@@ -1,0 +1,407 @@
+{% extends 'base.html' %}
+
+{% block title %}  Home Page  {% endblock %}
+
+<!-- {% load static %} -->
+
+{% block content%}
+
+
+<div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-interval="3000">
+      <img src="{% static '/website/My-Photo.jpg' %}" class="d-block w-100 h-25" alt="...">
+    </div>
+    <div class="carousel-item" data-interval="3000">
+      <img src="{% static '/website/photo_1.jpg' %}" class="d-block w-100 h-25" alt="...">
+    </div>
+    <div class="carousel-item" data-interval="3000">
+      <img src="{% static '/website/photo_2.jpg' %}" class="d-block w-100 h-25" alt="...">
+    </div>
+    <div class="carousel-item" data-interval="3000">
+      <img src="{% static '/website/photo_3.jpg' %}" class="d-block w-100 h-25" alt="...">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon text-primary" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
+    <span class="carousel-control-next-icon text-primary" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+<br/> <br/> <br/> <br/>
+
+<div class="container">
+  <div class="d-flex flex-row bd-highlight mb-3 justify-content-between">
+    <div class="p-2 bd-highlight col-md-6">
+      <h2 class="text-primary">Appy for Admission</h2>
+
+      <p>
+        HiLCoE is a specialized computer science and technology college and has always placed great emphasis on delivering high-quality education and producing graduates with a good practical knowledge of computing in a wide variety of areas. In its more than two decades of excellence in ICT Education, HiLCoE has earned a reputation for producing high-quality graduates with the ability to apply their knowledge to practical situations.
+      </p>
+      <p>
+        HiLCoE’s underlying philosophy is to focus on scientific and engineering foundations so that graduates remain self-learners and productive with the pace of technology and business agility.
+      </p>
+      <button class="btn btn-primary rounded-pill float-right">More +</button>
+    </div>
+    <div class="p-2 bd-highlight col-md-6"><img src="{% static '/website/photo_5.jpg' %}" class="d-block w-100 h-100" alt="..."></div>
+  </div>
+
+</div>
+<br/> <br/> <br/> <br/>
+<div class="container">
+  <div class="d-flex flex-row bd-highlight mb-3 justify-content-between">
+    <div class="p-2 bd-highlight col-md-4">
+      <h2 class="text-primary">About XCollege</h2>
+      <img src="{% static '/website/about-xcollege.jpg'%}" class="d-block w-100 h-100" >
+
+    </div>
+
+      <div class="p-2 bd-highlight col-md-8">
+      <p>
+        HiLCoE is committed to excellence and continuous improvement. It is being recognized as an innovative, dynamic, and exciting community in which to learn, teach and work. HiLCoE is known for industrious educational quality, a student-centered focus, and service beyond the campus. To achieve its vision and mission, HiLCoE has created core value oriented organizational structure.
+      </p>
+      <p>
+        The college pioneered computer science education in the country. It was founded by two computer professionals, Nassir Dino (PhD) and Ahmed Hussein (PhD).
+      </p>
+      <p>
+        At the present time, HiLCoE is offering Undergraduate and Post Graduate Degrees in Computer Science and Software Engineering.
+      </p>
+      <button class="btn btn-primary rounded-pill float-right">More +</button>
+    </div>
+  </div>
+</div>
+
+<br/><br/> <br/><br/><br/> <br/>
+
+<div class="container-fluid text-center">
+  <!-- <img src="{% static '/website/graduation-cap.jpg' %}" class="d-block w-25 h-25"> -->
+
+  <h2 class="text-uppercase fs-1 text-primary">  <i class="fas fa-graduation-cap"></i> Our Academic Programs
+  </h2>
+</div>
+
+
+<!-- Our academic program section -->
+<br/>
+<div class="row">
+
+  <div class="col-sm-3">
+  <div class="card card-block bg-primary">
+    <!-- <img class="card-img-top" data-src="holder.js/100px180/" alt="100%x180" src="{% static '/website/graduation-cap.jpg' %}" data-holder-rendered="true" style="height: 180px; width: 100%; display: block;"> -->
+    <h2 class="text-uppercase fs-1 text-secondary text-center">  <i class="fas fa-graduation-cap"></i> </h2>
+    <br/> <br/><br/><br/>
+    <div class="card-block">
+      <h4 class="card-title p-2 text-white">BSc. in Computer Science</h4>
+      <p class="card-text p-2 text-white">The general objective of the B. Sc. programme in Computer Science is to provide general education, supportive and computer science courses all selected to meet the current needs of the ICT industry &  to ensure academic parity and build up students’ confidence & flexibility .</p>
+      <a href="#" class="btn btn-primary float-right mr-2">Learn More + </a>
+    </div>
+    </div>
+  </div>
+            <div class="col-sm-3">
+  <div class="card card-block bg-primary">
+    <!-- <img class="card-img-top" data-src="holder.js/100px180/" alt="100%x180" src="{% static '/website/graduation-cap.jpg' %}" data-holder-rendered="true" style="height: 25%; width: 25%; display: block;"> -->
+    <h2 class="text-uppercase fs-1 text-secondary text-center">  <i class="fas fa-graduation-cap"></i> </h2>
+    <br/><br/><br/><br/>
+    <div class="card-block">
+      <h4 class="card-title p-2 text-white">BSc. in Software Engineering</h4>
+      <p class="card-text p-2 text-white">The general objective of the B. Sc. programme in Software Engineering is to provide a strong conceptual and theoretical understanding of Software Engineering that will enable students to create, evaluate, adapt, and utilize appropriate methods,</p>
+      <a href="#" class="btn btn-primary float-right mr-2">Learn More +</a>
+    </div>
+
+
+  </div>
+
+
+            </div>
+
+  <div class="col-sm-3">
+  <div class="card card-block bg-primary">
+    <!-- <img class="card-img-top" data-src="holder.js/100px180/" alt="100%x180" src="{% static '/website/graduation-cap.jpg' %}" data-holder-rendered="true" style="height: 180px; width: 100%; display: block;"> -->
+    <h2 class="text-uppercase fs-1 text-secondary text-center">  <i class="fas fa-graduation-cap"></i> </h2>
+    <br/>
+    <div class="card-block">
+      <h4 class="card-title p-2 text-white">Master of Science in Computer Science (MSCS)</h4>
+      <p class="card-text p-2 text-white">The general objective of the MSCS programme in Computer Science  is to provide a strong conceptual and Advanced  understanding of Computer Technology  that will enable students to create, evaluate, adapt, and utilize appropriate methods.</p>
+      <a href="#" class="btn btn-primary float-right mr-2">Learn More +</a>
+    </div>
+    </div>
+  </div>
+
+
+    <div class="col-sm-3">
+  <div class="card card-block bg-primary">
+    <!-- <img class="card-img-top" data-src="holder.js/100px180/" alt="100%x180" src="{% static '/website/graduation-cap.jpg' %}" data-holder-rendered="true" style="height: 180px; width: 100%; display: block;"> -->
+    <h2 class="text-uppercase fs-1 text-secondary text-center">  <i class="fas fa-graduation-cap"></i> </h2>
+    <br/>
+    <div class="card-block">
+      <h4 class="card-title p-2 text-white">Master of Science in Software Engineering</h4>
+      <p class="card-text p-2 text-white">The general objective of the MSSE  programme in Software Engineering is to provide a strong conceptual and theoretical understanding of Software Engineering that will enable students to create, evaluate, adapt, and utilize appropriate methods.</p>
+      <a href="#" class="btn btn-primary float-right mr-2">Learn More +</a>
+    </div>
+    </div>
+  </div>
+
+
+
+  </div>
+
+  <br/><br/>  <br/>
+<div class="container">
+ <div class="d-flex p-2">
+  <h4 class="text-primary"> News & Updates</h4>
+  <hr class="border border-primary border-3 opacity-75">
+ </div>
+
+ <div class="d-flex p-2 mb-3 justify-content-between align-items-start">
+  <div>
+    <h6><a href="#" class="btn btn-success">Read All News</a></h6>
+  </div>
+  <!-- <img src="{% static '/website/email_green.png' %}" class="w-25"> -->
+ </div>
+
+
+  <div class="d-flex justify-content-between">
+    <div class="card border-0" style="width: 18rem;">
+      <img src="{% static '/website/ethi-telecom.jpg' %}" class="card-img-top" alt="...">
+      <br/>
+      <br/><br/>
+      <span class="mt-3 pl-4"><small>January 23, 2023</small></span>
+      <div class="card-body">
+        <h5 class="card-title">Ethio Telecom Partner with GETFACTet to Boost Students’ Digital skills</h5>
+        <br/><br/>
+        <a href="#" class="btn btn-secondary">Read More</a>
+      </div>
+    </div>
+
+    <div class="d-flex flex-column mb-3">
+
+      <div class="card border-0" style="width: 18rem;">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img src="{% static '/website/ministry-of-innovation.png' %}" class="card-img-right w-100" alt="...">
+          </div>
+
+            <div class="card-body col-md-8">
+              <h5 class="card-title"><small>June 25, 2016</small></h5>
+              <p class="card-text">
+                <a href="#" class="btn btn-primary">The Ministry of Innovation and Internet Society sign new pact to advance digital economy in Ethiopia</a>
+              </p>
+            </div>
+
+        </div>
+      </div>
+
+      <div class="card border-0" style="width: 18rem;">
+       <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="{% static '/website/safaricom.jpeg' %}" class="card-img-right w-100" alt="...">
+        </div>
+        <div class="card-body col-md-8">
+          <h5 class="card-title"><small>June 25, 2016</small></h5>
+          <p class="card-text">
+            <a href="#" class="btn btn-primary">Safaricom PLC launches major recruitment drive targeting Ehiopians</a>
+          </p>
+        </div>
+       </div>
+      </div>
+
+      <div class="card border-0" style="width: 18rem;">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img src="{% static '/website/huawei.png' %}" class="card-img-right w-100" alt="...">
+          </div>
+          <div class="card-body col-md-8">
+            <h5 class="card-title"><small>June 25, 2016</small></h5>
+            <p>
+              <small>/ Admission, Event</small>
+            </p>
+            <p class="card-text">
+              <a href="#" class="btn btn-primary">Jobs Creation Commission and Huawei collaborate to cultivate ICT Talent Ecosystem in Ethiopia</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="card border-0" style="width: 18rem;">
+     <div class="mb-3">
+      <img src="{% static '/website/email_green.png' %}" class="w-25">
+     </div>
+
+      <form method="POST" class="mb-3">
+        <input type="email", name="email-address", value="Your Email Address">
+        <br/><br/>
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </form>
+
+      <h6 class="text-uppercase mt-3 fw-bold">Notice Board</h6>
+      <ul class="list-group mt-2">
+        <p><a href="#" class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Django Training</a></p>
+        <p><a href="#" class="link-info link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Info link</a></p>
+      </ul>
+    </div>
+   </div>
+ </div>
+
+ <!-- Footer -->
+ <!-- Remove the container if you want to extend the Footer to full width. -->
+<div class="container-fluid mt-5 px-0">
+
+  <!-- Footer -->
+  <footer
+          class="text-center text-lg-start text-white"
+          style="background-color: #1c2331"
+          >
+    <!-- Section: Social media -->
+    <section
+             class="d-flex justify-content-between p-4"
+             style="background-color: #6351ce"
+             >
+      <!-- Left -->
+      <div class="me-5">
+        <span>Get connected with us on social networks:</span>
+      </div>
+      <!-- Left -->
+
+      <!-- Right -->
+      <div>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-google"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="" class="text-white me-4">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold">Company name</h6>
+            <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+                />
+            <p>
+              Here you can use rows and columns to organize your footer
+              content. Lorem ipsum dolor sit amet, consectetur adipisicing
+              elit.
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold">Products</h6>
+            <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+                />
+            <p>
+              <a href="#!" class="text-white">MDBootstrap</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">MDWordPress</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">BrandFlow</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">Bootstrap Angular</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold">Useful links</h6>
+            <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+                />
+            <p>
+              <a href="#!" class="text-white">Your Account</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">Become an Affiliate</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">Shipping Rates</a>
+            </p>
+            <p>
+              <a href="#!" class="text-white">Help</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold">Contact</h6>
+            <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+                />
+            <p><i class="fas fa-home mr-3"></i> New York, NY 10012, US</p>
+            <p><i class="fas fa-envelope mr-3"></i> info@example.com</p>
+            <p><i class="fas fa-phone mr-3"></i> + 01 234 567 88</p>
+            <p><i class="fas fa-print mr-3"></i> + 01 234 567 89</p>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+
+    <!-- Copyright -->
+    <div
+         class="text-center p-3"
+         style="background-color: rgba(0, 0, 0, 0.2)"
+         >
+      © 2020 Copyright:
+      <a class="text-white" href="https://mdbootstrap.com/"
+         >MDBootstrap.com</a
+        >
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
+
+</div>
+<!-- End of .container -->
+
+
+
+
+
+<!-- $('.carousel').carousel() -->
+
+{% endblock %}
