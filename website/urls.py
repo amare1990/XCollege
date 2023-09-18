@@ -11,4 +11,5 @@ urlpatterns = [
   path('academics/se_msc/', views.seMSc, name='se-msc'),
   path('academics/courses/', views.courses, name='courses-list'),
   path('about/', views.about, name='about'),
+  path('contact/', views.contact, name='contact-us'),
 ]

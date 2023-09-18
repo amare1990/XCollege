@@ -25,3 +25,6 @@ def courses(request):
 def about(request):
     return render(request, 'website/about.html', {})
 
+def contact(request):
+    return render(request, 'website/contact_us.html', {})
+
