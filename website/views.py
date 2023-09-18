@@ -22,3 +22,6 @@ def seMSc(request):
 def courses(request):
     return render(request, 'website/courses_list.html')
 
+def about(request):
+    return render(request, 'website/about.html', {})
+
