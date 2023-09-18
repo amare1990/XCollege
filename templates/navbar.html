@@ -37,11 +37,11 @@
           Academics
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item " href="#">BSc. in computer Science</a>
-          <a class="dropdown-item" href="#">BSc. in Software Engineering</a>
-          <a class="dropdown-item" href="#">MSc. in Computer Science</a>
-          <a class="dropdown-item" href="#">MSc. in Software Engineering</a>
-          <a class="dropdown-item" href="#">Courses</a>
+          <a class="dropdown-item " href="{% url 'cs-bsc' %}">BSc. in computer Science</a>
+          <a class="dropdown-item" href="{% url 'se-bsc' %}">BSc. in Software Engineering</a>
+          <a class="dropdown-item" href="{% url 'cs-msc' %}">MSc. in Computer Science</a>
+          <a class="dropdown-item" href="{% url 'se-msc' %}">MSc. in Software Engineering</a>
+          <a class="dropdown-item" href="{% url 'courses-list' %}">Courses</a>
         </div>
       </div>
 

@@ -14,10 +14,10 @@ def seBSc(request):
     return render(request, 'website/se_bsc.html')
 
 def csMSc(request):
-    return render(request, 'website/cs_bsc.html')
+    return render(request, 'website/cs_msc.html')
 
 def seMSc(request):
-    return render(request, 'website/cs_bsc.html')
+    return render(request, 'website/se_msc.html')
 
 def courses(request):
     return render(request, 'website/courses_list.html')
