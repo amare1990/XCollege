@@ -6,15 +6,13 @@
         <a class="nav-link" href="#">Tel : +251 111 559769. E: info@hilcoe.net </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link bg-danger" href="#">Notice Board+</a>
+        <a class="nav-link bg-danger" href="#">Notice Board +</a>
       </li>
-
     </ul>
-
 </nav>
 
 <nav class="navbar navbar-expand-lg bg-white fixed-top">
-  <a class="navbar-brand" href="#"><img src="{% static '/website/logo-hilcoe.jpg' %}" class="w-75"></a>
+  <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static '/website/logo-hilcoe.jpg' %}" class="w-75"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -22,20 +20,31 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link text-dark" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link text-dark" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link text-dark" href="#">About</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="#">Admission</a>
+        <a class="nav-link text-dark" href="{% url 'admission' %}">Admission</a>
       </li>
-      <li class="nav-item text-dark">
+      <!-- <li class="nav-item text-dark">
         <a class="nav-link text-dark" href="#">Trainings</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-dark" href="#">Academics</a>
-      </li>
+      </li> -->
+
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Academics
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item " href="#">BSc. in computer Science</a>
+          <a class="dropdown-item" href="#">BSc. in Software Engineering</a>
+          <a class="dropdown-item" href="#">MSc. in Computer Science</a>
+          <a class="dropdown-item" href="#">MSc. in Software Engineering</a>
+          <a class="dropdown-item" href="#">Courses</a>
+        </div>
+      </div>
+
       <li class="nav-item">
         <a class="nav-link text-dark" href="#">Resources</a>
       </li>
@@ -44,10 +53,19 @@
       </li>
 
     </ul>
-    <form class="form-inline my-2 my-lg-0">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Search">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button">
+          <i class="fa fa-search"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
+    </form> -->
     <ul class="navbar-nav mr-auto">
 
       <li class="nav-item">
