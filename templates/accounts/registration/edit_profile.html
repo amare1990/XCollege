@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}  User Registration Page  {% endblock %}
+{% block title %}  User Edit Form  {% endblock %}
 
 <!-- {% load static %} -->
 
@@ -21,7 +21,7 @@
     {% endif %}
 
 
-        <h2>Register Here!</h2>
+        <h2>Edit your profile here!</h2>
 
 
 
@@ -30,7 +30,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-secondary">
-          Register
+          Update
         </button>
       </form>
     </div>
