@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}  Home Page  {% endblock %}
+
+<!-- {% load static %} -->
+
+{% block content%}
+<div class="container mt-5">
+  <h3> Add profile</h3>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-secondary"> Add profile  </button>
+
+  </form>
+</div>
+
+{% endblock %}
