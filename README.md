@@ -194,7 +194,7 @@ If you like this project, hit the ⭐️ button!
 
 ## 📝 License <a name="license"></a>
 
-This project is [MIT]() licensed.
+This project is [MIT](https://github.com/amare1990/XCollege/commit/41d85d2dad7400a022d130fb5725970b5407b691) licensed.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
