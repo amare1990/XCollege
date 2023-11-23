@@ -42,6 +42,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'XCollege.urls'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'jhonfair2020@gmail.com'
+EMAIL_HOST_PASSWORD = 'dlxv bxez pkur ljgb'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -70,6 +79,20 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# Email BAckend setup
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+   # settings.py
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'your_smtp_host'
+# EMAIL_PORT = 587  # or the appropriate port for your SMTP server
+# EMAIL_HOST_USER = 'your_email@example.com'
+# EMAIL_HOST_PASSWORD = 'your_email_password'
+# EMAIL_USE_TLS = True  # Set it to False if your SMTP server doesn't use TLS
+
 
 
 # Password validation
