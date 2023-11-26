@@ -7,6 +7,16 @@
 {% block content%}
 
   <div class="container my-5">
+
+
+    <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
+            {% url 'admin-dashboard' %}
+            {% else %}
+                {% url 'cs-bsc' %}
+            {% endif %}">My homepage
+    </a>
+
+
     <h3>All staff =  {{ number_of_staff }}</h3>
     {{ number_of_staff }}
     <h3>

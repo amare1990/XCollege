@@ -8,7 +8,13 @@ from . import views
 
 urlpatterns = [
     path('', views.admin_dashboard, name='admin-dashboard'),
-    path('add_profile/', views.add_profile, name='add-profile'),
-    path('staff_list/', views.staff_list, name='staff-list'),
+    path('add_department', views.add_department, name='add-department'),
+
     path('add_teacher/', views.add_teacher, name='add-teacher'),
+    path('add_student/', views.add_student, name='add-student'),
+
+    path('department_list/', views.department_list, name='department-list'),
+    path('teacher_list/', views.teacher_list, name='teacher-list'),
+    path('student_list/', views.student_list, name='student-list'),
+     path('staff_list/', views.staff_list, name='staff-list'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -3,13 +3,38 @@
 {% block title %}List of teachers {% endblock %}
 
 {% block content %}
-<h3>List of teachers </h3>
+
 <div class="container my-5">
-    <h3>{{ number_of_teachers }} total teachers </h3>
-    <ul>
-        {% for teacher in teachers %}
-            <li>{{ teacher.user.username }}</li>
-        {% endfor %}
-    </ul>
-</div>
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+
+      {% endfor %}
+    {% endif %}
+
+    <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
+            {% url 'admin-dashboard' %}
+            {% else %}
+                {% url 'cs-bsc' %}
+            {% endif %}">My homepage
+    </a>
+    <a class="nav-link text-black" href="{% url 'add-teacher' %}"> Add more </a>
+
+    <h3>List of teachers </h3>
+    <div class="container my-5">
+        <h3>{{ number_of_teachers }} total teachers </h3>
+        <ul>
+            {% for teacher in teachers %}
+                <li>{{ teacher.user.username }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    </div>
 {% endblock %}

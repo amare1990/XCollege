@@ -19,6 +19,14 @@ s{% extends 'base.html' %}
 
     {% endfor %}
   {% endif %}
+
+  <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
+          {% url 'admin-dashboard' %}
+          {% else %}
+            {% url 'cs-bsc' %}
+          {% endif %}">My homepage
+  </a>
+
   <h3> Add a department</h3>
   <form method="POST">
     {% csrf_token %}

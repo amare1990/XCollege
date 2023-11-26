@@ -20,17 +20,18 @@ s{% extends 'base.html' %}
     {% endfor %}
   {% endif %}
   <h3> List of departments</h3>
-  <a class="nav-link text-black" href="{% if user.profile.role == 'admin' %}
+  <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
           {% url 'admin-dashboard' %}
           {% else %}
             {% url 'cs-bsc' %}
           {% endif %}">My homepage
   </a>
+  <a class="nav-link text-black" href="{% url 'add-department' %}"> Add more </a>
 
-  <p>Number of departments = {{ depts_number }}</p>
+  <p>Number of departments = {{ number_of_departments }}</p>
   <p>List of departments</p>
   <ul>
-    {% for dept in depts %}
+    {% for dept in departments %}
     <li>
       <a href="#"> {{ dept.name}} </a>
     </li>

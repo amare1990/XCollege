@@ -1,5 +1,4 @@
 from django.db import models
-from website.models import Profile
 from django.contrib.auth.models import User
 
 title_choices = (
@@ -43,7 +42,7 @@ class Department(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(default='default-text')
+    bio = models.TextField(default='Enter your bio briefly')
     role = models.CharField(max_length=20, choices=roles, default='student')
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, blank=True)
     academic_year = models.CharField(max_length=20, choices=year, null=True, blank=True)

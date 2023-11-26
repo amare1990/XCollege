@@ -30,7 +30,7 @@ def user_login(request):
     if user is not None:
       login(request, user)
       messages.success(request, 'Bingo! %s' % ( user.first_name))
-      if user.profile.role == 'admin':
+      if user.is_staff:
         # return redirect('home')
         return redirect('admin-dashboard')
     else:

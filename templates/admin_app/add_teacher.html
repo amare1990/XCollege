@@ -19,13 +19,21 @@
 
     {% endfor %}
   {% endif %}
+
+  <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
+          {% url 'admin-dashboard' %}
+          {% else %}
+            {% url 'cs-bsc' %}
+          {% endif %}">My homepage
+  </a>
+
   <h3> Add a teacher</h3>
   <form method="POST">
     {% csrf_token %}
     {{ form_teacher.as_p }}
 
+    <button class="btn btn-secondary">Add teacher</button>
   </form>
-  <button class="btn btn-secondary">Add teacher</button>
 
 </div>
 
