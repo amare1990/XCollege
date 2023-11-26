@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}  Home Page  {% endblock %}
+
+<!-- {% load static %} -->
+
+{% block content%}
+
+<div class="container my-5 pt-5">
+  <div class="row">
+    <div class="col">
+      <p class="text-muted text-lg">THE SCHOOL OF YOUR DREAMS!</p>
+      <h2 class="text-xl font-weight-bolder">ABOUT HiLCoE </h2>
+      <img src="{% static '/website/logo.png' %}">
+    </div>
+    <div class="col">
+      <p class="text-left">
+        HiLCoE is a specialized computer science and technology college and has always placed great emphasis on delivering high-quality education and producing graduates with a good practical knowledge of computing in a wide variety of areas. In its more than two decades of excellence in ICT Education, HiLCoE has earned a reputation for producing high-quality graduates with the ability to apply their knowledge to practical situations.
+      </p>
+    </div>
+    <div class="col">
+      <p class="text-left">
+        HiLCoE’s underlying philosophy is to focus on scientific and engineering foundations so that graduates remain self-learners and productive with the pace of technology and business agility. HiLCoE strives to prepare its students to participate and reap the benefits of the digitalization opportunities with focuses on both theoretical and practical approaches in the real-world applications. Graduates are thus expected to use the skills and techniques they acquire to solve critical problems in digitalizing economy, business, health care, education, tourism, Banking – fintech and financial industry.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid my-5 bg-secondary text-white p-5">
+  <div class="row">
+    <div class="col">
+      <i class="fas fa-home"></i>
+    </div>
+    <div class="col">
+      <i class="fas fa-graduation-cap"></i>
+    </div>
+    <div class="col">
+      <i class="fas fa-home"></i>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col">
+      <h6 class="text-large font-weight-bolder text-uppercase p-3">Why we are Different </h6>
+      <p class="text-left">
+        HiLCoE is committed to excellence and continuous improvement. It is being recognized as an innovative, dynamic, and exciting community in which to learn, teach and work. HiLCoE is known for industrious educational quality, a student-centered focus, and service beyond the campus. To achieve its vision and mission, HiLCoE has created core value oriented organizational structure.
+      </p>
+      <img src="{% static '/website/founders.jpeg' %}">
+    </div>
+    <div class="col">
+      <h6 class="text-large font-weight-bolder text-uppercase py-3">Our Vison & Mission </h6>
+      <h6 class="font-weight-bolder pt-2 text-uppercase">Vision</h6>
+      <ul>
+        <li class="text-left">
+          Aspires to be a Centre of Excellence in the area of ICT Education, Research and Development (ER&D).
+        </li>
+      </ul>
+      <h6 class="font-weight-bolder pt-2 text-uppercase py-3">Mission</h6>
+      <ul>
+        <li class="text-left">
+          To provide innovative undergraduate and graduate education that contributes to the development of society and the individual.
+        </li>
+        <li class="text-left">
+          To establish a strong foundation in ICT and use of current technologies, and prepare students to be lifelong learners who are proficient in their fields of study, able to adapt to a changing world and contribute to the betterment of society and beyond.
+        </li>
+        <li class="text-left">
+          To conduct research and disseminate research results in ICT that will push the frontiers of knowledge and that are relevant to the development needs of the country.
+        </li>
+      </ul>
+
+    </div>
+    <div class="col">
+      <h6 class="font-weight-bolder p-3 text-uppercase">Core values</h6>
+      <p class="text-left">
+        HiLCoE values the following as central to its success:
+      </p>
+      <ul>
+        <li class="my-3"> Student Satisfaction </li>
+        <li class="my-3">Management Accessibility</li>
+        <li class="my-3">Management Involvement</li>
+        <li class="my-3">    Continuous Reviews</li>
+        <li class="my-3">    Service Upgrades</li>
+        <li class="my-3">     Capacity Building</li>
+        <li class="my-3">    Socially Responsible</li>
+        <li class="my-3">    Social Entrepreneurship</li>
+        <li class="my-3">    Solution Focused</li>
+        <li class="my-3">   Participatory</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

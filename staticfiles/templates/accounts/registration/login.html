@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}  Login Page  {% endblock %}
+
+<!-- {% load static %} -->
+
+{% block content%}
+
+  <div class="container my-5 py-3">
+
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      {% endfor %}
+    {% endif %}
+
+
+        <h2>Login Here!</h2>
+
+
+
+    <form method="POST">
+      {% csrf_token %}
+      <div class="mb-3">
+        <input type="text" class="form-control" name="username" aria-describedby="usernameHelp"  placeholder="Username">
+      </div>
+      <div class="mb-3">
+        <input type="password" class="form-control" name="password" placeholder="Password">
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+  </div>
+
+
+{% endblock %}
+
+
+

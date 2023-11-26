@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block title %}  Home Page  {% endblock %}
+
+  <!-- {% load static %} -->
+
+  {% block content %}
+  <!-- <h1>You welcome!</h1> -->
+  <br/><br/>
+
+  <div class="row my-5">
+      <!-- Navabr -->
+    <div class="col-md-2 d-none d-md-block bg-secondary">
+      <nav class="navbar navbar-expand-sm flex-column my-5">
+        <!-- <a class="navbar-brand" href="#">Logo</a> -->
+        <button class="navbar-toggler text-danger" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon text-danger"> <i class="fas fa-bars"></i></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'admin-dashboard' %}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'add-profile' %}">Add profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'add-teacher' %}">Add teacher</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'add-student' %}">Add student</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'add-course' %}">Add course</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'staff-list' %}">Staff lists</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'student-list' %}">Student lists</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="#">Manage staff</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+
+    <!-- content -->
+
+    <div class="col-md-10 ml-sm-auto px-4">
+      <div class="row m-0 px-5">
+        <h3 class="mb-3">Dashboard</h3>
+        <div class="col-12 p-0">
+          <div class="topstat d-flex justify-content-between">
+            <div class="statbox">
+              <span class="text-primary">
+                <i class="fas fa-user-graduate fa-3x"></i>
+              </span>
+
+              <div class="text">
+                <p>students</p>
+                <h3>{{ total_students }}</h3>
+              </div>
+            </div>
+            <div class="statbox">
+              <span class="text-primary">
+                <i class="fas fa-chalkboard-teacher fa-3x"></i>
+              </span>
+
+              <div class="text">
+                <p>teachers</p>
+                <h3>{{ total_teachers }}</h3>
+              </div>
+            </div>
+            <div class="statbox">
+              <span class="text-primary">
+                <i class="fas fa-users fa-3x"></i>
+              </span>
+              <div class="text">
+                <p>clubs</p>
+                <h3>20</h3>
+              </div>
+            </div>
+            <div class="statbox">
+              <span class="text-primary">
+                <i class="fas fa-book fa-3x"></i>
+              </span>
+
+
+              <div class="text">
+                <p>books</p>
+                <h3>2000</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- second row -->
+      <div id="second-row" class="row m-0 px-5">
+        <div class="col-12 mt-5 p-0 d-flex justify-content-between">
+          <div class="card">
+            <div class="card-header">
+              <h5>upcoming events</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between">
+                <span class="name">Seminar on Machine Learning</span>
+                <span class="date">december 12</span>
+                <span class="organizer">dpi decoder</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span class="name">Spelling Bee</span>
+                <span class="date">november 26</span>
+                <span class="organizer">english club</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span class="name">hello! you.</span>
+                <span class="date">december 2</span>
+                <span class="organizer">cultural club</span>
+              </li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h5>Notice Board</h5>
+            </div>
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h5 class="date">23 nov 2019</h5>
+                <h5>Admit card collecting notice.</h5>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- end of second row -->
+      <!-- payment row -->
+      <div class="row m-0 px-5">
+        <h3 class="mt-5 mb-3">Stuff Payment</h3>
+        <div class="col-12 p-0 d-flex justify-content-between">
+          <div class="unpaid card">
+            <ul class="list-group list-group-flush">
+              <li class="title list-group-item">
+                <h5>unpaid</h5>
+              </li>
+              <li class="list-group-item">
+                <input type="checkbox" name="paid"> Md. Shariful Islam
+              </li>
+              <li class="list-group-item">
+                <input type="checkbox" name="paid"> Md. Shariful Islam
+              </li>
+              <li class="list-group-item">
+                <input type="checkbox" name="paid"> Md. Shariful Islam
+              </li>
+            </ul>
+          </div>
+          <div class="paid card">
+            <ul class="list-group list-group-flush">
+              <li class="title list-group-item">
+                <h5>paid</h5>
+              </li>
+              <li class="list-group-item">Suma rani das</li>
+              <li class="list-group-item">Johir chy</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+
+{% endblock %}

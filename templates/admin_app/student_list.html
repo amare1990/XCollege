@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}List of students{% endblock %}
+
+{% block content %}
+<h3>List of students</h3>
+<div class="container my-5">
+    <h3>{{ number_of_students }} total students</h3>
+    <ul>
+        {% for student in students %}
+            <li>{{ student.user.username }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

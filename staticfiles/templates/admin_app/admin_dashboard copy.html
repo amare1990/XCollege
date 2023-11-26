@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+
+{% block title %}  Home Page  {% endblock %}
+
+<!-- {% load static %} -->
+
+{% block content%}
+
+
+<nav class="navbar navbar-expand-lg flex-column">
+  <a class="navbar-brand" href="#">Logo</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin-dashboard' %}">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'add-profile' %}">Add profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Staff lists</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Manage staff</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+  <div class="row my-5 pt-5">
+    <div class="col-3">
+      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>
+        <!-- <a class="nav-link" id="v-pills-add-profile-tab" data-toggle="pill" href="#v-pills-add-profile" role="tab" aria-controls="v-pills-add-profile" aria-selected="false">Manage staff</a> -->
+        <a class="nav-link" id="v-pills-add-profile-tab" data-toggle="pill" href="#v-pills-add-profile" role="tab" aria-controls="v-pills-add-profile" aria-selected="false">Add profile</a>
+        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Staff lists</a>
+        <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Manage Students’</a>
+        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Add student</a>
+        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Manage course</a>
+        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Add course</a>
+        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Staff feedback</a>
+        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Student feedback</a>
+        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Staff leave</a>
+        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Student Leave</a>
+        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Add staff</a>
+      </div>
+    </div>
+    <div class="col-9">
+      {% if messages %}
+        {% for message in messages %}
+        {% endfor %}
+      {% endif %}
+      <div class="tab-content" id="v-pills-tabContent">
+        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+          <div class="row m-0 px-5">
+            <h3 class="mb-3">Dashboard</h3>
+            <div class="col-12 p-0">
+              <div class="topstat d-flex justify-content-between">
+                <div class="statbox">
+                  <span class="text-primary">
+                    <i class="fas fa-user-graduate fa-3x"></i>
+                  </span>
+
+                  <div class="text">
+                    <p>students</p>
+                    <h3>{{ total_students }}</h3>
+                  </div>
+                </div>
+                <div class="statbox">
+                  <span class="text-primary">
+                    <i class="fas fa-chalkboard-teacher fa-3x"></i>
+                  </span>
+
+                  <div class="text">
+                    <p>teachers</p>
+                    <h3>{{ total_teachers }}</h3>
+                  </div>
+                </div>
+                <div class="statbox">
+                  <span class="text-primary">
+                    <i class="fas fa-users fa-3x"></i>
+                  </span>
+                  <div class="text">
+                    <p>clubs</p>
+                    <h3>20</h3>
+                  </div>
+                </div>
+                <div class="statbox">
+                  <span class="text-primary">
+                    <i class="fas fa-book fa-3x"></i>
+                  </span>
+
+
+                  <div class="text">
+                    <p>books</p>
+                    <h3>2000</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+      <!-- second row -->
+      <div id="second-row" class="row m-0 px-5">
+        <div class="col-12 mt-5 p-0 d-flex justify-content-between">
+          <div class="card">
+            <div class="card-header">
+              <h5>upcoming events</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between">
+                <span class="name">Seminar on Machine Learning</span>
+                <span class="date">december 12</span>
+                <span class="organizer">dpi decoder</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span class="name">Spelling Bee</span>
+                <span class="date">november 26</span>
+                <span class="organizer">english club</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span class="name">hello! you.</span>
+                <span class="date">december 2</span>
+                <span class="organizer">cultural club</span>
+              </li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h5>Notice Board</h5>
+            </div>
+            <ul class="list-group">
+              <li class="list-group-item">
+                <h5 class="date">23 nov 2019</h5>
+                <h5>Admit card collecting notice.</h5>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- end of second row -->
+
+       <!-- payment row -->
+       <div class="row m-0 px-5">
+        <h3 class="mt-5 mb-3">Stuff Payment</h3>
+        <div class="col-12 p-0 d-flex justify-content-between">
+          <div class="unpaid card">
+            <ul class="list-group list-group-flush">
+              <li class="title list-group-item">
+                <h5>unpaid</h5>
+              </li>
+              <li class="list-group-item">
+                <input type="checkbox" name="paid"> Md. Shariful Islam
+              </li>
+              <li class="list-group-item">
+                <input type="checkbox" name="paid"> Md. Shariful Islam
+              </li>
+              <li class="list-group-item">
+                <input type="checkbox" name="paid"> Md. Shariful Islam
+              </li>
+            </ul>
+          </div>
+          <div class="paid card">
+            <ul class="list-group list-group-flush">
+              <li class="title list-group-item">
+                <h5>paid</h5>
+              </li>
+              <li class="list-group-item">Suma rani das</li>
+              <li class="list-group-item">Johir chy</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+        </div>
+          <!-- Add profile -->
+        <!-- <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab"> ... </div> -->
+        <div class="tab-pane fade" id="v-pills-add-profile" role="tabpanel" aria-labelledby="v-pills-add-profile-tab">
+          <div class="container mt-5">
+            <!-- <h3> Add profile</h3> -->
+             <!-- <form method="post"> -->
+              <!-- {% csrf_token %} -->
+              <!-- {{ form.as_p }} -->
+              <!-- <button class="btn btn-secondary"> Add profile  </button> -->
+
+            <!-- </form> -->
+            {% include 'add_profile-snippet.html' %}
+        </div>
+        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
+      </div>
+    </div>
+
+
+    <!-- Staff list -->
+  </div>
+  <!-- end of the whole page -->
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}  User Edit Form  {% endblock %}
+
+<!-- {% load static %} -->
+
+{% block content%}
+
+  <div class="container my-5 py-3">
+
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      {% endfor %}
+    {% endif %}
+
+
+        <h2>Edit your profile here!</h2>
+
+
+
+    <div  class="form-group">
+      <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-secondary">
+          Update
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+
+{% endblock %}
+
+
+

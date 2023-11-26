@@ -1,0 +1,42 @@
+s{% extends 'base.html' %}
+
+{% block title %}  List of Departments  {% endblock %}
+
+<!-- {% load static %} -->
+
+{% block content%}
+
+<div class="container my-5">
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+    </div>
+
+    {% endfor %}
+  {% endif %}
+  <h3> List of departments</h3>
+  <a class="nav-link text-black" href="{% if user.profile.role == 'admin' %}
+          {% url 'admin-dashboard' %}
+          {% else %}
+            {% url 'cs-bsc' %}
+          {% endif %}">My homepage
+  </a>
+
+  <p>Number of departments = {{ depts_number }}</p>
+  <p>List of departments</p>
+  <ul>
+    {% for dept in depts %}
+    <li>
+      <a href="#"> {{ dept.name}} </a>
+    </li>
+  {% endfor %}
+  </ul>
+
+</div>
+
+{% endblock %}
