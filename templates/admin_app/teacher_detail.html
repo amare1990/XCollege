@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %} Details of a teacher named {{ teacher.name }} {% endblock %}
+
+{% block content %}
+
+<div class="container my-5">
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+
+      {% endfor %}
+    {% endif %}
+
+    <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
+            {% url 'admin-dashboard' %}
+            {% else %}
+                {% url 'cs-bsc' %}
+            {% endif %}">My homepage
+    </a>
+    <a class="nav-link text-black" href="{% url 'teacher-list' %}"> View teachers </a>
+
+
+    <h3>Teacher details</h3>
+    <div class="container my-5">
+        <p>Username: {{ teacher.user.username }} </p>
+
+        <p>Role: {{ teacher.role }}</p>
+        <p>Title:{{ teacher.title }}</p>
+        <p>Faculty member in the department of {{ teacher.department }} </p>
+        <p>Brief bio of {{ teacher.title }}: <br> {{ teacher.bio }}</p>
+
+
+        <a href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit a teacher </a>|<a href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete teacher </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -131,6 +131,33 @@ def teacher_list(request):
 
    return render(request, 'admin_app/teacher_list.html', context)
 
+def teacher_edit(request, teacher_id):
+    teacher = get_object_or_404(UserProfile, pk=teacher_id)
+    if request.method == 'POST':
+        form_teacher = AddTeacherForm(request.POST, instance=teacher)
+        if form_teacher.is_valid():
+            form_teacher.save()
+            return redirect('teacher-detail', teacher_id=teacher_id)
+    else:
+        form_teacher = AddTeacherForm(instance=teacher)
+    return render(request, 'admin_app/teacher_edit.html', {'form_teacher': form_teacher })
+
+def teacher_detail(request, teacher_id):
+    teacher = UserProfile.objects.get(pk=teacher_id)
+
+    context = {
+      'teacher':teacher
+   }
+    return render(request, 'admin_app/teacher_detail.html', context)
+
+def teacher_delete(request, teacher_id):
+    teacher = get_object_or_404(UserProfile, pk=teacher_id)
+    if request.method == 'POST':
+        teacher.delete()
+        messages.info(request, "Deleted successfully!")
+        return redirect('teacher-list')
+    return render(request, 'admin_app/teacher_delete.html', {'teacher': teacher })
+
 # Student list
 def student_list(request):
 

@@ -29,11 +29,37 @@
     <h3>List of teachers </h3>
     <div class="container my-5">
         <h3>{{ number_of_teachers }} total teachers </h3>
-        <ul>
+
+        <table class="table table-dark">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Id</th>
+              <th scope="col"> Username </th>
+              <th scope="col">Role</th>
+              <th scope="col">Bio</th>
+              <th scope="col">Tiltle</th>
+              <th scope="col">Department</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
             {% for teacher in teachers %}
-                <li>{{ teacher.user.username }}</li>
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td><a href="{% url 'teacher-detail' teacher_id=teacher.pk %}">{{ teacher.pk }}</a></td>
+              <td>{{ teacher.user.username }}</td>
+              <td>{{ teacher.role }}</td>
+              <td>{{ teacher.bio|truncatechars:50 }}</td>
+              <td> {{ teacher.title }} </td>
+              <td> {{ teacher.department }} </td>
+              <td><a href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>|<a href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a>|
+                <a href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a></td>
+            </tr>
             {% endfor %}
-        </ul>
+
+          </tbody>
+        </table>
     </div>
 
     </div>

@@ -21,6 +21,10 @@ urlpatterns = [
 
     path('department_list/', views.department_list, name='department-list'),
     path('teacher_list/', views.teacher_list, name='teacher-list'),
+    path('teacher/<int:teacher_id>/detail/', views.teacher_detail, name='teacher-detail'),
+    path('teacher/<int:teacher_id>/edit/', views.teacher_edit, name='teacher-edit'),
+    path('teacher/<int:teacher_id>/delete/', views.teacher_delete, name='teacher-delete'),
+
     path('student_list/', views.student_list, name='student-list'),
     path('staff_list/', views.staff_list, name='staff-list'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
