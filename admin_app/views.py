@@ -77,6 +77,18 @@ def course_detail(request, course_id):
    }
     return render(request, 'admin_app/course_detail.html', context)
 
+def course_edit(request, course_id):
+       course = get_object_or_404(Course, pk=course_id)
+       if request.method == 'POST':
+           form_course = AddCourseForm(request.POST, instance=course)
+           if form_course.is_valid():
+               form_course.save()
+               return redirect('course-detail', course_id=course_id)
+       else:
+           form_course = AddCourseForm(instance=course)
+       return render(request, 'admin_app/course_edit.html', {'form_course': form_course })
+
+
 def course_delete(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     if request.method == 'POST':
