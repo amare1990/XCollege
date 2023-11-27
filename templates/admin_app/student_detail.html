@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %} Details of a student named {{ student.name }} {% endblock %}
+
+{% block content %}
+
+<div class="container my-5">
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+
+      {% endfor %}
+    {% endif %}
+
+    <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
+            {% url 'admin-dashboard' %}
+            {% else %}
+                {% url 'cs-bsc' %}
+            {% endif %}">My homepage
+    </a>
+    <a class="nav-link text-black" href="{% url 'student-list' %}"> View students </a>
+
+
+    <h3>Student details</h3>
+    <div class="container my-5">
+        <p>Username: {{ student.user.username }} </p>
+
+        <p>Role: {{ student.role }}</p>
+        <p>Academic year:{{ student.academic_year }}</p>
+        <p>Semester:{{ student.semester }}</p>
+        <p>Registered in the department of {{ student.department }} </p>
+        <p>Brief bio: <br> {{ student.bio }}</p>
+
+
+        <a href="{% url 'student-edit' student_id=student.pk %}">Edit a student </a>|<a href="{% url 'student-delete' student_id=student.pk %}">Delete student </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

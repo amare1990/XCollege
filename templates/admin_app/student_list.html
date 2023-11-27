@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}List of students{% endblock %}
+{% block title %}List of students {% endblock %}
 
 {% block content %}
 
@@ -26,17 +26,43 @@
     </a>
     <a class="nav-link text-black" href="{% url 'add-student' %}"> Add more </a>
 
-
-    <h3>List of students</h3>
+    <h3>List of teachers </h3>
     <div class="container my-5">
-        <h3>{{ number_of_students }} total students</h3>
-        <ul>
+        <h3>{{ number_of_students }} total students </h3>
+
+        <table class="table table-dark">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Id</th>
+              <th scope="col"> Username </th>
+              <th scope="col">Role</th>
+              <th scope="col">Bio</th>
+              <th scope="col">Academic year</th>
+              <th scope="col">Semester</th>
+              <th scope="col">Department</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
             {% for student in students %}
-                <li>{{ student.user.username }}</li>
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td><a href="{% url 'student-detail' student_id=student.pk %}">{{ student.pk }}</a></td>
+              <td>{{ student.user.username }}</td>
+              <td>{{ student.role }}</td>
+              <td>{{ student.bio|truncatechars:50 }}</td>
+              <td> {{ student.academic_year }} </td>
+              <td> {{ student.semester }} </td>
+              <td> {{ teacher.department }} </td>
+              <td><a href="{% url 'student-edit' student_id=student.pk %}">Edit</a>|<a href="{% url 'student-detail' student_id=student.pk %}">View</a>|
+                <a href="{% url 'student-delete' student_id=student.pk %}">Delete</a></td>
+            </tr>
             {% endfor %}
-        </ul>
+
+          </tbody>
+        </table>
     </div>
 
-</div>
-
+    </div>
 {% endblock %}

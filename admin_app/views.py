@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from .models import UserProfile, Department, Course
 from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 
 def admin_dashboard(request):
 
@@ -31,8 +33,13 @@ def add_student(request):
     if request.method == 'POST':
         form_student = AddStudentForm(request.POST)
         if form_student.is_valid():
-            form_student.save()
-            return redirect('student-list')
+            user_instance = form_student.save(commit=False)
+            if UserProfile.objects.filter(user=user_instance.user).exists():
+                messages.error(request, 'This user profile has already been registered')
+                return redirect('student-list')
+            else:
+                form_student.save()
+                return redirect('student-list')
     else:
         form_student = AddStudentForm()
         return render(request, 'admin_app/add_student.html', {'form_student': form_student})
@@ -169,6 +176,33 @@ def student_list(request):
    }
 
    return render(request, 'admin_app/student_list.html', context)
+
+def student_edit(request, student_id):
+    student = get_object_or_404(UserProfile, pk=student_id)
+    if request.method == 'POST':
+        form_student = AddStudentForm(request.POST, instance=student)
+        if form_student.is_valid():
+            form_student.save()
+            return redirect('student-detail', student_id=student_id)
+    else:
+        form_student = AddStudentForm(instance=student)
+    return render(request, 'admin_app/student_edit.html', {'form_student': form_student })
+
+def student_detail(request, student_id):
+    student = UserProfile.objects.get(pk=student_id)
+
+    context = {
+      'student':student
+   }
+    return render(request, 'admin_app/student_detail.html', context)
+
+def student_delete(request, student_id):
+    student = get_object_or_404(UserProfile, pk=student_id)
+    if request.method == 'POST':
+        student.delete()
+        messages.info(request, "Deleted successfully!")
+        return redirect('student-list')
+    return render(request, 'admin_app/student_delete.html', {'student': student })
 
 # course list
 def course_list(request):
