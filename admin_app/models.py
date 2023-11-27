@@ -52,3 +52,8 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+class Course(models.Model):
+    name = models.CharField(max_length=100)
+    teachers = models.ManyToManyField(UserProfile, related_name="courses_taught", null=True, blank=True)
+    students = models.ManyToManyField(UserProfile, related_name="courses_registered", null=True, blank=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)

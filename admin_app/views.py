@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .models import UserProfile, Department
-from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm
+from .models import UserProfile, Department, Course
+from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm
 from django.contrib import messages
 
 def admin_dashboard(request):
@@ -47,6 +47,45 @@ def add_teacher(request):
         form_teacher = AddTeacherForm()
         return render(request, 'admin_app/add_teacher.html', {'form_teacher': form_teacher})
 
+
+def add_course(request):
+    if request.method == 'POST':
+        form_course = AddCourseForm(request.POST)
+        if form_course.is_valid():
+            form_course.save()
+            return redirect('course-list')
+    else:
+        form_course = AddCourseForm()
+        return render(request, 'admin_app/add_course.html', {'form_course': form_course})
+
+def course_detail(request, course_id):
+    course = Course.objects.get(pk=course_id)
+    students_registered = course.students.all()
+    number_of_students_registered = students_registered.count()
+    teachers_taught = course.teachers.all()
+    number_of_teachers_registered = teachers_taught.count()
+    department = course.department
+
+    context = {
+    #   'course_name': course.name,
+      'number_of_students_registered': number_of_students_registered,
+      'number_of_teachers_registered': number_of_teachers_registered,
+      'students_registered': students_registered,
+      'teachers_taught': number_of_teachers_registered,
+      'department': department,
+      'course': course
+   }
+    return render(request, 'admin_app/course_detail.html', context)
+
+def course_delete(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+    if request.method == 'POST':
+        course.delete()
+        return redirect('course-list')
+    return render(request, 'admin_app/course_delete.html', {'course': course})
+
+
+
 # Department list
 def department_list(request):
    departments = Department.objects.all()
@@ -91,6 +130,18 @@ def student_list(request):
    }
 
    return render(request, 'admin_app/student_list.html', context)
+
+# course list
+def course_list(request):
+
+   courses = Course.objects.all()
+   number_of_courses = courses.count()
+   context = {
+      'courses': courses,
+      'number_of_courses': number_of_courses,
+   }
+
+   return render(request, 'admin_app/course_list.html', context)
 
 
 

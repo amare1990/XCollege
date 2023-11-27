@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %} Course deletion {% endblock %}
+
+{% block content %}
+
+<div class="container my-5">
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+
+      {% endfor %}
+    {% endif %}
+
+    <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
+            {% url 'admin-dashboard' %}
+            {% else %}
+                {% url 'cs-bsc' %}
+            {% endif %}">My homepage
+    </a>
+    <a class="nav-link text-black" href="{% url 'course-list' %}"> Add more </a>
+
+
+    <h3>Course deletion</h3>
+    <div class="container my-5">
+      <h2>Confirm Deletion</h2>
+      <p>Are you sure you want to delete "{{ course.name }}"?</p>
+      <form method="post">
+          {% csrf_token %}
+          <button type="submit">Delete</button>
+      </form>
+
+
+    </div>
+
+</div>
+
+{% endblock %}

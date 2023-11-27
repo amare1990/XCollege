@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}  Home Page  {% endblock %}
+{% block title %}  Add course  {% endblock %}
 
 <!-- {% load static %} -->
 
@@ -19,13 +19,23 @@
 
     {% endfor %}
   {% endif %}
+
+
+  <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
+            {% url 'admin-dashboard' %}
+            {% else %}
+                {% url 'cs-bsc' %}
+            {% endif %}">My homepage
+    </a>
+
   <h3> Add a course</h3>
   <form method="POST">
     {% csrf_token %}
     {{ form_course.as_p }}
 
+    <button class="btn btn-secondary">Add course</button>
+
   </form>
-  <button class="btn btn-secondary">Add student</button>
 
 </div>
 

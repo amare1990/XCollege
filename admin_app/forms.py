@@ -1,6 +1,6 @@
 # forms.py
 from django import forms
-from .models import UserProfile, Department
+from .models import UserProfile, Department, Course
 
 
 class AddDepartmentForm(forms.ModelForm):
@@ -38,4 +38,16 @@ class AddTeacherForm(forms.ModelForm):
             'role': forms.Select(attrs={'class': 'form-control'}),
             'department': forms.Select(attrs={'class': 'form-control'}),
             'title': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+class AddCourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ['name', 'teachers', 'students', 'department']
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'teachers': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'students': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'department': forms.Select(attrs={'class': 'form-control'}),
         }
