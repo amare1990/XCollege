@@ -11,6 +11,8 @@ def admin_dashboard(request):
     total_students = UserProfile.objects.filter(role='student').count()
     total_teachers = UserProfile.objects.filter(role='teacher').count()
 
+    department = Department.objects.filter(department_head=request.user.username)
+
     context = {
         'total_students': total_students,
         'total_teachers': total_teachers
@@ -18,6 +20,10 @@ def admin_dashboard(request):
 
     if request.user.is_staff:
       return render(request, 'admin_app/admin_dashboard.html', context)
+    elif request.user.username == department.department_head:
+        return render(request, 'admin_app/heads_page.html', {'department': department })
+    else:
+        return render(request, 'website/courses-list.html')
 
 def add_department(request):
     if request.method == 'POST':
@@ -116,6 +122,33 @@ def department_list(request):
    }
 
    return render(request, 'admin_app/departments_list.html', context)
+
+def department_edit(request, department_id):
+    department = get_object_or_404(Department, pk=department_id)
+    if request.method == 'POST':
+        form_department = AddDepartmentForm(request.POST, instance=department)
+        if form_department.is_valid():
+            form_department.save()
+            return redirect('department-detail', department_id=department_id)
+    else:
+        form_department = AddDepartmentForm(instance=department)
+    return render(request, 'admin_app/department_edit.html', {'form_department': form_department })
+
+def department_detail(request, department_id):
+    department = Department.objects.get(pk=department_id)
+
+    context = {
+      'department':department
+   }
+    return render(request, 'admin_app/department_detail.html', context)
+
+def department_delete(request, department_id):
+    department = get_object_or_404(Department, pk=department_id)
+    if request.method == 'POST':
+        department.delete()
+        messages.info(request, "Deleted successfully!")
+        return redirect('department-list')
+    return render(request, 'admin_app/department_delete.html', {'department': department })
 
 # Staff list
 def staff_list(request):

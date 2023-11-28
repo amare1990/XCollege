@@ -32,12 +32,48 @@ roles = (
   ('student', 'student')
 )
 
+program_type = (
+    ('summer', 'summer'),
+    ('Extension', 'Extension'),
+    ('Regular', 'Regular')
+)
+
+program_name = (
+    ('PhD', 'PhD'),
+    ('MSc.', 'MSc.'),
+    ('BSc.', 'BSc.')
+)
+
+class School(models.Model):
+    name = models.CharField(max_length=50, null=True, blank=True)
+    school_dean = models.CharField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        return self.name if self.name else "Unnamed Stream"
+
 
 class Department(models.Model):
-  name = models.CharField(max_length=50)
-  department_head = models.CharField(max_length=50)
+  name = models.CharField(max_length=50, null=True, blank=True)
+  department_head = models.CharField(max_length=50, null=True, blank=True)
 
   def __str__(self):
+        return self.name if self.name else "Unnamed Stream"
+
+class Stream(models.Model):
+    name = models.CharField(max_length=50, null=True, blank=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, blank=True)
+    chair = models.CharField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        return self.name if self.name else "Unnamed Stream"
+
+class Program(models.Model):
+    name = models.CharField(max_length=50, choices=program_name)
+    program_type = models.CharField(max_length=50, choices=program_type)
+    stream = models.ForeignKey(Stream, on_delete=models.CASCADE, null=True, blank=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
         return self.name
 
 class UserProfile(models.Model):
@@ -48,6 +84,8 @@ class UserProfile(models.Model):
     academic_year = models.CharField(max_length=20, choices=year, null=True, blank=True)
     semester = models.CharField(max_length=20, choices=semester, null=True, blank=True)
     title = models.CharField(max_length=20, choices=title_choices, null=True, blank=True)
+    stream = models.ForeignKey(Stream, on_delete=models.CASCADE, null=True, blank=True)
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.user.username
@@ -57,3 +95,7 @@ class Course(models.Model):
     teachers = models.ManyToManyField(UserProfile, related_name="courses_taught", null=True, blank=True)
     students = models.ManyToManyField(UserProfile, related_name="courses_registered", null=True, blank=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    stream = models.ForeignKey(Stream, on_delete=models.CASCADE, null=True, blank=True)
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, null=True, blank=True)
+    academic_year = models.CharField(max_length=20, choices=year, default='first')
+    semester = models.CharField(max_length=20, choices=semester, default='first')

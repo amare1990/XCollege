@@ -32,13 +32,35 @@
         <h3>{{ course.name }} </h3>
         <p> <small>{{ number_of_students_registered }} have already registed</small></p>
         <p><small>Taught by {{ number_of_teachers_registered }}</small> | {{ department.name }} </p>
-        <ul>
-            {% for student in students_registered %}
-                <li>{{ student.user.username }}</li>
-            {% endfor %}
-        </ul>
 
-        <a href="{% url 'course-delete' course_id=course.pk %}">Delete Course</a>
+
+        <a href="{% url 'course-edit' course_id=course.pk %}">Edit Course</a>|<a href="{% url 'course-delete' course_id=course.pk %}">Delete Course</a>
+
+        <h5>Students registered for this course</h5>
+        <table class="table table-dark">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Id</th>
+              <th scope="col">Student username </th>
+              <th scope="col">Department</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in course.students.all %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td><a href="{% url 'student-detail' student_id=student.pk %}">{{ student.pk }}</a></td>
+              <td>{{ student.user.username }}</td>
+              <td>{{ student.department }}</td>
+              <td><a href="{% url 'student-edit' student_id=student.pk %}">Edit</a>|<a href="{% url 'student-detail' student_id=student.pk %}">View</a>|
+                <a href="{% url 'student-delete' student_id=student.pk %}">Delete</a></td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
 
     </div>
 

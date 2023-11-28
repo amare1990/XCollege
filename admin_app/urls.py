@@ -9,6 +9,10 @@ from . import views
 urlpatterns = [
     path('', views.admin_dashboard, name='admin-dashboard'),
     path('add_department', views.add_department, name='add-department'),
+    path('department_list/', views.department_list, name='department-list'),
+    path('department/<int:department_id>/edit', views.department_edit, name='department-edit'),
+    path('department/<int:department_id>/detail', views.department_detail, name='department-detail'),
+    path('department/<int:department_id>/delete', views.department_delete, name='department-delete'),
 
     path('add_course/', views.add_course, name='add-course'),
     path('course_list/', views.course_list, name='course-list'),
@@ -19,7 +23,6 @@ urlpatterns = [
     path('add_teacher/', views.add_teacher, name='add-teacher'),
     path('add_student/', views.add_student, name='add-student'),
 
-    path('department_list/', views.department_list, name='department-list'),
     path('teacher_list/', views.teacher_list, name='teacher-list'),
     path('teacher/<int:teacher_id>/detail/', views.teacher_detail, name='teacher-detail'),
     path('teacher/<int:teacher_id>/edit/', views.teacher_edit, name='teacher-edit'),

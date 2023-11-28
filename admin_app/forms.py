@@ -4,13 +4,13 @@ from .models import UserProfile, Department, Course
 
 
 class AddDepartmentForm(forms.ModelForm):
-    class Meta:
-        model = Department
-        fields = ['name','department_head']
+     department_head = forms.ModelChoiceField(queryset=UserProfile.objects.filter(role='teacher'), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
 
+     class Meta:
+        model = Department
+        fields = ['name', 'department_head']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'department_head': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
 class AddStudentForm(forms.ModelForm):
@@ -43,10 +43,12 @@ class AddTeacherForm(forms.ModelForm):
 class AddCourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ['name', 'teachers', 'students', 'department']
+        fields = ['name', 'teachers', 'students', 'academic_year', 'semester','department']
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'academic-year': forms.Select(attrs={'class': 'form-control'}),
+            'semester': forms.Select(attrs={'class': 'form-control'}),
             'teachers': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'students': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'department': forms.Select(attrs={'class': 'form-control'}),

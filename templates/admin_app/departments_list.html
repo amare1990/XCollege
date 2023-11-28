@@ -30,13 +30,29 @@ s{% extends 'base.html' %}
 
   <p>Number of departments = {{ number_of_departments }}</p>
   <p>List of departments</p>
-  <ul>
-    {% for dept in departments %}
-    <li>
-      <a href="#"> {{ dept.name}} </a>
-    </li>
-  {% endfor %}
-  </ul>
+
+  <table class="table table-dark">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Course Id</th>
+        <th scope="col">name </th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for dept in departments %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td><a href="{% url 'department-detail' department_id=dept.pk %}">{{ dept.pk }}</a></td>
+        <td>{{ dept.name }}</td>
+        <td><a href="{% url 'department-edit' department_id=dept.pk %}">Edit</a>|<a href="{% url 'department-detail' department_id=dept.pk %}">View</a>|
+          <a href="{% url 'department-delete' department_id=dept.pk %}">Delete</a></td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
 
 </div>
 
