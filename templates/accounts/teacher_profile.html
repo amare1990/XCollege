@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}  Student Home Page  {% endblock %}
+{% block title %}  Teacher Home Page  {% endblock %}
 
   <!-- {% load static %} -->
 
@@ -23,21 +23,17 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'add-department' %}"> View my result</a>
+              <a class="nav-link text-white" href="{% url 'add-department' %}"> Evaluation & Grading </a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-teacher' %}">My courses</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'department-list' %}">Register for courses</a>
+              <a class="nav-link text-white" href="{% url 'department-list' %}">Notify students</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'teacher-list' %}">View schedules</a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'course-list' %}">View course</a>
             </li>
 
               <li class="nav-item">
@@ -57,9 +53,9 @@
 
     <div class="statbox">
       <span class="text-primary">
-        <i class="fas fa-user-graduate fa-3x"></i>
+        <i class="fas fa-chalkboard-teacher fa-3x"></i>
       </span>
-      <P>Welcome back, {{ profile.user.username }}! </P>
+      <P> Welcome back, Teacher {{ profile.user.username }}!</P>
     </div>
 
 

@@ -1,10 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
 from .models import UserProfile, Department, Course
 from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm
 from django.contrib import messages
-from django.core.exceptions import ValidationError
 
 def admin_dashboard(request):
 
@@ -18,16 +15,28 @@ def admin_dashboard(request):
         'total_teachers': total_teachers
     }
 
+    profile = UserProfile.objects.get(user=request.user)
+    context = {
+            'profile': profile
+        }
 
     if request.user.is_staff:
       return render(request, 'admin_app/admin_dashboard.html', context1)
-    else:
+    elif profile.role == 'student':
         # student = UserProfile.objects.filter(user=request.user)
-        student = get_object_or_404(UserProfile, user=request.user)
-        context_students = {
-            'student': student
-        }
-        return render(request, 'accounts/student_profile.html', context_students)
+        # student = get_object_or_404(UserProfile, user=request.user)
+        # context_students = {
+        #     'student': student
+        # }
+
+        return render(request, 'accounts/student_profile.html', context)
+    elif profile.role == 'teacher':
+        # student = UserProfile.objects.filter(user=request.user)
+        # teacher = get_object_or_404(UserProfile, user=request.user)
+        # context_teachers = {
+        #     'teacher': teacher
+        # }
+        return render(request, 'accounts/teacher_profile.html', context)
 
 def add_department(request):
     if request.method == 'POST':
