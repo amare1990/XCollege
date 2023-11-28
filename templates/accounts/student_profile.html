@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}  Student Home Page  {% endblock %}
+
+  <!-- {% load static %} -->
+
+  {% block content %}
+  <!-- <h1>You welcome!</h1> -->
+  <br/><br/>
+
+  <div class="row my-5">
+      <!-- Navabr -->
+    <div class="col-md-2 d-none d-md-block bg-light">
+      <nav class="navbar navbar-expand-lg flex-column my-5">
+        <!-- <a class="navbar-brand" href="#">Logo</a> -->
+        <button class="navbar-toggler text-danger" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon text-danger"><i class="fas fa-bars"></i></span>
+        </button>
+        <div class="collapse navbar-collapse bg-secondary" id="navbarNav">
+          <ul class="navbar-nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'admin-dashboard' %}">Home</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'add-department' %}"> View my result</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'add-teacher' %}">My courses</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'department-list' %}">Register for courses</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'teacher-list' %}">View schedules</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'course-list' %}">View course</a>
+            </li>
+
+              <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'add-student' %}">Ask for leave</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'add-course' %}">Give feedback</a>
+            </li>
+
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <!-- body-->
+
+    <div class="statbox">
+      <span class="text-primary">
+        <i class="fas fa-user-graduate fa-3x"></i>
+      </span>
+      <P>{{ student.user.username }} </P>
+    </div>
+
+
+
+
+
+
+
+  </div>
+
+
+{% endblock %}

@@ -81,11 +81,9 @@
           <a class="nav-link text-white" href="{% url 'edit-profile' %}">Edit profile</a>
           <a class="nav-link text-white" href="{% url 'change-password' %}">Change password</a>
           <a class="nav-link text-white" href="{% url 'reset_password' %}">Reset your password?</a>
-          <a class="nav-link text-white" href="{% if user.is_staff %}
+          <a class="nav-link text-white" href="
           {% url 'admin-dashboard' %}
-          {% else %}
-          {% url 'cs-bsc' %}
-          {% endif %}">My homepage</a>
+          ">My homepage</a>
         </div>
       </div>
 

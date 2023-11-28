@@ -11,19 +11,23 @@ def admin_dashboard(request):
     total_students = UserProfile.objects.filter(role='student').count()
     total_teachers = UserProfile.objects.filter(role='teacher').count()
 
-    department = Department.objects.filter(department_head=request.user.username)
+    # department = Department.objects.filter(department_head=request.user.username)
 
-    context = {
+    context1 = {
         'total_students': total_students,
         'total_teachers': total_teachers
     }
 
+
     if request.user.is_staff:
-      return render(request, 'admin_app/admin_dashboard.html', context)
-    elif request.user.username == department.department_head:
-        return render(request, 'admin_app/heads_page.html', {'department': department })
+      return render(request, 'admin_app/admin_dashboard.html', context1)
     else:
-        return render(request, 'website/courses-list.html')
+        # student = UserProfile.objects.filter(user=request.user)
+        student = get_object_or_404(UserProfile, user=request.user)
+        context_students = {
+            'student': student
+        }
+        return render(request, 'accounts/student_profile.html', context_students)
 
 def add_department(request):
     if request.method == 'POST':
@@ -33,7 +37,7 @@ def add_department(request):
             return redirect('department-list')
     else:
         form_department = AddDepartmentForm()
-    return render(request, 'admin_app/add_department.html', {'form_department': form_department})
+    return render(request, 'admin_app/department/add_department.html', {'form_department': form_department})
 
 def add_student(request):
     if request.method == 'POST':
@@ -48,7 +52,7 @@ def add_student(request):
                 return redirect('student-list')
     else:
         form_student = AddStudentForm()
-        return render(request, 'admin_app/add_student.html', {'form_student': form_student})
+        return render(request, 'admin_app/student/add_student.html', {'form_student': form_student})
 
 def add_teacher(request):
     if request.method == 'POST':
@@ -58,7 +62,7 @@ def add_teacher(request):
             return redirect('teacher-list')
     else:
         form_teacher = AddTeacherForm()
-        return render(request, 'admin_app/add_teacher.html', {'form_teacher': form_teacher})
+        return render(request, 'admin_app/teacher/add_teacher.html', {'form_teacher': form_teacher})
 
 
 def add_course(request):
@@ -69,7 +73,7 @@ def add_course(request):
             return redirect('course-list')
     else:
         form_course = AddCourseForm()
-        return render(request, 'admin_app/add_course.html', {'form_course': form_course})
+        return render(request, 'admin_app/course/add_course.html', {'form_course': form_course})
 
 def course_detail(request, course_id):
     course = Course.objects.get(pk=course_id)
@@ -88,7 +92,7 @@ def course_detail(request, course_id):
       'department': department,
       'course': course
    }
-    return render(request, 'admin_app/course_detail.html', context)
+    return render(request, 'admin_app/course/course_detail.html', context)
 
 def course_edit(request, course_id):
        course = get_object_or_404(Course, pk=course_id)
@@ -99,7 +103,7 @@ def course_edit(request, course_id):
                return redirect('course-detail', course_id=course_id)
        else:
            form_course = AddCourseForm(instance=course)
-       return render(request, 'admin_app/course_edit.html', {'form_course': form_course })
+       return render(request, 'admin_app/course/course_edit.html', {'form_course': form_course })
 
 
 def course_delete(request, course_id):
@@ -107,7 +111,7 @@ def course_delete(request, course_id):
     if request.method == 'POST':
         course.delete()
         return redirect('course-list')
-    return render(request, 'admin_app/course_delete.html', {'course': course})
+    return render(request, 'admin_app/course/course_delete.html', {'course': course})
 
 
 
@@ -121,7 +125,7 @@ def department_list(request):
       'number_of_departments': number_of_departments,
    }
 
-   return render(request, 'admin_app/departments_list.html', context)
+   return render(request, 'admin_app/department/departments_list.html', context)
 
 def department_edit(request, department_id):
     department = get_object_or_404(Department, pk=department_id)
@@ -132,7 +136,7 @@ def department_edit(request, department_id):
             return redirect('department-detail', department_id=department_id)
     else:
         form_department = AddDepartmentForm(instance=department)
-    return render(request, 'admin_app/department_edit.html', {'form_department': form_department })
+    return render(request, 'admin_app/department/department_edit.html', {'form_department': form_department })
 
 def department_detail(request, department_id):
     department = Department.objects.get(pk=department_id)
@@ -140,7 +144,7 @@ def department_detail(request, department_id):
     context = {
       'department':department
    }
-    return render(request, 'admin_app/department_detail.html', context)
+    return render(request, 'admin_app/department/department_detail.html', context)
 
 def department_delete(request, department_id):
     department = get_object_or_404(Department, pk=department_id)
@@ -148,7 +152,7 @@ def department_delete(request, department_id):
         department.delete()
         messages.info(request, "Deleted successfully!")
         return redirect('department-list')
-    return render(request, 'admin_app/department_delete.html', {'department': department })
+    return render(request, 'admin_app/department/department_delete.html', {'department': department })
 
 # Staff list
 def staff_list(request):
@@ -157,7 +161,7 @@ def staff_list(request):
       'number_of_staff': number_of_staff,
    }
 
-   return render(request, 'admin_app/staff_list.html', context)
+   return render(request, 'admin_app/staff/staff_list.html', context)
 
 # Teachers list
 def teacher_list(request):
@@ -169,7 +173,7 @@ def teacher_list(request):
       'number_of_teachers': number_of_teachers,
    }
 
-   return render(request, 'admin_app/teacher_list.html', context)
+   return render(request, 'admin_app/teacher/teacher_list.html', context)
 
 def teacher_edit(request, teacher_id):
     teacher = get_object_or_404(UserProfile, pk=teacher_id)
@@ -180,7 +184,7 @@ def teacher_edit(request, teacher_id):
             return redirect('teacher-detail', teacher_id=teacher_id)
     else:
         form_teacher = AddTeacherForm(instance=teacher)
-    return render(request, 'admin_app/teacher_edit.html', {'form_teacher': form_teacher })
+    return render(request, 'admin_app/teacher/teacher_edit.html', {'form_teacher': form_teacher })
 
 def teacher_detail(request, teacher_id):
     teacher = UserProfile.objects.get(pk=teacher_id)
@@ -188,7 +192,7 @@ def teacher_detail(request, teacher_id):
     context = {
       'teacher':teacher
    }
-    return render(request, 'admin_app/teacher_detail.html', context)
+    return render(request, 'admin_app/teacher/teacher_detail.html', context)
 
 def teacher_delete(request, teacher_id):
     teacher = get_object_or_404(UserProfile, pk=teacher_id)
@@ -196,7 +200,7 @@ def teacher_delete(request, teacher_id):
         teacher.delete()
         messages.info(request, "Deleted successfully!")
         return redirect('teacher-list')
-    return render(request, 'admin_app/teacher_delete.html', {'teacher': teacher })
+    return render(request, 'admin_app/teacher/teacher_delete.html', {'teacher': teacher })
 
 # Student list
 def student_list(request):
@@ -208,7 +212,7 @@ def student_list(request):
       'number_of_students': number_of_students,
    }
 
-   return render(request, 'admin_app/student_list.html', context)
+   return render(request, 'admin_app/student/student_list.html', context)
 
 def student_edit(request, student_id):
     student = get_object_or_404(UserProfile, pk=student_id)
@@ -219,7 +223,7 @@ def student_edit(request, student_id):
             return redirect('student-detail', student_id=student_id)
     else:
         form_student = AddStudentForm(instance=student)
-    return render(request, 'admin_app/student_edit.html', {'form_student': form_student })
+    return render(request, 'admin_app/student/student_edit.html', {'form_student': form_student })
 
 def student_detail(request, student_id):
     student = UserProfile.objects.get(pk=student_id)
@@ -227,7 +231,7 @@ def student_detail(request, student_id):
     context = {
       'student':student
    }
-    return render(request, 'admin_app/student_detail.html', context)
+    return render(request, 'admin_app/student/student_detail.html', context)
 
 def student_delete(request, student_id):
     student = get_object_or_404(UserProfile, pk=student_id)
@@ -235,7 +239,7 @@ def student_delete(request, student_id):
         student.delete()
         messages.info(request, "Deleted successfully!")
         return redirect('student-list')
-    return render(request, 'admin_app/student_delete.html', {'student': student })
+    return render(request, 'admin_app/student/student_delete.html', {'student': student })
 
 # course list
 def course_list(request):
@@ -247,7 +251,7 @@ def course_list(request):
       'number_of_courses': number_of_courses,
    }
 
-   return render(request, 'admin_app/course_list.html', context)
+   return render(request, 'admin_app/course/course_list.html', context)
 
 
 
