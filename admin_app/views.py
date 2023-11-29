@@ -25,6 +25,8 @@ def admin_dashboard(request):
             return render(request, 'admin_app/admin_dashboard.html', context1)
         elif profile.role == 'student':
             return render(request, 'accounts/student_profile.html', context)
+        elif profile.role == 'head' and profile.role == 'teacher':
+            return render(request, 'accounts/head_profile.html', context)
         elif profile.role == 'teacher':
             return render(request, 'accounts/teacher_profile.html', context)
     except UserProfile.DoesNotExist:

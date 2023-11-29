@@ -59,6 +59,7 @@ class CourseRegistrationForm(forms.Form):
 
 
 class AddCourseOfferingForm(forms.Form):
+    # user_profile = UserProfile.objects.get(user=request.user)
     course = forms.ModelChoiceField(queryset=Course.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
     # academic_year = forms.CharField(max_length=20, widget=forms.Select(attrs={'class': 'form-control'}))
     # semester = forms.CharField(max_length=20, widget=forms.Select(attrs={'class': 'form-control'}))
