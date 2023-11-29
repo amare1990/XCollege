@@ -30,7 +30,7 @@ class AddStudentForm(forms.ModelForm):
 class AddTeacherForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['user', 'bio', 'role', 'department', 'title']
+        fields = ['user', 'bio', 'role', 'department', 'title', 'position']
 
         widgets = {
             'user': forms.Select(attrs={'class': 'form-control'}),
@@ -38,6 +38,7 @@ class AddTeacherForm(forms.ModelForm):
             'role': forms.Select(attrs={'class': 'form-control'}),
             'department': forms.Select(attrs={'class': 'form-control'}),
             'title': forms.Select(attrs={'class': 'form-control'}),
+            'position': forms.Select(attrs={'class': 'form-control'}),
         }
 
 class AddCourseForm(forms.ModelForm):
@@ -64,3 +65,7 @@ class AddCourseOfferingForm(forms.Form):
     # academic_year = forms.CharField(max_length=20, widget=forms.Select(attrs={'class': 'form-control'}))
     # semester = forms.CharField(max_length=20, widget=forms.Select(attrs={'class': 'form-control'}))
     teachers = forms.ModelMultipleChoiceField(queryset=UserProfile.objects.filter(role='teacher'), widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
+
+class OfferPositionForm(forms.Form):
+    department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
+    teachers = forms.ModelChoiceField(queryset=UserProfile.objects.filter(role='teacher'), widget=forms.SelectMultiple(attrs={'class': 'form-control'}))

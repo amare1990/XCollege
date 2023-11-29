@@ -8,6 +8,8 @@ from . import views
 
 urlpatterns = [
     path('', views.admin_dashboard, name='admin-dashboard'),
+    path('position/offer/', views.offer_position, name='offer-position'),
+    path('position/view/', views.view_position, name='view-position'),
     path('add_department', views.add_department, name='add-department'),
     path('department_list/', views.department_list, name='department-list'),
     path('department/<int:department_id>/edit', views.department_edit, name='department-edit'),

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import UserProfile, Department, Course
-from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm
+from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm
 from django.contrib import messages
 
 def admin_dashboard(request):
@@ -25,12 +25,30 @@ def admin_dashboard(request):
             return render(request, 'admin_app/admin_dashboard.html', context1)
         elif profile.role == 'student':
             return render(request, 'accounts/student_profile.html', context)
-        elif profile.role == 'head' and profile.role == 'teacher':
+        elif profile.position == 'head':
             return render(request, 'accounts/head_profile.html', context)
-        elif profile.role == 'teacher':
+        elif profile.role == 'teacher' and profile.position == None:
             return render(request, 'accounts/teacher_profile.html', context)
     except UserProfile.DoesNotExist:
         return redirect('add-teacher')
+
+
+def offer_position(request):
+    if request.method == 'POST':
+        form = OfferPositionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('view-position')
+    else:
+        form = OfferPositionForm()
+    return render(request, 'admin_app/offer_position.html', {'form': form})
+
+def view_position(request):
+    heads = UserProfile.objects.filter(position='head')
+
+    return render(request, 'admin_app/view_position.html', {'heads':heads})
+
+
 
 
 def add_department(request):

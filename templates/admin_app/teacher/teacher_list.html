@@ -40,6 +40,7 @@
               <th scope="col">Bio</th>
               <th scope="col">Tiltle</th>
               <th scope="col">Department</th>
+              <th scope="col">Position</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -53,6 +54,7 @@
               <td>{{ teacher.bio|truncatechars:50 }}</td>
               <td> {{ teacher.title }} </td>
               <td> {{ teacher.department }} </td>
+              <td> {{ teacher.position }} </td>
               <td><a href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>|<a href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a>|
                 <a href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a></td>
             </tr>

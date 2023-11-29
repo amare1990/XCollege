@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}  Offer position  {% endblock %}
+
+<!-- {% load static %} -->
+
+{% block content%}
+
+<div class="container my-5">
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+    </div>
+
+    {% endfor %}
+  {% endif %}
+
+  <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
+          {% url 'admin-dashboard' %}
+          {% else %}
+            {% url 'cs-bsc' %}
+          {% endif %}">My homepage
+  </a>
+
+  <h3> Offer position</h3>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button class="btn btn-secondary">Offer position</button>
+  </form>
+
+</div>
+
+{% endblock %}
