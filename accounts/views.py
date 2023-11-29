@@ -42,6 +42,8 @@ def user_login(request):
         return render(request, 'accounts/student_profile.html', context)
       elif profile.role == 'teacher':
         return render(request, 'accounts/teacher_profile.html', context)
+      elif profile.role == 'head':
+        return render(request, 'accounts/head_profile.html', context)
     else:
       messages.info(request, 'Either username or passowrd is not corectly entered!')
       return redirect('user-login')

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %} Course offering view {% endblock %}
+
+{% block content %}
+
+<div class="container my-5">
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+
+      {% endfor %}
+    {% endif %}
+
+    <a class="nav-link text-black" href="
+        {% url 'admin-dashboard' %}">My homepage </a>
+
+    <p> H! {{ profile.user.username }} | Head of {{ profile.department }} </p>
+    <h2>Course Offered View</h2>
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th>Course Name</th>
+                <th>Department</th>
+                <th>Teachers</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses_with_teachers %}
+            <tr>
+                <td>{{ course.name }}</td>
+                <td>{{ course.department.name }}</td>
+                <td>
+                    <ul class="list-unstyled">
+                        {% for teacher in course.teachers.all %}
+                        <li>{{ teacher.user.username }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+
+
+
+{% endblock %}

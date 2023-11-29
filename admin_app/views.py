@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import UserProfile, Department, Course
-from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm
+from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm
 from django.contrib import messages
 
 def admin_dashboard(request):
@@ -283,6 +283,28 @@ def course_registration(request):
 
     return render(request, 'admin_app/course/course_registration.html', {'form_course_registration': form_course_registration})
 
+
+def add_course_offering(request):
+    if request.method == 'POST':
+        form = AddCourseOfferingForm(request.POST)
+        if form.is_valid():
+            course = form.cleaned_data['course']
+            academic_year = form.cleaned_data['academic_year']
+            semester = form.cleaned_data['semester']
+            teachers = form.cleaned_data['teachers']
+            course.academic_year = academic_year
+            course.semester = semester
+            course.teachers.set(teachers)
+            course.save()
+            return redirect('teacher-courses')
+    else:
+        form = AddCourseOfferingForm()
+
+    return render(request, 'admin_app/head/add_course_offering.html', {'form': form})
+
+
+
+
 def student_courses(request):
     user_profile = UserProfile.objects.get(user=request.user)
     registered_courses = user_profile.courses_registered.all()
@@ -293,3 +315,30 @@ def student_courses(request):
     }
 
     return render(request, 'admin_app/course/student_courses.html', context)
+
+def add_course_offering(request):
+    if request.method == 'POST':
+        form = AddCourseOfferingForm(request.POST)
+        if form.is_valid():
+            selected_course = form.cleaned_data['course']
+            # academic_year = form.cleaned_data['academic_year']
+            # semester = form.cleaned_data['semester']
+            teachers = form.cleaned_data['teachers']
+            # selected_course.academic_year = academic_year
+            # selected_course.semester = semester
+            selected_course.teachers.set(teachers)
+            selected_course.save()
+            return redirect('course-offering-view')
+    else:
+        form = AddCourseOfferingForm()
+
+    return render(request, 'admin_app/head/add_course_offering.html', {'form': form})
+
+
+def course_offering_view(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    department = user_profile.department
+
+    courses_with_teachers = Course.objects.filter(department=department).prefetch_related('teachers').all()
+    return render(request, 'admin_app/head/course_offering_view.html', {'courses_with_teachers': courses_with_teachers,
+                                                                        'profile':user_profile })

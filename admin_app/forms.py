@@ -56,3 +56,10 @@ class AddCourseForm(forms.ModelForm):
 
 class CourseRegistrationForm(forms.Form):
     courses = forms.ModelMultipleChoiceField(queryset=Course.objects.all(), widget=forms.CheckboxSelectMultiple)
+
+
+class AddCourseOfferingForm(forms.Form):
+    course = forms.ModelChoiceField(queryset=Course.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
+    # academic_year = forms.CharField(max_length=20, widget=forms.Select(attrs={'class': 'form-control'}))
+    # semester = forms.CharField(max_length=20, widget=forms.Select(attrs={'class': 'form-control'}))
+    teachers = forms.ModelMultipleChoiceField(queryset=UserProfile.objects.filter(role='teacher'), widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
