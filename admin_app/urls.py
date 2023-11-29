@@ -27,11 +27,16 @@ urlpatterns = [
     path('teacher/<int:teacher_id>/detail/', views.teacher_detail, name='teacher-detail'),
     path('teacher/<int:teacher_id>/edit/', views.teacher_edit, name='teacher-edit'),
     path('teacher/<int:teacher_id>/delete/', views.teacher_delete, name='teacher-delete'),
+    path('teacher/teacher_courses/', views.teacher_courses, name='teacher-courses'),
 
     path('student_list/', views.student_list, name='student-list'),
     path('student/<int:student_id>/detail/', views.student_detail, name='student-detail'),
     path('student/<int:student_id>/edit/', views.student_edit, name='student-edit'),
     path('student/<int:student_id>/delete/', views.student_delete, name='student-delete'),
+    path('student/register/', views.course_registration, name='course-register'),
+    path('student/student_courses/', views.student_courses, name='student-courses'),
+
+    path('staff/course_offer/', views.course_offer, name='course-offer'),
 
     path('staff_list/', views.staff_list, name='staff-list'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

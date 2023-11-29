@@ -99,3 +99,7 @@ class Course(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, null=True, blank=True)
     academic_year = models.CharField(max_length=20, choices=year, default='first')
     semester = models.CharField(max_length=20, choices=semester, default='first')
+
+
+    def __str__(self):
+        return self.course.name

@@ -26,19 +26,16 @@
               <a class="nav-link text-white" href="{% url 'add-department' %}"> View my result</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'add-teacher' %}">My courses</a>
+              <a class="nav-link text-white" href="{% url 'student-courses' %}">My courses</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'department-list' %}">Register for courses</a>
+              <a class="nav-link text-white" href="{% url 'course-register' %}">Register for courses</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'teacher-list' %}">View schedules</a>
             </li>
 
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'course-list' %}">View course</a>
-            </li>
 
               <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-student' %}">Ask for leave</a>
@@ -60,6 +57,8 @@
         <i class="fas fa-user-graduate fa-3x"></i>
       </span>
       <P>Welcome back, {{ profile.user.username }}! </P>
+
+      My courses
     </div>
 
 

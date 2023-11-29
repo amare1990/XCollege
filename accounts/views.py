@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from admin_app.models import UserProfile
 
 # User registration form
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
@@ -12,10 +13,8 @@ from django.urls import reverse_lazy
 # Password change view
 class PasswordsChangeView(PasswordChangeView):
   form_class = PasswordChangingForm
-  # form_class = PasswordChangeForm
   success_url = reverse_lazy('password-change-done')
-  # success_url = reverse_lazy('user-login')
-# Password change done!
+
 def password_change_done(request):
   return render(request, 'accounts/registration/password_change_done.html', {})
 
@@ -23,16 +22,26 @@ def password_change_done(request):
 # User login
 def user_login(request):
 
+  # profile = UserProfile.objects.get(user=request.user.id)
+
   if request.method == "POST":
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(request, username=username, password=password)
     if user is not None:
       login(request, user)
+      profile = get_object_or_404(UserProfile, user=request.user.id)
+      context = {
+            'profile': profile
+        }
       messages.success(request, 'Bingo! %s' % ( user.first_name))
-      if user.is_staff:
+      if user.is_staff or profile.role == 'admin':
         # return redirect('home')
         return redirect('admin-dashboard')
+      elif profile.role == 'student':
+        return render(request, 'accounts/student_profile.html', context)
+      elif profile.role == 'teacher':
+        return render(request, 'accounts/teacher_profile.html', context)
     else:
       messages.info(request, 'Either username or passowrd is not corectly entered!')
       return redirect('user-login')

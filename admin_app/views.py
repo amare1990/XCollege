@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import UserProfile, Department, Course
-from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm
+from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm
 from django.contrib import messages
 
 def admin_dashboard(request):
@@ -15,28 +15,21 @@ def admin_dashboard(request):
         'total_teachers': total_teachers
     }
 
-    profile = UserProfile.objects.get(user=request.user)
-    context = {
+    try:
+        profile = UserProfile.objects.get(user=request.user)
+        context = {
             'profile': profile
         }
 
-    if request.user.is_staff:
-      return render(request, 'admin_app/admin_dashboard.html', context1)
-    elif profile.role == 'student':
-        # student = UserProfile.objects.filter(user=request.user)
-        # student = get_object_or_404(UserProfile, user=request.user)
-        # context_students = {
-        #     'student': student
-        # }
+        if profile.role == 'admin' or request.user.is_staff:
+            return render(request, 'admin_app/admin_dashboard.html', context1)
+        elif profile.role == 'student':
+            return render(request, 'accounts/student_profile.html', context)
+        elif profile.role == 'teacher':
+            return render(request, 'accounts/teacher_profile.html', context)
+    except UserProfile.DoesNotExist:
+        return redirect('add-teacher')
 
-        return render(request, 'accounts/student_profile.html', context)
-    elif profile.role == 'teacher':
-        # student = UserProfile.objects.filter(user=request.user)
-        # teacher = get_object_or_404(UserProfile, user=request.user)
-        # context_teachers = {
-        #     'teacher': teacher
-        # }
-        return render(request, 'accounts/teacher_profile.html', context)
 
 def add_department(request):
     if request.method == 'POST':
@@ -211,6 +204,19 @@ def teacher_delete(request, teacher_id):
         return redirect('teacher-list')
     return render(request, 'admin_app/teacher/teacher_delete.html', {'teacher': teacher })
 
+
+
+def teacher_courses(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    courses_taught = user_profile.courses_taught.all()
+
+    context = {
+        'profile': user_profile,
+        'courses': courses_taught
+    }
+
+    return render(request, 'admin_app/course/teacher_courses.html', context)
+
 # Student list
 def student_list(request):
 
@@ -264,3 +270,26 @@ def course_list(request):
 
 
 
+def course_registration(request):
+    if request.method == 'POST':
+        form_course_registration = CourseRegistrationForm(request.POST)
+        if form_course_registration.is_valid():
+            selected_courses = form_course_registration.cleaned_data['courses']
+            user_profile = UserProfile.objects.get(user=request.user)
+            user_profile.courses_registered.add(*selected_courses)
+            return redirect('student-courses')
+    else:
+        form_course_registration = CourseRegistrationForm()
+
+    return render(request, 'admin_app/course/course_registration.html', {'form_course_registration': form_course_registration})
+
+def student_courses(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    registered_courses = user_profile.courses_registered.all()
+
+    context = {
+        'profile': user_profile,
+        'courses': registered_courses
+    }
+
+    return render(request, 'admin_app/course/student_courses.html', context)

@@ -43,13 +43,16 @@ class AddTeacherForm(forms.ModelForm):
 class AddCourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ['name', 'teachers', 'students', 'academic_year', 'semester','department']
+        fields = ['name', 'academic_year', 'semester','department']
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'academic-year': forms.Select(attrs={'class': 'form-control'}),
             'semester': forms.Select(attrs={'class': 'form-control'}),
-            'teachers': forms.SelectMultiple(attrs={'class': 'form-control'}),
-            'students': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            # 'teachers': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            # 'students': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'department': forms.Select(attrs={'class': 'form-control'}),
         }
+
+class CourseRegistrationForm(forms.Form):
+    courses = forms.ModelMultipleChoiceField(queryset=Course.objects.all(), widget=forms.CheckboxSelectMultiple)
