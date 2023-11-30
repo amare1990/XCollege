@@ -1,7 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %} Position view {% endblock %}
+
+{% block content %}
+
+<div class="container my-5">
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+
+      {% endfor %}
+    {% endif %}
+
+    <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
+            {% url 'admin-dashboard' %}
+            {% else %}
+                {% url 'cs-bsc' %}
+            {% endif %}">My homepage
+    </a>
+    <a class="nav-link text-black" href="{% url 'offer-position' %}"> Offer position </a>
+
+    <h3> Positions </h3>
+    <div class="container my-5">
+
+        <table class="table table-dark">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col"> Username </th>
+              <th scope="col">Department</th>
+              <th scope="col">Position</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for head_profile in head_profiles %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ head_profile.user.username }}</td>
+              <td> {{ head_profile.department }} </td>
+              <td> {{ head_profile.position }} </td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+    </div>
+
+    </div>
+{% endblock %}
+
+
+
+
+
 <h1>positions</h1>
 
-<ul>
-  {% for head in heads %}
-    {{ head.user.name }} | {{ head.departmnet}}
+<ul class="list-unstyled">
+  {% for head_profile in head_profiles %}
+    <li>
+      {{ head_profile.user.username }} of  {{ head_profile.department}} department
+    </li>
   {% endfor %}
 </ul>

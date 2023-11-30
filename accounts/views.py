@@ -40,9 +40,9 @@ def user_login(request):
         return redirect('admin-dashboard')
       elif profile.role == 'student':
         return render(request, 'accounts/student_profile.html', context)
-      elif profile.role == 'teacher':
+      elif profile.role == 'teacher' and profile.position == None:
         return render(request, 'accounts/teacher_profile.html', context)
-      elif profile.role == 'head':
+      elif profile.position == 'head':
         return render(request, 'accounts/head_profile.html', context)
     else:
       messages.info(request, 'Either username or passowrd is not corectly entered!')

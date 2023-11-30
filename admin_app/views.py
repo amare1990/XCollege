@@ -44,9 +44,8 @@ def offer_position(request):
     return render(request, 'admin_app/offer_position.html', {'form': form})
 
 def view_position(request):
-    heads = UserProfile.objects.filter(position='head')
-
-    return render(request, 'admin_app/view_position.html', {'heads':heads})
+    head_profiles = UserProfile.objects.filter(position='head')
+    return render(request, 'admin_app/view_position.html', {'head_profiles': head_profiles})
 
 
 
