@@ -1,4 +1,4 @@
-#!/home/am/Django/XCollege/venv-college/bin/python3
+#!/home/am/Django/XCollege/venv-college/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
