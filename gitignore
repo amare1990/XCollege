@@ -6,3 +6,18 @@
 
 # Ignore the virtual environment directory
 venv-college/
+
+# Ignore Django cache files
+__pycache__/
+
+# Ignore SQLite database file
+db.sqlite3
+
+# Ignore specific cache files
+XCollege/__pycache__/
+accounts/__pycache__/
+accounts/__pycache__/apps.cpython-38.pyc
+accounts/__pycache__/views.cpython-38.pyc
+
+# Ignore signals.cpython-38.pyc file
+accounts/__pycache__/signals.cpython-38.pyc

@@ -44,12 +44,13 @@ def user_login(request):
         return render(request, 'accounts/teacher_profile.html', context)
       elif profile.position == 'head':
         return render(request, 'accounts/head_profile.html', context)
+      elif profile.role == None or profile.position == None:
+        return redirect('home')
+
     else:
       messages.info(request, 'Either username or passowrd is not corectly entered!')
       return redirect('user-login')
-
   return render(request, 'accounts/registration/login.html', {})
-
 
 
 # User Registration
