@@ -48,7 +48,7 @@ position = (
     ('head', 'Head'),
     ('school dean', 'School Dean'),
     ('chair', 'Chair'),
-    ('program coordinater', 'Program Coordinator'),
+    ('program coordinator', 'Program Coordinator'),
     ('college dean', 'College Dean')
 )
 

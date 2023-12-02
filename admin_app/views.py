@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import UserProfile, Department, Course
 from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm
 from django.contrib import messages
-
+from django.db.models import Q
+from django.db.models import Count
 def admin_dashboard(request):
 
     total_students = UserProfile.objects.filter(role='student').count()
@@ -37,16 +38,37 @@ def offer_position(request):
     if request.method == 'POST':
         form = OfferPositionForm(request.POST)
         if form.is_valid():
-            form.save()
+            department = form.cleaned_data['department']
+            teachers = form.cleaned_data['teachers']
+            # Custom logic to filter teachers based on the selected position and department
+            # For example:
+            # if position == 'department_head':
+            filtered_teachers = teachers.filter(department=department)
+            # elif position == 'school_dean':
+            # filtered_teachers = teachers.filter(school=department.school)  # Assuming school is a field in UserProfile
+            # Add similar logic for other positions
+            # else:
+            # filtered_teachers = teachers
+            # form.save()
             return redirect('view-position')
     else:
         form = OfferPositionForm()
     return render(request, 'admin_app/offer_position.html', {'form': form})
 
 def view_position(request):
-    head_profiles = UserProfile.objects.filter(position='head')
-    return render(request, 'admin_app/view_position.html', {'head_profiles': head_profiles})
+    department_head_profiles = UserProfile.objects.filter(position='head')
+    school_dean_profiles = UserProfile.objects.filter(position='school dean')
+    college_dean_profiles = UserProfile.objects.filter(position='college dean')
+    program_coordinator_profiles = UserProfile.objects.filter(position='program coordinator')
+    chair_profiles = UserProfile.objects.filter(position='chair')
 
+    return render(request, 'admin_app/view_position.html', {
+        'department_head_profiles': department_head_profiles,
+        'school_dean_profiles': school_dean_profiles,
+        'college_dean_profiles': college_dean_profiles,
+        'program_coordinator_profiles': program_coordinator_profiles,
+        'chair_profiles': chair_profiles,
+    })
 
 
 
