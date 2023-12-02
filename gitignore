@@ -1,6 +1,8 @@
 # Ignore Python bytecode files
 *.pyc
 
+**/__pycache__/*
+
 # Ignore Django migration files for all apps
 **/migrations/
 
@@ -21,3 +23,8 @@ accounts/__pycache__/views.cpython-38.pyc
 
 # Ignore signals.cpython-38.pyc file
 accounts/__pycache__/signals.cpython-38.pyc
+
+XCollege/XCollege/__pycache__/custom_middleware.cpython-38.pyc
+
+
+

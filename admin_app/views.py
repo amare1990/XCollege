@@ -4,12 +4,12 @@ from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseF
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models import Count
-def admin_dashboard(request):
+from django.http import HttpResponse
 
+
+def admin_dashboard(request):
     total_students = UserProfile.objects.filter(role='student').count()
     total_teachers = UserProfile.objects.filter(role='teacher').count()
-
-    # department = Department.objects.filter(department_head=request.user.username)
 
     context1 = {
         'total_students': total_students,
@@ -28,8 +28,10 @@ def admin_dashboard(request):
             return render(request, 'accounts/student_profile.html', context)
         elif profile.position == 'head':
             return render(request, 'accounts/head_profile.html', context)
-        elif profile.role == 'teacher' and profile.position == None:
+        elif profile.role == 'teacher' and profile.position is None:
             return render(request, 'accounts/teacher_profile.html', context)
+        else:
+            return HttpResponse("Unauthorized access")
     except UserProfile.DoesNotExist:
         return redirect('add-teacher')
 

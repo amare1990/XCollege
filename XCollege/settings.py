@@ -39,7 +39,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'custom_middleware.ProfileCompletionMiddleware',
+    'XCollege.custom_middleware.ProfileCompletionMiddleware',
 ]
 
 ROOT_URLCONF = 'XCollege.urls'

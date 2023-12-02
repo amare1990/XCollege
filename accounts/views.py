@@ -20,37 +20,42 @@ def password_change_done(request):
 
 
 # User login
+# from django.http import Http404
+
 def user_login(request):
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
 
-  # profile = UserProfile.objects.get(user=request.user.id)
+        if user is not None:
+            login(request, user)
+            try:
+                profile = UserProfile.objects.get(user=request.user)
+            except UserProfile.DoesNotExist:
+                profile = None
 
-  if request.method == "POST":
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-      login(request, user)
-      profile = get_object_or_404(UserProfile, user=request.user.id)
-      context = {
-            'profile': profile
-        }
-      messages.success(request, 'Bingo! %s' % ( user.first_name))
-      if user.is_staff or profile.role == 'admin':
-        # return redirect('home')
-        return redirect('admin-dashboard')
-      elif profile.role == 'student':
-        return render(request, 'accounts/student_profile.html', context)
-      elif profile.role == 'teacher' and profile.position == None:
-        return render(request, 'accounts/teacher_profile.html', context)
-      elif profile.position == 'head':
-        return render(request, 'accounts/head_profile.html', context)
-      elif profile.role == None or profile.position == None:
-        return redirect('home')
-
-    else:
-      messages.info(request, 'Either username or passowrd is not corectly entered!')
-      return redirect('user-login')
-  return render(request, 'accounts/registration/login.html', {})
+            if profile is not None:
+                context = {'profile': profile}
+                messages.success(request, 'Bingo! %s' % (user.first_name))
+                if user.is_staff or profile.role == 'admin':
+                    return redirect('admin-dashboard')
+                elif profile.role == 'student':
+                    return render(request, 'accounts/student_profile.html', context)
+                elif profile.role == 'teacher' and profile.position is None:
+                    return render(request, 'accounts/teacher_profile.html', context)
+                elif profile.position == 'head':
+                    return render(request, 'accounts/head_profile.html', context)
+                elif profile.role is None or profile.position is None:
+                    return redirect('home')
+            else:
+                # Handle the case where the UserProfile does not exist
+                messages.error(request, 'User profile does not exist')
+                return redirect('home')
+        else:
+            messages.info(request, 'Either username or password is not correctly entered')
+            return redirect('user-login')
+    return render(request, 'accounts/registration/login.html', {})
 
 
 # User Registration

@@ -87,7 +87,7 @@ class Program(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(default='Enter your bio briefly')
-    role = models.CharField(max_length=20, choices=roles, default='student')
+    role = models.CharField(max_length=20, choices=roles)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, blank=True)
     academic_year = models.CharField(max_length=20, choices=year, null=True, blank=True)
     semester = models.CharField(max_length=20, choices=semester, null=True, blank=True)
