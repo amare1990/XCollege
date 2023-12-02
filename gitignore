@@ -1,0 +1,8 @@
+# Ignore Python bytecode files
+*.pyc
+
+# Ignore Django migration files for all apps
+**/migrations/
+
+# Ignore the virtual environment directory
+venv-college/
