@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Teacher deletion {% endblock %}
+{% block title %} Student deletion {% endblock %}
 
 {% block content %}
 
@@ -18,19 +18,15 @@
       {% endfor %}
     {% endif %}
 
-    <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
-            {% url 'admin-dashboard' %}
-            {% else %}
-                {% url 'cs-bsc' %}
-            {% endif %}">My homepage
-    </a>
-    <a class="nav-link text-black" href="{% url 'teacher-list' %}"> To teachers list </a>
+    <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage </a>
+    <a class="nav-link text-black" href="{% url 'student-list' %}"> Student list </a>
+    <a class="nav-link text-black" href="{% url 'student-detail' student_id=student.pk %}"> Student detail </a>
 
 
-    <h3>Teacher deletion</h3>
+    <h3> Delete student </h3>
     <div class="container my-5">
       <h2>Confirm Deletion</h2>
-      <p>Are you sure you want to delete "{{ teacher.username }}"?</p>
+      <p>Are you sure you want to delete "{{ student.user.username }}"?</p>
       <form method="post">
           {% csrf_token %}
           <button type="submit">Delete</button>

@@ -133,7 +133,7 @@ def course_detail(request, course_id):
       'number_of_students_registered': number_of_students_registered,
       'number_of_teachers_registered': number_of_teachers_registered,
       'students_registered': students_registered,
-      'teachers_taught': number_of_teachers_registered,
+      'teachers_taught': teachers_taught,
       'department': department,
       'course': course
    }
@@ -148,7 +148,7 @@ def course_edit(request, course_id):
                return redirect('course-detail', course_id=course_id)
        else:
            form_course = AddCourseForm(instance=course)
-       return render(request, 'admin_app/course/course_edit.html', {'form_course': form_course })
+       return render(request, 'admin_app/course/course_edit.html', {'form_course': form_course, 'course':course })
 
 
 def course_delete(request, course_id):
@@ -229,7 +229,7 @@ def teacher_edit(request, teacher_id):
             return redirect('teacher-detail', teacher_id=teacher_id)
     else:
         form_teacher = AddTeacherForm(instance=teacher)
-    return render(request, 'admin_app/teacher/teacher_edit.html', {'form_teacher': form_teacher })
+    return render(request, 'admin_app/teacher/teacher_edit.html', {'form_teacher': form_teacher, 'teacher':teacher })
 
 def teacher_detail(request, teacher_id):
     teacher = UserProfile.objects.get(pk=teacher_id)
@@ -281,7 +281,7 @@ def student_edit(request, student_id):
             return redirect('student-detail', student_id=student_id)
     else:
         form_student = AddStudentForm(instance=student)
-    return render(request, 'admin_app/student/student_edit.html', {'form_student': form_student })
+    return render(request, 'admin_app/student/student_edit.html', {'form_student': form_student, 'student':student })
 
 def student_detail(request, student_id):
     student = UserProfile.objects.get(pk=student_id)

@@ -48,7 +48,7 @@ class AddCourseForm(forms.ModelForm):
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'academic-year': forms.Select(attrs={'class': 'form-control'}),
+            'academic_year': forms.Select(attrs={'class': 'form-control'}),
             'semester': forms.Select(attrs={'class': 'form-control'}),
             # 'teachers': forms.SelectMultiple(attrs={'class': 'form-control'}),
             # 'students': forms.SelectMultiple(attrs={'class': 'form-control'}),

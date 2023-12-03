@@ -1,8 +1,6 @@
 # Ignore Python bytecode files
 *.pyc
 
-**/__pycache__/*
-
 # Ignore Django migration files for all apps
 **/migrations/
 

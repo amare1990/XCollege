@@ -21,13 +21,8 @@
   {% endif %}
 
 
-  <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
-            {% url 'admin-dashboard' %}
-            {% else %}
-                {% url 'cs-bsc' %}
-            {% endif %}">My homepage
-    </a>
-    <a href="{% url 'course-list' %}">List of courses</a>
+  <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage </a>
+    <a href="{% url 'course-detail' course_id=course.pk %}">Course detail</a>
 
   <h3> Edit a course</h3>
   <form method="post">

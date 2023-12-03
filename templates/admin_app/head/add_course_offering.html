@@ -20,10 +20,8 @@
     {% endfor %}
   {% endif %}
 
-  <a class="nav-link text-black" href="
-          {% url 'admin-dashboard' %}
-         ">My homepage
-  </a>
+  <a class="nav-link text-black" href="{% url 'admin-dashboard' %} ">My homepage </a>
+  <a class="nav-link text-black" href="{% url 'course-offering-view' %} ">View courses offered </a>
 
   <h3> Add course offering </h3>
   <form method="POST">

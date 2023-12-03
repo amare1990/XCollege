@@ -21,15 +21,11 @@
   {% endif %}
 
 
-  <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
-            {% url 'admin-dashboard' %}
-            {% else %}
-                {% url 'cs-bsc' %}
-            {% endif %}">My homepage
-    </a>
-    <a href="{% url 'student-list' %}">List of students</a>
+  <a class="nav-link text-black" href="{% url 'admin-dashboard' %}"> My homepage </a>
+  <a href="{% url 'student-list' %}"> List of students </a> |
+  <a href="{% url 'student-detail' student_id=student.pk %}"> Student details </a>
 
-  <h3> Edit a student </h3>
+  <h3> Edit a student profile </h3>
   <form method="post">
     {% csrf_token %}
     {{ form_student.as_p }}

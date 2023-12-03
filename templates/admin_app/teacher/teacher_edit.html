@@ -21,13 +21,9 @@
   {% endif %}
 
 
-  <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
-            {% url 'admin-dashboard' %}
-            {% else %}
-                {% url 'cs-bsc' %}
-            {% endif %}">My homepage
+  <a class="nav-link text-black" href="{% url 'admin-dashboard'%}">My homepage
     </a>
-    <a href="{% url 'teacher-list' %}">List of teachers</a>
+    <a href="{% url 'teacher-detail' teacher_id=teacher.id %}">Teacher detail</a>
 
   <h3> Edit a teacher </h3>
   <form method="post">

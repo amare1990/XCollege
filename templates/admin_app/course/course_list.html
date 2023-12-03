@@ -18,13 +18,8 @@
       {% endfor %}
     {% endif %}
 
-    <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
-            {% url 'admin-dashboard' %}
-            {% else %}
-                {% url 'cs-bsc' %}
-            {% endif %}">My homepage
-    </a>
-    <a class="nav-link text-black" href="{% url 'add-course' %}"> Add more </a>
+    <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage </a>
+    <a class="nav-link text-black" href="{% url 'add-course' %}"> Add more course</a>
 
 
     <h3>List of courses</h3>
