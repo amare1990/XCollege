@@ -28,8 +28,17 @@
         <p>Year: {{ course.academic_year }} and </p>
         <p>Semester: {{ course.semester }} </p>
         <p>Department:  {{ department.name }} </p>
-        <p> <small>{{ number_of_students_registered }} have already got registed</small></p>
-        <p><small>Taught by {{ number_of_teachers_registered }} teachers </small> </p>
+        <a href="{% url 'course-edit' course_id=course.pk %}">Edit Course</a>|<a href="{% url 'course-delete' course_id=course.pk %}">Delete Course</a>
+        <hr>
+        <h5>Teachers in charge for this course</h5>
+        <p><small>
+          Taught by
+          {% if number_of_teachers_registered == 1 %}
+            {{ number_of_teachers_registered }} teacher
+          {% else %}
+            {{ number_of_teachers_registered }} teachers
+        {% endif %}
+        </small> </p>
         <table class="table table-dark">
           <thead>
             <tr>
@@ -55,10 +64,16 @@
           </tbody>
         </table>
 
-
-        <a href="{% url 'course-edit' course_id=course.pk %}">Edit Course</a>|<a href="{% url 'course-delete' course_id=course.pk %}">Delete Course</a>
+        <hr>
 
         <h5>Students registered for this course</h5>
+        <p> <small>
+          {% if number_of_students_registered == 1 %}
+            {{ number_of_students_registered }} student has already registered for this course
+          {% else %}
+            {{ number_of_students_registered }} students have already registered for this course
+        {% endif %}
+        </small></p>
         <table class="table table-dark">
           <thead>
             <tr>
