@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import UserProfile, Department, Course
-from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm
+from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarkForm
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models import Count
@@ -258,7 +258,33 @@ def teacher_courses(request):
         'courses': courses_taught
     }
 
-    return render(request, 'admin_app/course/teacher_courses.html', context)
+    return render(request, 'admin_app/teacher/teacher_courses.html', context)
+
+def add_mark(request):
+
+    if request.method == 'POST':
+        form = AddMarkForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.SUCCESS(request, "You successfully filled mark")
+            return redirect('mark-list')
+        else:
+            messages.warning(request, "You didn't fill marks successfully!")
+    else:
+        form = AddMarkForm()
+        return render(request, 'admin_app/teacher/add_mark.html', {'form': form})
+
+def mark_list(request):
+
+   students = UserProfile.objects.filter(role='student')
+   number_of_students = students.count()
+   context = {
+      'students': students,
+      'number_of_students': number_of_students,
+   }
+
+   return render(request, 'admin_app/teacher/mark_list.html', context)
+
 
 # Student list
 def student_list(request):

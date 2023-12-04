@@ -112,3 +112,9 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+class Mark(models.Model):
+    teacher = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    assessment_name = models.CharField(max_length=100)
+    students = models.ManyToManyField(UserProfile, related_name='marks_got')

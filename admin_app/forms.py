@@ -1,6 +1,6 @@
 # forms.py
 from django import forms
-from .models import UserProfile, Department, Course
+from .models import UserProfile, Department, Course, Mark
 
 
 class AddDepartmentForm(forms.ModelForm):
@@ -69,3 +69,15 @@ class AddCourseOfferingForm(forms.Form):
 class OfferPositionForm(forms.Form):
     department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
     teachers = forms.ModelChoiceField(queryset=UserProfile.objects.filter(role='teacher'), widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
+
+
+# class AddMarkForm(forms.ModelForm):
+#     class Meta:
+#         model = Mark
+#         fields = ['students', 'assessment_name', 'course']
+
+
+class AddMarkForm(forms.Form):
+    assessment_name = forms.CharField(max_length=100)
+    course = forms.ModelChoiceField(queryset=Course.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
+    students = forms.ModelMultipleChoiceField(queryset=UserProfile.objects.filter(role='student'), widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
