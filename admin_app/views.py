@@ -385,45 +385,17 @@ def add_course_offering(request):
     head_department = user.userprofile.department
     if request.method == 'POST':
         form = AddCourseOfferingForm(head_department, request.POST)
-        # form = AddCourseOfferingForm(request.POST, department=head_department)
         if form.is_valid():
             course = Course.objects.filter(department=head_department, id=form.cleaned_data['course'].id).first()
-            # course = form.cleaned_data['course']
-            # academic_year = form.cleaned_data['academic_year']
-            # semester = form.cleaned_data['semester']
             teachers = form.cleaned_data['teachers']
-            # course.academic_year = academic_year
-            # course.semester = semester
             course.teachers.set(teachers)
             course.save()
             return redirect('course-offering-view')
     else:
         initial_department = Department.objects.get(id=head_department.id)
         form = AddCourseOfferingForm(head_department, initial={'department': initial_department})
-        # form = AddCourseOfferingForm(department=head_department)
 
     return render(request, 'admin_app/head/add_course_offering.html', {'form': form})
-
-
-# def add_course_offering(request):
-#     user = request.user
-#     if request.method == 'POST':
-#         form = AddCourseOfferingForm(request.POST)
-#         if form.is_valid():
-#             selected_course = form.cleaned_data['course']
-#             # academic_year = form.cleaned_data['academic_year']
-#             # semester = form.cleaned_data['semester']
-#             teachers = form.cleaned_data['teachers']
-#             # selected_course.academic_year = academic_year
-#             # selected_course.semester = semester
-#             selected_course.teachers.set(teachers)
-#             selected_course.save()
-#             return redirect('course-offering-view')
-#     else:
-#         form = AddCourseOfferingForm()
-
-#     return render(request, 'admin_app/head/add_course_offering.html', {'form': form, 'user': user})
-
 
 
 
@@ -437,25 +409,6 @@ def student_courses(request):
     }
 
     return render(request, 'admin_app/course/student_courses.html', context)
-
-# def add_course_offering(request):
-#     user = request.user
-#     if request.method == 'POST':
-#         form = AddCourseOfferingForm(request.POST)
-#         if form.is_valid():
-#             selected_course = form.cleaned_data['course']
-#             # academic_year = form.cleaned_data['academic_year']
-#             # semester = form.cleaned_data['semester']
-#             teachers = form.cleaned_data['teachers'].filter(department=user.userprofile.department)
-#             # selected_course.academic_year = academic_year
-#             # selected_course.semester = semester
-#             selected_course.teachers.set(teachers)
-#             selected_course.save()
-#             return redirect('course-offering-view')
-#     else:
-#         form = AddCourseOfferingForm()
-
-#     return render(request, 'admin_app/head/add_course_offering.html', {'form': form, 'user': user})
 
 
 def course_offering_view(request):

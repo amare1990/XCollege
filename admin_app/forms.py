@@ -83,9 +83,6 @@ class AddCourseOfferingForm(forms.Form):
     course = forms.ModelChoiceField(queryset=Course.objects.none(), widget=forms.Select(attrs={'class': 'form-control'}))
     teachers = forms.ModelMultipleChoiceField(queryset=UserProfile.objects.none(), widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
 
-    # course = forms.ModelChoiceField(queryset=Course.objects.filter(department=head_department), widget=forms.Select(attrs={'class': 'form-control'}))
-    # teachers = forms.ModelMultipleChoiceField(queryset=UserProfile.objects.filter(department=head_department, role='teacher'), widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
-
     def __init__(self, head_department, *args, **kwargs):
         super(AddCourseOfferingForm, self).__init__(*args, **kwargs)
         self.fields['course'].queryset = Course.objects.filter(department=head_department)
