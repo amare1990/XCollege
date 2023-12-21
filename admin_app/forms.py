@@ -77,6 +77,9 @@ class AddCourseForm(forms.ModelForm):
 class CourseRegistrationForm(forms.Form):
     courses = forms.ModelMultipleChoiceField(queryset=Course.objects.all(), widget=forms.CheckboxSelectMultiple)
 
+    def __init__(self, student_department, *args, **kwargs):
+        super(CourseRegistrationForm, self).__init__(*args, **kwargs)
+        self.fields['courses'].queryset = Course.objects.filter(department=student_department)
 
 class AddCourseOfferingForm(forms.Form):
     department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
@@ -106,4 +109,6 @@ class OfferPositionForm(forms.Form):
 class AddMarksForm(forms.Form):
     course = forms.ModelChoiceField(queryset=Course.objects.all())
     assessments = forms.ModelMultipleChoiceField(queryset=Assessment.objects.all(), widget=forms.CheckboxSelectMultiple)
-    # marks = forms.DecimalField(initial=0.1)
+    def __init__(self, teacher_id, *args, **kwargs):
+           super(AddMarksForm, self).__init__(*args, **kwargs)
+           self.fields['course'].queryset = Course.objects.filter(teachers=teacher_id)

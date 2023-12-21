@@ -279,7 +279,7 @@ def teacher_courses(request):
 
 def add_mark(request):
     if request.method == 'POST':
-        form = AddMarksForm(request.POST)
+        form = AddMarksForm(request.POST, teacher_id=request.user.id)
         if form.is_valid():
             course = form.cleaned_data['course']
             assessments = form.cleaned_data['assessments']
@@ -295,7 +295,7 @@ def add_mark(request):
         else:
             return render(request, 'admin_app/teacher/mark-list.html', {'form': form})
     else:
-        form = AddMarksForm()
+        form = AddMarksForm(teacher_id=request.user.id)
         return render(request, 'admin_app/teacher/add_mark.html', {'form': form})
 
 
@@ -367,17 +367,18 @@ def course_list(request):
 
 
 def course_registration(request):
+    student_department=request.user.userprofile.department
     if request.method == 'POST':
-        form_course_registration = CourseRegistrationForm(request.POST)
+        form_course_registration = CourseRegistrationForm(student_department, request.POST)
         if form_course_registration.is_valid():
             selected_courses = form_course_registration.cleaned_data['courses']
             user_profile = UserProfile.objects.get(user=request.user)
             user_profile.courses_registered.add(*selected_courses)
             return redirect('student-courses')
     else:
-        form_course_registration = CourseRegistrationForm()
+        form_course_registration = CourseRegistrationForm(student_department)
+        return render(request, 'admin_app/course/course_registration.html', {'form_course_registration': form_course_registration})
 
-    return render(request, 'admin_app/course/course_registration.html', {'form_course_registration': form_course_registration})
 
 
 def add_course_offering(request):
