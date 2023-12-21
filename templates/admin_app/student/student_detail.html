@@ -29,6 +29,8 @@
 
     <h3>Student details</h3>
     <div class="container my-5">
+      {{ student.profile_picture.url }} <br>
+        <img src="{{ student.profile_picture.url }}" class="d-block w-5 h-5">
         <p>Username: {{ student.user.username }} </p>
 
         <p>Role: {{ student.role }}</p>

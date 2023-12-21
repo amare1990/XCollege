@@ -41,7 +41,6 @@
               <th scope="row">{{ forloop.counter }}</th>
               <td><a href="{% url 'course-detail' course_id=course.pk %}">{{ course.pk }}</a></td>
               <td>{{ course.name }}</td>
-              <td>{{ teacher.bio|truncatechars:50 }}</td>
               <td> {{ course.department }} </td>
               <td><a href="{% url 'course-edit' course_id=course.pk %}">Edit</a>|<a href="{% url 'course-detail' course_id=course.pk %}">View</a>|
                 <a href="{% url 'course-delete' course_id=course.pk %}">Delete</a></td>

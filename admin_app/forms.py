@@ -1,6 +1,7 @@
 # forms.py
 from django import forms
-from .models import UserProfile, Department, Course, Mark
+from django.forms import formset_factory
+from .models import UserProfile, Department, Course, Assessment
 
 
 class AddDepartmentForm(forms.ModelForm):
@@ -13,10 +14,28 @@ class AddDepartmentForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
+# class RegistrationForm(forms.ModelForm):
+#     class Meta:
+#         model = UserProfile
+#         fields = ['user', 'title', 'position', 'bio', 'role', 'department', 'academic_year', 'semester']
+
+#         widgets = {
+#             'user': forms.Select(attrs={'class': 'form-control'}),
+#             'bio': forms.Textarea(attrs={'class': 'form-control'}),
+#             'role': forms.Select(attrs={'class': 'form-control'}),
+#             'department': forms.Select(attrs={'class': 'form-control'}),
+#             'academic_year': forms.Select(attrs={'class': 'form-control'}),
+#             'semester': forms.Select(attrs={'class': 'form-control'}),
+#             'position': forms.Select(attrs={'class': 'form-control'}),
+#             'title': forms.Select(attrs={'class': 'form-control'}),
+#             'semester': forms.Select(attrs={'class': 'form-control'})
+#         }
+
+
 class AddStudentForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['user', 'bio', 'role', 'department', 'academic_year', 'semester']
+        fields = ['user', 'bio', 'role', 'department', 'academic_year', 'semester', 'profile_picture']
 
         widgets = {
             'user': forms.Select(attrs={'class': 'form-control'}),
@@ -60,24 +79,34 @@ class CourseRegistrationForm(forms.Form):
 
 
 class AddCourseOfferingForm(forms.Form):
-    # user_profile = UserProfile.objects.get(user=request.user)
-    course = forms.ModelChoiceField(queryset=Course.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
-    # academic_year = forms.CharField(max_length=20, widget=forms.Select(attrs={'class': 'form-control'}))
-    # semester = forms.CharField(max_length=20, widget=forms.Select(attrs={'class': 'form-control'}))
-    teachers = forms.ModelMultipleChoiceField(queryset=UserProfile.objects.filter(role='teacher'), widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
+    department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
+    course = forms.ModelChoiceField(queryset=Course.objects.none(), widget=forms.Select(attrs={'class': 'form-control'}))
+    teachers = forms.ModelMultipleChoiceField(queryset=UserProfile.objects.none(), widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
+
+    # course = forms.ModelChoiceField(queryset=Course.objects.filter(department=head_department), widget=forms.Select(attrs={'class': 'form-control'}))
+    # teachers = forms.ModelMultipleChoiceField(queryset=UserProfile.objects.filter(department=head_department, role='teacher'), widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
+
+    def __init__(self, head_department, *args, **kwargs):
+        super(AddCourseOfferingForm, self).__init__(*args, **kwargs)
+        self.fields['course'].queryset = Course.objects.filter(department=head_department)
+        self.fields['teachers'].queryset = UserProfile.objects.filter(department=head_department, role='teacher')
 
 class OfferPositionForm(forms.Form):
     department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
     teachers = forms.ModelChoiceField(queryset=UserProfile.objects.filter(role='teacher'), widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
 
 
-# class AddMarkForm(forms.ModelForm):
+# class CourseSelectionForm(forms.Form):
+#     course = forms.ModelChoiceField(queryset=Course.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
+
+# class AssessmentForm(forms.ModelForm):
 #     class Meta:
-#         model = Mark
-#         fields = ['students', 'assessment_name', 'course']
+#         model = Assessment
+#         fields = ['assessment_name', 'student', 'marks']
 
+# AssessmentFormSet = formset_factory(AssessmentForm, extra=0)
 
-class AddMarkForm(forms.Form):
-    assessment_name = forms.CharField(max_length=100)
-    course = forms.ModelChoiceField(queryset=Course.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
-    students = forms.ModelMultipleChoiceField(queryset=UserProfile.objects.filter(role='student'), widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
+class AddMarksForm(forms.Form):
+    course = forms.ModelChoiceField(queryset=Course.objects.all())
+    assessments = forms.ModelMultipleChoiceField(queryset=Assessment.objects.all(), widget=forms.CheckboxSelectMultiple)
+    # marks = forms.DecimalField(initial=0.1)

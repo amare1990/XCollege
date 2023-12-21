@@ -1,11 +1,8 @@
 {% extends 'base.html' %}
 
-{% block title %}  Fill mark  {% endblock %}
+{% block title %}Fill Marks{% endblock %}
 
-<!-- {% load static %} -->
-
-{% block content%}
-
+{% block content %}
 <div class="container my-5">
   {% if messages %}
     {% for message in messages %}
@@ -14,22 +11,17 @@
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-
     </div>
-
     {% endfor %}
   {% endif %}
 
-  <a class="nav-link text-black" href="{% url 'admin-dashboard' %}"> My homepage </a>
+  <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage</a>
 
-  <h3> Fill marks</h3>
-  <form method="POST">
+  <h5>Fill Marks for {{ course.name }} course</h5>
+  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-
-    <button class="btn btn-secondary">Add mark</button>
+    <button type="submit">Save Marks</button>
   </form>
-
 </div>
-
 {% endblock %}

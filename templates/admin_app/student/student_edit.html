@@ -26,7 +26,7 @@
   <a href="{% url 'student-detail' student_id=student.pk %}"> Student details </a>
 
   <h3> Edit a student profile </h3>
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form_student.as_p }}
     <button type="submit">Save Changes</button>

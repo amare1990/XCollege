@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import UserProfile, Department, Course
-from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarkForm
+from .models import UserProfile, Department, Course, Assessment, Marks
+from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarksForm
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models import Count
 from django.http import HttpResponse
+from django.forms import formset_factory
 
 
 def admin_dashboard(request):
@@ -86,7 +87,7 @@ def add_department(request):
 
 def add_student(request):
     if request.method == 'POST':
-        form_student = AddStudentForm(request.POST)
+        form_student = AddStudentForm(request.POST, request.FILES)
         if form_student.is_valid():
             user_instance = form_student.save(commit=False)
             if UserProfile.objects.filter(user=user_instance.user).exists():
@@ -95,6 +96,8 @@ def add_student(request):
             else:
                 form_student.save()
                 return redirect('student-list')
+        else:
+            messages.error(request, "Invalid form")
     else:
         form_student = AddStudentForm()
         return render(request, 'admin_app/student/add_student.html', {'form_student': form_student})
@@ -105,6 +108,9 @@ def add_teacher(request):
         if form_teacher.is_valid():
             form_teacher.save()
             return redirect('teacher-list')
+        else:
+            messages.warning(request, "You didn't fill the form successfully!")
+            return render(request, 'admin_app/teacher/add_teacher.html', {'form_teacher': form_teacher})
     else:
         form_teacher = AddTeacherForm()
         return render(request, 'admin_app/teacher/add_teacher.html', {'form_teacher': form_teacher})
@@ -272,18 +278,28 @@ def teacher_courses(request):
     return render(request, 'admin_app/teacher/teacher_courses.html', context)
 
 def add_mark(request):
-
     if request.method == 'POST':
-        form = AddMarkForm(request.POST)
+        form = AddMarksForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.SUCCESS(request, "You successfully filled mark")
+            course = form.cleaned_data['course']
+            assessments = form.cleaned_data['assessments']
+            students = course.students.all()
+            for student in students:
+                for assessment in assessments:
+                    mark_value = request.POST.get(f"mark_{student.id}_{assessment.id}")  # Assuming the input field names are dynamically generated
+                    mark, created = Marks.objects.get_or_create(student=student, assessment=assessment, defaults={'marks': mark_value})
+                    if not created:
+                        mark.marks = mark_value
+                        mark.save()
             return redirect('mark-list')
         else:
-            messages.warning(request, "You didn't fill marks successfully!")
+            return render(request, 'admin_app/teacher/mark-list.html', {'form': form})
     else:
-        form = AddMarkForm()
+        form = AddMarksForm()
         return render(request, 'admin_app/teacher/add_mark.html', {'form': form})
+
+
+
 
 def mark_list(request):
 
@@ -312,7 +328,7 @@ def student_list(request):
 def student_edit(request, student_id):
     student = get_object_or_404(UserProfile, pk=student_id)
     if request.method == 'POST':
-        form_student = AddStudentForm(request.POST, instance=student)
+        form_student = AddStudentForm(request.POST, request.FILES, instance=student)
         if form_student.is_valid():
             form_student.save()
             return redirect('student-detail', student_id=student_id)
@@ -368,19 +384,23 @@ def add_course_offering(request):
     user = request.user
     head_department = user.userprofile.department
     if request.method == 'POST':
-        form = AddCourseOfferingForm(request.POST, department=head_department)
+        form = AddCourseOfferingForm(head_department, request.POST)
+        # form = AddCourseOfferingForm(request.POST, department=head_department)
         if form.is_valid():
-            course = form.cleaned_data['course']
-            academic_year = form.cleaned_data['academic_year']
-            semester = form.cleaned_data['semester']
+            course = Course.objects.filter(department=head_department, id=form.cleaned_data['course'].id).first()
+            # course = form.cleaned_data['course']
+            # academic_year = form.cleaned_data['academic_year']
+            # semester = form.cleaned_data['semester']
             teachers = form.cleaned_data['teachers']
-            course.academic_year = academic_year
-            course.semester = semester
+            # course.academic_year = academic_year
+            # course.semester = semester
             course.teachers.set(teachers)
             course.save()
             return redirect('course-offering-view')
     else:
-        form = AddCourseOfferingForm()
+        initial_department = Department.objects.get(id=head_department.id)
+        form = AddCourseOfferingForm(head_department, initial={'department': initial_department})
+        # form = AddCourseOfferingForm(department=head_department)
 
     return render(request, 'admin_app/head/add_course_offering.html', {'form': form})
 
@@ -418,24 +438,24 @@ def student_courses(request):
 
     return render(request, 'admin_app/course/student_courses.html', context)
 
-def add_course_offering(request):
-    user = request.user
-    if request.method == 'POST':
-        form = AddCourseOfferingForm(request.POST)
-        if form.is_valid():
-            selected_course = form.cleaned_data['course']
-            # academic_year = form.cleaned_data['academic_year']
-            # semester = form.cleaned_data['semester']
-            teachers = form.cleaned_data['teachers'].filter(department=user.userprofile.department)
-            # selected_course.academic_year = academic_year
-            # selected_course.semester = semester
-            selected_course.teachers.set(teachers)
-            selected_course.save()
-            return redirect('course-offering-view')
-    else:
-        form = AddCourseOfferingForm()
+# def add_course_offering(request):
+#     user = request.user
+#     if request.method == 'POST':
+#         form = AddCourseOfferingForm(request.POST)
+#         if form.is_valid():
+#             selected_course = form.cleaned_data['course']
+#             # academic_year = form.cleaned_data['academic_year']
+#             # semester = form.cleaned_data['semester']
+#             teachers = form.cleaned_data['teachers'].filter(department=user.userprofile.department)
+#             # selected_course.academic_year = academic_year
+#             # selected_course.semester = semester
+#             selected_course.teachers.set(teachers)
+#             selected_course.save()
+#             return redirect('course-offering-view')
+#     else:
+#         form = AddCourseOfferingForm()
 
-    return render(request, 'admin_app/head/add_course_offering.html', {'form': form, 'user': user})
+#     return render(request, 'admin_app/head/add_course_offering.html', {'form': form, 'user': user})
 
 
 def course_offering_view(request):

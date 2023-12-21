@@ -18,8 +18,15 @@ class SignUpForm(UserCreationForm):
   def __init__(self, *args, **kwargs):
     super(SignUpForm, self).__init__(*args, **kwargs)
     self.fields['username'].widget.attrs['class'] = 'form-control'
+    self.fields['username'].help_text = None
     self.fields['password1'].widget.attrs['class'] = 'form-control'
+    self.fields['password1'].help_text = None
     self.fields['password2'].widget.attrs['class'] = 'form-control'
+    self.fields['password2'].help_text = None
+
+    self.fields['username'].widget.attrs['autocomplete'] = 'off'
+    self.fields['password1'].widget.attrs['autocomplete'] = 'off'
+    self.fields['password2'].widget.attrs['autocomplete'] = 'off'
 
 # Edit profile form
 class EditProfileForm(UserChangeForm):

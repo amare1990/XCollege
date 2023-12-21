@@ -87,7 +87,7 @@ class Program(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(default='Enter your bio briefly')
-    role = models.CharField(max_length=20, choices=roles)
+    role = models.CharField(max_length=20, choices=roles, default='student')
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, blank=True)
     academic_year = models.CharField(max_length=20, choices=year, null=True, blank=True)
     semester = models.CharField(max_length=20, choices=semester, null=True, blank=True)
@@ -95,6 +95,7 @@ class UserProfile(models.Model):
     stream = models.ForeignKey(Stream, on_delete=models.CASCADE, null=True, blank=True)
     program = models.ForeignKey(Program, on_delete=models.CASCADE, null=True, blank=True)
     position = models.CharField(max_length=50, choices=position, null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', default='profile_pictures/default_profile.jpg')
 
     def __str__(self):
         return self.user.username
@@ -113,8 +114,16 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
-class Mark(models.Model):
-    teacher = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+class Assessment(models.Model):
     assessment_name = models.CharField(max_length=100)
-    students = models.ManyToManyField(UserProfile, related_name='marks_got')
+    # course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    # student = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    weight = models.DecimalField(max_digits=5, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.assessment_name} - {self.weight}"
+
+class Marks(models.Model):
+    student = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
+    marks = models.DecimalField(max_digits=5, decimal_places=2, default=10)

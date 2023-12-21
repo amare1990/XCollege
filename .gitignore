@@ -24,5 +24,11 @@ accounts/__pycache__/signals.cpython-38.pyc
 
 XCollege/XCollege/__pycache__/custom_middleware.cpython-38.pyc
 
+# Ignore PIL cache files
+venv-college/lib/python3.8/site-packages/PIL/__pycache__/BlpImagePlugin.cpython-38.pyc
+venv-college/lib/python3.8/site-packages/PIL/__pycache__/BmpImagePlugin.cpython-38.pyc
+venv-college/lib/python3.8/site-packages/PIL/__pycache__/BufrStubImagePlugin.cpython-38.pyc
+
+
 
 

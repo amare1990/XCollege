@@ -73,15 +73,15 @@
     {% if user.is_authenticated %}
 
       <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fa fa-user" aria-hidden="true"></i>
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-user" aria-hidden="true"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-right bg-secondary" aria-labelledby="dropdownMenuButton">
           <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
           <a class="nav-link text-white" href="{% url 'edit-profile' %}">Edit profile</a>
           <a class="nav-link text-white" href="{% url 'change-password' %}">Change password</a>
           <a class="nav-link text-white" href="{% url 'reset_password' %}">Reset your password?</a>
-          {% if user.userprofile.role %}
+          {% if user.userprofile.role or user.is_superuser or user.is_staff%}
             <a class="nav-link text-white" href="{% url 'admin-dashboard' %}">
               My homepage
             </a>
