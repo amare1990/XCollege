@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}  Home Page  {% endblock %}
+
+<!-- {% load static %} -->
+
+{% block content%}
+
+<div class="container my-5">
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+    </div>
+
+    {% endfor %}
+  {% endif %}
+
+  <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage </a>
+
+  <h3> Add assessment</h3>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button class="btn btn-secondary">Add assessment</button>
+  </form>
+
+</div>
+
+{% endblock %}

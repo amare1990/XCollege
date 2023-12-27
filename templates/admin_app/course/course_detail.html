@@ -29,6 +29,9 @@
         <p>Semester: {{ course.semester }} </p>
         <p>Department:  {{ department.name }} </p>
         <a href="{% url 'course-edit' course_id=course.pk %}">Edit Course</a>|<a href="{% url 'course-delete' course_id=course.pk %}">Delete Course</a>
+        |<a href="{% url 'add-mark' course_id=course.pk %}">Add marks</a>
+        |<a href="{% url 'mark-list' course_id=course.pk %}">Mark sheet</a>
+        <a href="{% url 'view-result' course_id=course.pk %}">View my result</a>
         <hr>
         <h5>Teachers in charge for this course</h5>
         <p><small>

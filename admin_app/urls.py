@@ -18,9 +18,9 @@ urlpatterns = [
 
     path('add_course/', views.add_course, name='add-course'),
     path('course_list/', views.course_list, name='course-list'),
-    path('course_detail/<int:course_id>/', views.course_detail, name='course-detail'),
-    path('course/<int:course_id>/delete', views.course_delete, name='course-delete'),
-    path('course/<int:course_id>/edit/', views.course_edit, name='course-edit'),
+    path('course_detail/<int:course_code>/', views.course_detail, name='course-detail'),
+    path('course/<int:course_code>/delete', views.course_delete, name='course-delete'),
+    path('course/<int:course_code>/edit/', views.course_edit, name='course-edit'),
     path('my_all_department_courses/', views.my_all_department_courses, name='my-all-department-courses'),
 
     path('add_teacher/', views.add_teacher, name='add-teacher'),
@@ -32,8 +32,11 @@ urlpatterns = [
     path('teacher/<int:teacher_id>/delete/', views.teacher_delete, name='teacher-delete'),
     path('teacher/teacher_courses/', views.teacher_courses, name='teacher-courses'),
 
-    path('fill_mark/', views.add_mark, name='add-mark'),
-    path('mark_list/', views.mark_list, name='mark-list'),
+    path('add_assessment/', views.add_assessment, name='add-assessment'),
+    path('assessments/', views.assessments, name='assessments'),
+    path('fill_mark/<course_id>/', views.add_mark, name='add-mark'),
+    path('mark_list/<int:course_id>/', views.mark_list, name='mark-list'),
+    path('view_result/<course_id>/', views.view_result, name='view-result'),
 
     path('student_list/', views.student_list, name='student-list'),
     path('student/<int:student_id>/detail/', views.student_detail, name='student-detail'),

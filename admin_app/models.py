@@ -101,6 +101,7 @@ class UserProfile(models.Model):
         return self.user.username
 
 class Course(models.Model):
+    course_code = models.CharField(max_length=50, default='XCC-101')
     name = models.CharField(max_length=100)
     teachers = models.ManyToManyField(UserProfile, related_name="courses_taught", blank=True)
     students = models.ManyToManyField(UserProfile, related_name="courses_registered", blank=True)
@@ -109,6 +110,7 @@ class Course(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, null=True, blank=True)
     academic_year = models.CharField(max_length=20, choices=year, default='first')
     semester = models.CharField(max_length=20, choices=semester, default='first')
+    offered = models.BooleanField(default=False)
 
 
     def __str__(self):
@@ -116,14 +118,13 @@ class Course(models.Model):
 
 class Assessment(models.Model):
     assessment_name = models.CharField(max_length=100)
-    # course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    # student = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     weight = models.DecimalField(max_digits=5, decimal_places=2)
 
     def __str__(self):
         return f"{self.assessment_name} - {self.weight}"
 
-class Marks(models.Model):
+class Mark(models.Model):
     student = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
-    marks = models.DecimalField(max_digits=5, decimal_places=2, default=10)
+    mark = models.DecimalField(max_digits=5, decimal_places=2, default=10)

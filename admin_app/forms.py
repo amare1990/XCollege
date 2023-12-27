@@ -63,9 +63,10 @@ class AddTeacherForm(forms.ModelForm):
 class AddCourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ['name', 'academic_year', 'semester','department']
+        fields = ['course_code', 'name', 'academic_year', 'semester','department']
 
         widgets = {
+            'course_code': forms.TextInput(attrs={'class': 'form-control'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'academic_year': forms.Select(attrs={'class': 'form-control'}),
             'semester': forms.Select(attrs={'class': 'form-control'}),
@@ -96,19 +97,27 @@ class OfferPositionForm(forms.Form):
     teachers = forms.ModelChoiceField(queryset=UserProfile.objects.filter(role='teacher'), widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
 
 
-# class CourseSelectionForm(forms.Form):
-#     course = forms.ModelChoiceField(queryset=Course.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
+class CourseSelectionForm(forms.Form):
+    course = forms.ModelChoiceField(queryset=Course.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
 
-# class AssessmentForm(forms.ModelForm):
-#     class Meta:
-#         model = Assessment
-#         fields = ['assessment_name', 'student', 'marks']
+class AssessmentForm(forms.ModelForm):
+    class Meta:
+        model = Assessment
+        fields = ['assessment_name', 'weight']
+
+
+class AddMarksForm(forms.Form):
+    # course = forms.ModelChoiceField(queryset=Course.objects.all())
+    student = forms.ModelChoiceField(queryset=UserProfile.objects.filter(role='student'))
+    assessment = forms.ModelChoiceField(queryset=Assessment.objects.all())
+    # assessment_form = AssessmentForm()
+    marks = forms.DecimalField(max_digits=5, decimal_places=2, initial=10)
+
+#     def __init__(self, teacher_id, student_department, *args, **kwargs):
+#         super(AddMarksForm, self).__init__(*args, **kwargs)
+#         self.fields['course'].queryset = Course.objects.filter(teachers=teacher_id)
+#         self.fields['student'].queryset = UserProfile.objects.filter(role = 'student', department=student_department)
 
 # AssessmentFormSet = formset_factory(AssessmentForm, extra=0)
 
-class AddMarksForm(forms.Form):
-    course = forms.ModelChoiceField(queryset=Course.objects.all())
-    assessments = forms.ModelMultipleChoiceField(queryset=Assessment.objects.all(), widget=forms.CheckboxSelectMultiple)
-    def __init__(self, teacher_id, *args, **kwargs):
-           super(AddMarksForm, self).__init__(*args, **kwargs)
-           self.fields['course'].queryset = Course.objects.filter(teachers=teacher_id)
+
