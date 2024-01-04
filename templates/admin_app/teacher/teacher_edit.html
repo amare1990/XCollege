@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}  Edit teacher  {% endblock %}
-{% block content%}
-<div class="container my-5 py-3 bg-secondary" style="max-width: 700px;">
+{% block content %}
+<div class="container my-5 py-3 bg-secondary" style="max-width: 400px;">
   {% if messages %}
     {% for message in messages %}
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,16 +12,22 @@
       </div>
     {% endfor %}
   {% endif %}
-  <button type="btn btn-primary">
-    <a class="nav-link text-black" href="{% url 'admin-dashboard'%}">My homepage </a>|
-    <a href="{% url 'teacher-detail' teacher_id=teacher.id %}">Teacher detail</a>
+  <button class="btn btn-primary">
+    <a href="{% url 'admin-dashboard'%}">My homepage</a>|<a href="{% url 'teacher-detail' teacher_id=teacher.id %}">Teacher details</a>
   </button>
-  <h3> Edit a teacher </h3>
+  <h3 class="text-center bg-primary my-3">
+    {% if user.is_authenticated %}
+      {% if profile.role == 'admin' %}
+        Edit a teacher
+      {% else %}
+        Update my profile
+      {% endif %}
+    {% endif %}
+  </h3>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form_teacher.as_p }}
     <button type="submit">Save Changes</button>
-</form>
+  </form>
 </div>
-
 {% endblock %}

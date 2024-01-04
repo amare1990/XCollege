@@ -27,9 +27,9 @@ semester= (
 roles = (
   ('admin', 'admin'),
   # ('head', 'head'),
-  ('teacher', 'teacher'),
-  ('staff', 'staff'),
-  ('student', 'student')
+  ('teacher', 'Teacher'),
+  ('staff', 'Staff'),
+  ('student', 'Student')
 )
 
 program_type = (
