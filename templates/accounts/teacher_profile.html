@@ -1,42 +1,30 @@
 {% extends 'base.html' %}
-
 {% block title %}  Teacher Home Page  {% endblock %}
-
-  <!-- {% load static %} -->
-
-  {% block content %}
-  <!-- <h1>You welcome!</h1> -->
+{% block content %}
   <br/><br/>
-
   <div class="row my-5">
-      <!-- Navabr -->
-    <div class="col-md-2 d-none d-md-block bg-light">
-      <nav class="navbar navbar-expand-lg flex-column my-5">
-        <!-- <a class="navbar-brand" href="#">Logo</a> -->
-        <button class="navbar-toggler text-danger" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon text-danger"><i class="fas fa-bars"></i></span>
+    <div class="col-md-2 d-none d-md-block bg-secondary">
+      <nav class="navbar navbar-expand-lg flex-column my-5 bg-secondary">
+        <button class="navbar-toggler bg-primary" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon text-white"><i class="fas fa-bars"></i></span>
         </button>
-        <div class="collapse navbar-collapse bg-secondary" id="navbarNav">
+        <div class="collapse navbar-collapse bg-primary p-2" id="navbarNav">
           <ul class="navbar-nav flex-column">
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'admin-dashboard' %}">Home</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'teacher-courses' %}">My courses</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'department-list' %}">Notify students</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'teacher-list' %}">View schedules</a>
             </li>
-
-              <li class="nav-item">
+            <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-student' %}">Ask for leave</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-course' %}">Give feedback</a>
             </li>
@@ -46,14 +34,12 @@
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'assessments' %}"> View assessments </a>
             </li>
-
           </ul>
         </div>
       </nav>
     </div>
 
     <!-- body-->
-
     <div class="statbox mx-5 pl-5">
       <span class="text-primary">
         <i class="fas fa-chalkboard-teacher fa-3x"></i>
@@ -72,15 +58,16 @@
         </div>
        <div class="col-md-8">
         <div class="card-body">
-          <h5 class="card-title">
-            Username:
+          <h5 class="card-title text-center">
             {% if profile.user.first_name %}
               {{ profile.user.first_name|capfirst }}  {{ profile.user.last_name|capfirst }}
             {% else %}
               {{ profile.user.username|capfirst }}
             {% endif %}
           </h5>
-          <p class="card-text">Role: {{ profile.role|capfirst }} <br>
+          <p class="card-text">
+            Username: {{ profile.user.username|capfirst }} <br>
+            Role: {{ profile.role|capfirst }} <br>
             Title: {{ profile.title }} <br>
             Faculty member in the department of {{ profile.department }} <br>
             email: {{ profile.user.email }} <br>
@@ -93,9 +80,6 @@
        </div>
        </div>
       </div>
-
     </div>
-
   </div>
-
 {% endblock %}
