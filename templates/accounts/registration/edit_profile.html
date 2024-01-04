@@ -1,43 +1,29 @@
 {% extends 'base.html' %}
-
 {% block title %}  User Edit Form  {% endblock %}
-
-<!-- {% load static %} -->
-
 {% block content%}
-
-  <div class="container my-5 py-3">
-
+  <div class="container my-5 py-3 bg-secondary" style="max-width: 400px;">
     {% if messages %}
       {% for message in messages %}
-      <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
       {% endfor %}
     {% endif %}
-
-
-        <h2>Edit your profile here!</h2>
-
-
-
+    <p>You are logined as <span class="text-success"><strong>{{ user.username|capfirst }}</strong></span></p>
+    <h3 class="text-center bg-primary">Edit your profile here!</h3>
     <div  class="form-group">
       <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-secondary">
+        <button type="submit" class="btn btn-primary">
           Update
         </button>
       </form>
     </div>
-
   </div>
-
-
 {% endblock %}
 
 

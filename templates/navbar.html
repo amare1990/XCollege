@@ -1,5 +1,4 @@
 {% load static %}
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="display: none;">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item active mr-auto">
@@ -10,14 +9,12 @@
       </li>
     </ul>
 </nav>
-
 <nav class="navbar navbar-expand-lg fixed-top mb-5"  style="background-color: rgb(158, 77, 19);">
   <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static '/website/logo-hilcoe.jpg' %}" class="w-75"></a>
   <button class="navbar-toggler bg-secondary" type="button" data-toggle="collapse" data-target="#collapsed-menu-items" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-
-  <div class="collapse navbar-collapse" id="collapsed-menu-items">
+  <div class="collapse navbar-collapse mr-3" id="collapsed-menu-items">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
         <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
@@ -28,10 +25,10 @@
       <li class="nav-item">
         <a class="nav-link" href="{% url 'admission' %}">Admission</a>
       </li>
+
       <!-- <li class="nav-item text-dark">
         <a class="nav-link text-dark" href="#">Trainings</a>
       </li> -->
-
       <div class="dropdown">
         <button style="border: none;" class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span style="color: white; background-color: rgb(158, 77, 19);">Academics</span>
@@ -44,14 +41,12 @@
           <a class="dropdown-item nav-link" href="{% url 'courses-list' %}">Courses</a>
         </ul>
       </div>
-
       <li class="nav-item">
         <a class="nav-link" href="#">Resources</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'contact-us' %}">Contact</a>
       </li>
-
       <li class="nav-item input-group">
         <input type="text" class="form-control col-8" placeholder="Search">
         <div class="input-group-append">
@@ -60,8 +55,6 @@
           </button>
         </div>
       </li>
-
-
     </ul>
 
 
@@ -69,27 +62,24 @@
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
     </form> -->
-
     <div class="setting">
       {% if user.is_authenticated %}
-
-      <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-user" aria-hidden="true"></i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-right bg-secondary" aria-labelledby="dropdownMenuButton">
-          <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
-          <a class="nav-link text-white" href="{% url 'edit-profile' %}">Edit profile</a>
-          <a class="nav-link text-white" href="{% url 'change-password' %}">Change password</a>
-          <a class="nav-link text-white" href="{% url 'reset_password' %}">Reset your password?</a>
-          {% if user.userprofile.role or user.is_superuser or user.is_staff%}
-            <a class="nav-link text-white" href="{% url 'admin-dashboard' %}">
-              My homepage
-            </a>
-          {% endif %}
+        <div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-user" aria-hidden="true"></i>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right bg-secondary" aria-labelledby="dropdownMenuButton">
+            <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
+            <a class="nav-link text-white" href="{% url 'edit-profile' %}">Edit profile</a>
+            <a class="nav-link text-white" href="{% url 'change-password' %}">Change password</a>
+            <a class="nav-link text-white" href="{% url 'reset_password' %}">Reset your password?</a>
+            {% if user.userprofile.role or user.is_superuser or user.is_staff%}
+              <a class="nav-link text-white" href="{% url 'admin-dashboard' %}">
+                My homepage
+              </a>
+            {% endif %}
+          </div>
         </div>
-      </div>
-
     {% else %}
       <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -100,7 +90,6 @@
           <a class="dropdown-item" href="{% url 'user-login' %}">Login</a>
         </div>
       </div>
-
     {% endif %}
     </div>
   </div>

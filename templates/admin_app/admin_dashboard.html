@@ -1,64 +1,48 @@
 {% extends 'base.html' %}
-
 {% block title %}  Home Page  {% endblock %}
-
-  <!-- {% load static %} -->
-
-  {% block content %}
-  <!-- <h1>You welcome!</h1> -->
+{% block content %}
   <br/><br/>
-
   <div class="row my-5">
-      <!-- Navabr -->
-    <div class="col-md-2 d-none d-md-block bg-light">
+    <div class="col-md-2 d-none d-md-block bg-secondary">
       <nav class="navbar navbar-expand-lg flex-column my-5">
-        <!-- <a class="navbar-brand" href="#">Logo</a> -->
         <button class="navbar-toggler text-danger" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon text-danger"><i class="fas fa-bars"></i></span>
         </button>
-        <div class="collapse navbar-collapse bg-secondary" id="navbarNav">
+        <div class="collapse navbar-collapse bg-primary" id="navbarNav">
           <ul class="navbar-nav flex-column">
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'admin-dashboard' %}">Home</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-department' %}">Add department</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-teacher' %}">Add teacher</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-student' %}">Add student</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-course' %}">Add course</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'department-list' %}">View departments</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'teacher-list' %}">View teachers</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'offer-position' %}">Offer position</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'view-position' %}">View positions</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'student-list' %}">View students</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'course-list' %}">View courses</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'staff-list' %}">Staff lists</a>
             </li>
@@ -70,9 +54,7 @@
       </nav>
     </div>
 
-
     <!-- content -->
-
     <div class="col-md-10 ml-sm-auto px-4">
       <p>Hi     <span class="text-success fs-4 display-4"> {{ user.username|capfirst }}</span> </p>
       <div class="row m-0 px-5">
@@ -83,7 +65,6 @@
               <span class="text-primary">
                 <i class="fas fa-user-graduate fa-3x"></i>
               </span>
-
               <div class="text">
                 <p>students</p>
                 <h3>{{ total_students }}</h3>
@@ -93,7 +74,6 @@
               <span class="text-primary">
                 <i class="fas fa-chalkboard-teacher fa-3x"></i>
               </span>
-
               <div class="text">
                 <p>teachers</p>
                 <h3>{{ total_teachers }}</h3>
@@ -112,8 +92,6 @@
               <span class="text-primary">
                 <i class="fas fa-book fa-3x"></i>
               </span>
-
-
               <div class="text">
                 <p>books</p>
                 <h3>2000</h3>
@@ -161,6 +139,7 @@
           </div>
         </div>
       </div>
+
       <!-- end of second row -->
       <!-- payment row -->
       <div class="row m-0 px-5">
@@ -194,9 +173,5 @@
         </div>
       </div>
     </div>
-
-
   </div>
-
-
 {% endblock %}

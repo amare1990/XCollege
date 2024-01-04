@@ -1,18 +1,10 @@
 {% extends 'base.html' %}
-
 {% block title %}  Department Head's Home Page  {% endblock %}
-
-  <!-- {% load static %} -->
-
   {% block content %}
-  <!-- <h1>You welcome!</h1> -->
   <br/><br/>
-
   <div class="row my-5">
-      <!-- Navabr -->
     <div class="col-md-2 d-none d-md-block bg-light">
-      <nav class="navbar navbar-expand-lg flex-column my-5">
-        <!-- <a class="navbar-brand" href="#">Logo</a> -->
+      <nav class="navbar navbar-expand-lg flex-column my-5">>
         <button class="navbar-toggler text-danger" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon text-danger"><i class="fas fa-bars"></i></span>
         </button>
@@ -21,7 +13,6 @@
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'admin-dashboard' %}">Home</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'course-offer' %}"> Course offer</a>
             </li>
@@ -40,18 +31,15 @@
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-teacher' %}">Call meetings</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'department-list' %}">Manage leave request</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'teacher-list' %}">View schedules</a>
             </li>
-
               <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-student' %}">Ask for leave</a>
             </li>
-
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-course' %}">Give feedback</a>
             </li>
@@ -61,14 +49,12 @@
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'assessments' %}"> View assessments </a>
             </li>
-
           </ul>
         </div>
       </nav>
     </div>
 
     <!-- body-->
-
     <div class="statbox pl-5">
       <span class="text-primary">
         <i class="fas fa-user-graduate fa-3x"></i>
@@ -79,7 +65,6 @@
         {% elif profile.role == 'student' %}
            Student
         {% elif profile.role == 'staff' %}
-
         {% endif %}
         {% if profile.user.first_name %}
           Welcome back, {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
@@ -87,13 +72,10 @@
           Welcome back, {{ profile.user.username|capfirst }}!
         {% endif %}
         {% if profile.position == 'head' %}
-        <br>
-        <small>
-          Head of <span>{{ profile.department }} department</span>
-        </small>
-      {% endif %}
+          <br>
+          <small>Head of <span>{{ profile.department }} department</span></small>
+        {% endif %}
       </P>
-
       <div class="card bg-secondary" style="width: 40rem;">
         <div class="row g-0">
           <div class="col-md-4">
@@ -120,12 +102,8 @@
             </button>
           </div>
          </div>
-
         </div>
       </div>
-
     </div>
-
   </div>
-
 {% endblock %}
