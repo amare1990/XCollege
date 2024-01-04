@@ -2,20 +2,46 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- <link rel="stylesheet" type="text/css" href="{% static '/css/admin_dashboard-snippet.css' %}"> -->
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <!-- Google Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
+    <link rel="stylesheet" href="../static/css/custom.css">
     <title>{% block title %} My Site {% endblock%}</title>
 
     <style>
-      /* Custom CSS */
+      body {
+        background-color: rgb(138, 113, 30);
+        color: white;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      button {
+        font-family: 'Poppins', sans-serif;
+        /* font-size: 1.1em;
+        font-weight: 300;
+        line-height: 1.7em; */
+      }
+
+
+      a {
+        color: inherit;
+        text-decoration: none;
+        transition: all 0.3s;
+        text-decoration: none;
+      }
+
+      a:active {
+        color: green;
+      }
+
+      a:hover {
+          color: green;
+          background-color: #7386D5;
+          text-decoration: none;
+          transition: all 0.3s;
+      }
+
       .navbar {
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       }
@@ -30,6 +56,7 @@
   <body>
 
     {% include 'navbar.html' %}
+    <br><br><br>
 
     <div class="container-fluid px-0">
       <!-- <div class="row"> -->

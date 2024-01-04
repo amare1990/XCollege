@@ -18,9 +18,9 @@ urlpatterns = [
 
     path('add_course/', views.add_course, name='add-course'),
     path('course_list/', views.course_list, name='course-list'),
-    path('course_detail/<int:course_code>/', views.course_detail, name='course-detail'),
-    path('course/<int:course_code>/delete', views.course_delete, name='course-delete'),
-    path('course/<int:course_code>/edit/', views.course_edit, name='course-edit'),
+    path('course_detail/<str:course_code>/', views.course_detail, name='course-detail'),
+    path('course/<str:course_code>/delete', views.course_delete, name='course-delete'),
+    path('course/<str:course_code>/edit/', views.course_edit, name='course-edit'),
     path('my_all_department_courses/', views.my_all_department_courses, name='my-all-department-courses'),
 
     path('add_teacher/', views.add_teacher, name='add-teacher'),
@@ -34,9 +34,9 @@ urlpatterns = [
 
     path('add_assessment/', views.add_assessment, name='add-assessment'),
     path('assessments/', views.assessments, name='assessments'),
-    path('fill_mark/<course_id>/', views.add_mark, name='add-mark'),
-    path('mark_list/<int:course_id>/', views.mark_list, name='mark-list'),
-    path('view_result/<course_id>/', views.view_result, name='view-result'),
+    path('fill_mark/<str:course_code>/', views.add_mark, name='add-mark'),
+    path('mark_list/<str:course_code>/', views.mark_list, name='mark-list'),
+    path('view_result/<str:course_code>/', views.view_result, name='view-result'),
 
     path('student_list/', views.student_list, name='student-list'),
     path('student/<int:student_id>/detail/', views.student_detail, name='student-detail'),
@@ -47,6 +47,8 @@ urlpatterns = [
 
     path('head/course_offer/', views.add_course_offering, name='course-offer'),
     path('head/course_offering_view/', views.course_offering_view, name='course-offering-view'),
+    path('head/course/<str:course_code>/unoffer/', views.remove_course_offering, name='remove-offering'),
+    path('head/department_students/', views.my_all_department_students, name='department-students'),
 
     path('staff_list/', views.staff_list, name='staff-list'),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

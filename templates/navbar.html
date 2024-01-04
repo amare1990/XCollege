@@ -1,6 +1,6 @@
 {% load static %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="display: none;">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item active mr-auto">
         <a class="nav-link" href="#">Tel : +251 111 559769. E: info@hilcoe.net </a>
@@ -11,49 +11,49 @@
     </ul>
 </nav>
 
-<nav class="navbar navbar-expand-lg bg-white fixed-top">
+<nav class="navbar navbar-expand-lg fixed-top mb-5"  style="background-color: rgb(158, 77, 19);">
   <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static '/website/logo-hilcoe.jpg' %}" class="w-75"></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler bg-secondary" type="button" data-toggle="collapse" data-target="#collapsed-menu-items" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <div class="collapse navbar-collapse" id="collapsed-menu-items">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link text-dark" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="{% url 'about' %}">About</a>
+        <a class="nav-link" href="{% url 'about' %}">About</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="{% url 'admission' %}">Admission</a>
+        <a class="nav-link" href="{% url 'admission' %}">Admission</a>
       </li>
       <!-- <li class="nav-item text-dark">
         <a class="nav-link text-dark" href="#">Trainings</a>
       </li> -->
 
       <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Academics
+        <button style="border: none;" class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span style="color: white; background-color: rgb(158, 77, 19);">Academics</span>
         </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item " href="{% url 'cs-bsc' %}">BSc. in computer Science</a>
-          <a class="dropdown-item" href="{% url 'se-bsc' %}">BSc. in Software Engineering</a>
-          <a class="dropdown-item" href="{% url 'cs-msc' %}">MSc. in Computer Science</a>
-          <a class="dropdown-item" href="{% url 'se-msc' %}">MSc. in Software Engineering</a>
-          <a class="dropdown-item" href="{% url 'courses-list' %}">Courses</a>
-        </div>
+        <ul class="dropdown-menu bg-secondary" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item nav-link" href="{% url 'cs-bsc' %}">BSc. in computer Science</a>
+          <a class="dropdown-item nav-link" href="{% url 'se-bsc' %}">BSc. in Software Engineering</a>
+          <a class="dropdown-item nav-link" href="{% url 'cs-msc' %}">MSc. in Computer Science</a>
+          <a class="dropdown-item nav-link" href="{% url 'se-msc' %}">MSc. in Software Engineering</a>
+          <a class="dropdown-item nav-link" href="{% url 'courses-list' %}">Courses</a>
+        </ul>
       </div>
 
       <li class="nav-item">
-        <a class="nav-link text-dark" href="#">Resources</a>
+        <a class="nav-link" href="#">Resources</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="{% url 'contact-us' %}">Contact</a>
+        <a class="nav-link" href="{% url 'contact-us' %}">Contact</a>
       </li>
 
       <li class="nav-item input-group">
-        <input type="text" class="form-control" placeholder="Search">
+        <input type="text" class="form-control col-8" placeholder="Search">
         <div class="input-group-append">
           <button class="btn btn-outline-secondary btn-custom" type="button">
             <i class="fa fa-search"></i>
@@ -70,7 +70,8 @@
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
     </form> -->
 
-    {% if user.is_authenticated %}
+    <div class="setting">
+      {% if user.is_authenticated %}
 
       <div class="dropdown">
         <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -101,7 +102,6 @@
       </div>
 
     {% endif %}
-
-
+    </div>
   </div>
 </nav>

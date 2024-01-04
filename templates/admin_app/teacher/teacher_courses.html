@@ -39,11 +39,11 @@
             {% for course in courses %}
             <tr>
               <th scope="row">{{ forloop.counter }}</th>
-              <td><a href="{% url 'course-detail' course_id=course.pk %}">{{ course.pk }}</a></td>
+              <td><a href="{% url 'course-detail' course_code=course.course_code %}">{{ course.course_code }}</a></td>
               <td>{{ course.name }}</td>
               <td> {{ course.department }} </td>
-              <td><a href="{% url 'course-edit' course_id=course.pk %}">Edit</a>|<a href="{% url 'course-detail' course_id=course.pk %}">View</a>|
-                <a href="{% url 'course-delete' course_id=course.pk %}">Delete</a></td>
+              <td><a href="{% url 'course-edit' course_code=course.course_code %}">Edit</a>|<a href="{% url 'course-detail' course_code=course.course_code %}">View</a>|
+                <a href="{% url 'course-delete' course_code=course.course_code %}">Delete</a></td>
             </tr>
             {% endfor %}
 

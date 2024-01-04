@@ -21,8 +21,8 @@
     <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage </a>
     <a class="nav-link text-black" href="{% url 'add-student' %}"> Add more </a>
 
-    <h3>List of teachers </h3>
-    <div class="container my-5">
+    <h3>List of students in our department </h3>
+    <div class="container mb-5">
         <h3>{{ number_of_students }} total students </h3>
 
         <table class="table table-dark">
@@ -49,7 +49,7 @@
               <td>{{ student.bio|truncatechars:50 }}</td>
               <td> {{ student.academic_year }} </td>
               <td> {{ student.semester }} </td>
-              <td> {{ teacher.department }} </td>
+              <td> {{ student.department }} </td>
               <td><a href="{% url 'student-edit' student_id=student.pk %}">Edit</a>|<a href="{% url 'student-detail' student_id=student.pk %}">View</a>|
                 <a href="{% url 'student-delete' student_id=student.pk %}">Delete</a></td>
             </tr>

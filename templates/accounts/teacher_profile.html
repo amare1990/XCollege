@@ -54,20 +54,48 @@
 
     <!-- body-->
 
-    <div class="statbox">
+    <div class="statbox mx-5 pl-5">
       <span class="text-primary">
         <i class="fas fa-chalkboard-teacher fa-3x"></i>
       </span>
-      <P> Welcome back, Teacher {{ profile.user.username }}!</P>
+      <P> Welcome back, Teacher
+        {% if profile.user.first_name %}
+          {{ profile.user.first_name|capfirst }}  {{ profile.user.last_name|capfirst }}!
+        {% else %}
+          {{ profile.user.username|capfirst }}!
+        {% endif %}
+      </P>
+      <div class="card bg-secondary" style="width: 40rem;">
+       <div class="row g-0">
+        <div class="col-md-4">
+          <img src="{{ profile.profile_picture.url }}" class="card-img-top" alt="Profile picture">
+        </div>
+       <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">
+            Username:
+            {% if profile.user.first_name %}
+              {{ profile.user.first_name|capfirst }}  {{ profile.user.last_name|capfirst }}
+            {% else %}
+              {{ profile.user.username|capfirst }}
+            {% endif %}
+          </h5>
+          <p class="card-text">Role: {{ profile.role|capfirst }} <br>
+            Title: {{ profile.title }} <br>
+            Faculty member in the department of {{ profile.department }} <br>
+            email: {{ profile.user.email }} <br>
+            Brief bio: <br> {{ profile.bio }}
+          </p>
+          <button class="btn btn-primary">
+            <a href="{% url 'teacher-edit' teacher_id=profile.pk %}">Edit a teacher </a>|<a href="{% url 'teacher-delete' teacher_id=profile.pk %}">Delete teacher </a>
+          </button>
+        </div>
+       </div>
+       </div>
+      </div>
+
     </div>
 
-
-
-
-
-
-
   </div>
-
 
 {% endblock %}

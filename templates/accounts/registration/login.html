@@ -2,28 +2,23 @@
 
 {% block title %}  Login Page  {% endblock %}
 
-<!-- {% load static %} -->
-
 {% block content%}
 
-  <div class="container my-5 py-3">
+  <div class="container my-5 py-3 bg-secondary" style="max-width: 400px;">
+    <div class="text-center mb-4">
+      {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endfor %}
+      {% endif %}
 
-    {% if messages %}
-      {% for message in messages %}
-      <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      {% endfor %}
-    {% endif %}
-
-
-        <h2>Login Here!</h2>
-
-
+      <h2>Login Here!</h2>
+    </div>
 
     <form method="POST">
       {% csrf_token %}
@@ -33,13 +28,8 @@
       <div class="mb-3">
         <input type="password" class="form-control" name="password" placeholder="Password">
       </div>
-      <button type="submit" class="btn btn-primary">Login</button>
+      <button type="submit" class="btn btn-primary btn-block">Login</button>
     </form>
-
   </div>
 
-
 {% endblock %}
-
-
-

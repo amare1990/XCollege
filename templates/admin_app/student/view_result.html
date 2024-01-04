@@ -33,6 +33,8 @@
               {% for assessment  in assessments %}
                 <th scope="col">{{ assessment.assessment_name }}</th>
               {% endfor %}
+              <th scop="col">Total Mark (100%)</th>
+              <th scope="col">Grade</th>
             </tr>
           </thead>
           <tbody>
@@ -42,6 +44,8 @@
               {% for mark in my_mark %}
                 <td scope="col">   {{ mark.mark }} </td>
               {% endfor %}
+              <td>{{ total_mark }}</td>
+              <td>{{ grade }}</td>
             </tr>
 
           </tbody>

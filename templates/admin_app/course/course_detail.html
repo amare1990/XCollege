@@ -19,7 +19,11 @@
     {% endif %}
 
     <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage </a>
-    <a class="nav-link text-black" href="{% url 'course-list' %}">List of Courses </a>
+    {% if user.userprofile.role == 'admin' %}
+      <a class="nav-link text-black" href="{% url 'course-list' %}">List of Courses </a>
+    {% else %}
+      <a class="nav-link text-black" href="{% url 'my-all-department-courses' %}">List of Courses </a>
+    {% endif %}
 
 
     <h3>Course details</h3>
@@ -28,10 +32,10 @@
         <p>Year: {{ course.academic_year }} and </p>
         <p>Semester: {{ course.semester }} </p>
         <p>Department:  {{ department.name }} </p>
-        <a href="{% url 'course-edit' course_id=course.pk %}">Edit Course</a>|<a href="{% url 'course-delete' course_id=course.pk %}">Delete Course</a>
-        |<a href="{% url 'add-mark' course_id=course.pk %}">Add marks</a>
-        |<a href="{% url 'mark-list' course_id=course.pk %}">Mark sheet</a>
-        <a href="{% url 'view-result' course_id=course.pk %}">View my result</a>
+        <a href="{% url 'course-edit' course_code=course.course_code %}">Edit Course</a>|<a href="{% url 'course-delete' course_code=course.course_code %}">Delete Course</a>
+        |<a href="{% url 'add-mark' course_code=course.course_code %}">Add marks</a>
+        |<a href="{% url 'mark-list' course_code=course.course_code %}">Mark sheet</a>
+        <a href="{% url 'view-result' course_code=course.course_code %}">View my result</a>
         <hr>
         <h5>Teachers in charge for this course</h5>
         <p><small>

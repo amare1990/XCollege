@@ -1,11 +1,39 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import UserProfile, Department, Course, Assessment, Mark
-from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarksForm, AssessmentForm
+from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarksForm, AssessmentForm, AcademicYear
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models import Count
 from django.http import HttpResponse
-from django.forms import formset_factory
+from django.core.exceptions import ObjectDoesNotExist
+
+
+def letter_grade(total_marks):
+    grade = ''
+    if total_marks >= 90:
+            grade= 'A+'
+    elif total_marks >=85:
+        grade = 'A'
+    elif total_marks >= 80:
+        grade = 'A-'
+    elif total_marks >= 75:
+        grade = 'B+'
+    elif total_marks >= 70:
+        grade = 'B'
+    elif total_marks >= 65:
+        grade = 'B-'
+    elif total_marks >= 60:
+        grade = 'C+'
+    elif total_marks >= 50:
+        grade = 'C'
+    elif total_marks >= 45:
+        grade = 'C-'
+    elif total_marks >= 40:
+        grade = 'D'
+    else:
+        grade = 'F'
+
+    return grade
 
 
 def admin_dashboard(request):
@@ -104,30 +132,43 @@ def add_student(request):
 
 def add_teacher(request):
     if request.method == 'POST':
-        form_teacher = AddTeacherForm(request.POST)
+        form_teacher = AddTeacherForm(request.POST, request.FILES)
         if form_teacher.is_valid():
-            form_teacher.save()
-            return redirect('teacher-list')
+            user_instance = form_teacher.save(commit=False)
+            if UserProfile.objects.filter(user=user_instance).exists():
+                messages.error(request, 'This user profile already exists')
+                return redirect('teacher-list')
+            else:
+                form_teacher.save()
+                return redirect('teacher-list')
         else:
-            messages.warning(request, "You didn't fill the form successfully!")
-            return render(request, 'admin_app/teacher/add_teacher.html', {'form_teacher': form_teacher})
+            messages.error(request, "You didn't fill the form successfully!")
+            # return render(request, 'admin_app/teacher/add_teacher.html', {'form_teacher': form_teacher})
     else:
         form_teacher = AddTeacherForm()
         return render(request, 'admin_app/teacher/add_teacher.html', {'form_teacher': form_teacher})
-
 
 def add_course(request):
     if request.method == 'POST':
         form_course = AddCourseForm(request.POST)
         if form_course.is_valid():
-            form_course.save()
-            return redirect('course-list')
+            course_code = form_course.cleaned_data['course_code']
+            try:
+                course = Course.objects.get(course_code=course_code)
+                messages.error(request, f"This course code-{course.course_code} has already been added")
+                return redirect('add-course')
+            except ObjectDoesNotExist:
+                form_course.save()
+                return redirect('course-list')
+        else:
+            messages.error(request, "You didn't fill the form successfully!")
+            return render(request, 'admin_app/course/add_course.html', {'form_course': form_course})
     else:
         form_course = AddCourseForm()
         return render(request, 'admin_app/course/add_course.html', {'form_course': form_course})
 
 def course_detail(request, course_code):
-    course = Course.objects.get(pk=course_code)
+    course = Course.objects.get(course_code=course_code)
     students_registered = course.students.all()
     number_of_students_registered = students_registered.count()
     teachers_taught = course.teachers.all()
@@ -145,20 +186,20 @@ def course_detail(request, course_code):
    }
     return render(request, 'admin_app/course/course_detail.html', context)
 
-def course_edit(request, course_id):
-       course = get_object_or_404(Course, pk=course_id)
+def course_edit(request, course_code):
+       course = get_object_or_404(Course, course_code=course_code)
        if request.method == 'POST':
            form_course = AddCourseForm(request.POST, instance=course)
            if form_course.is_valid():
                form_course.save()
-               return redirect('course-detail', course_id=course_id)
+               return redirect('course-detail', course_code=course_code)
        else:
            form_course = AddCourseForm(instance=course)
        return render(request, 'admin_app/course/course_edit.html', {'form_course': form_course, 'course':course })
 
 
-def course_delete(request, course_id):
-    course = get_object_or_404(Course, pk=course_id)
+def course_delete(request, course_code):
+    course = get_object_or_404(Course, course_code=course_code)
     if request.method == 'POST':
         course.delete()
         return redirect('course-list')
@@ -227,20 +268,30 @@ def staff_list(request):
 
 # Teachers list
 def teacher_list(request):
-
-   teachers = UserProfile.objects.filter(role='teacher')
-   number_of_teachers = teachers.count()
-   context = {
+    if request.user.userprofile.role == 'admin':
+       teachers = UserProfile.objects.filter(role='teacher')
+    else:
+       teachers = UserProfile.objects.filter(role='teacher', department=request.user.userprofile.department)
+    number_of_teachers = teachers.count()
+    context = {
       'teachers': teachers,
-      'number_of_teachers': number_of_teachers,
-   }
+      'number_of_teachers': number_of_teachers,}
+    return render(request, 'admin_app/teacher/teacher_list.html', context)
 
-   return render(request, 'admin_app/teacher/teacher_list.html', context)
+def my_all_department_students(request):
+    user = request.user
+    user_profile = user.userprofile
+    print('userprofile= ', user_profile)
+    my_department = user_profile.department
+    department_students = UserProfile.objects.filter(role='student', department=my_department)
+    print('dept students= ', department_students)
+
+    return render(request, 'admin_app/head/my_all_department_students.html', {'department_students': department_students})
 
 def teacher_edit(request, teacher_id):
     teacher = get_object_or_404(UserProfile, pk=teacher_id)
     if request.method == 'POST':
-        form_teacher = AddTeacherForm(request.POST, instance=teacher)
+        form_teacher = AddTeacherForm(request.POST, request.FILES, instance=teacher)
         if form_teacher.is_valid():
             form_teacher.save()
             return redirect('teacher-detail', teacher_id=teacher_id)
@@ -294,67 +345,46 @@ def assessments(request):
     assessments = Assessment.objects.all()
     return render(request, 'admin_app/teacher/assessments.html', {'assessments': assessments})
 
-def add_mark(request, course_id):
-    course = Course.objects.get(id=course_id)
+def add_mark(request, course_code):
+    course = Course.objects.get(course_code=course_code)
     students = course.students.all()
     assessments = Assessment.objects.all()
 
     if request.method == 'POST':
         for student in students:
+            print('student name= ', student.user.username)
+            # print(request.POST.GET('comment'))
             for assessment in assessments:
                 marks_field_name = f"marks_{student.id}_{assessment.id}"
                 mark = request.POST.get(marks_field_name, 0)
                 Mark.objects.create(student=student, assessment=assessment, mark=mark, course=course)
+                # mark = Mark.objects.get(student=student, assessment=assessment)
+                # mark.comment= comment
 
-        return redirect('mark-list', course_id=course.id)
+        return redirect('mark-list', course_code=course.course_code)
     else:
         form = AddMarksForm()
 
     return render(request, 'admin_app/teacher/add_mark.html', {'form': form, 'students': students, 'course': course, 'assessments': assessments})
 
-
-
-
-def mark_list(request, course_id):
-    selected_course = Course.objects.get(pk=course_id)
+def mark_list(request, course_code):
+    selected_course = Course.objects.get(course_code=course_code)
     students = selected_course.students.all()
-    assessments = Assessment.objects.all()  # Fetch all assessments for the course
+    assessments = Assessment.objects.all()
     marks_data = []
     grade = ''
     for student in students:
-        # total_marks = student.calculate_total_marks()
         total_marks = 0
         student_marks = []
         for assessment in assessments:
             marks = Mark.objects.filter(student=student, assessment=assessment)
             if marks.exists():
                 mark = marks.first()
-                total_marks += mark.mark  # Accumulate the marks for each assessment
+                total_marks += mark.mark
                 student_marks.append(mark)
             else:
-                student_marks.append(None)  # Append None if no mark is found for the assessment
-        if total_marks >= 90:
-            grade= 'A+'
-        elif total_marks >=85:
-            grade = 'A'
-        elif total_marks >= 80:
-            grade = 'A-'
-        elif total_marks >= 75:
-            grade = 'B+'
-        elif total_marks >= 70:
-            grade = 'B'
-        elif total_marks >= 65:
-            grade = 'B-'
-        elif total_marks >= 60:
-            grade = 'C+'
-        elif total_marks >= 50:
-            grade = 'C'
-        elif total_marks >= 45:
-            grade = 'C-'
-        elif total_marks >= 40:
-            grade = 'D'
-        else:
-            grade = 'F'
+                student_marks.append(None)
+        grade = letter_grade(total_marks)
 
         marks_data.append({'student': student, 'marks': student_marks, 'total_marks': total_marks, 'grade': grade})
 
@@ -367,7 +397,11 @@ def mark_list(request, course_id):
 # Student list
 def student_list(request):
 
-   students = UserProfile.objects.filter(role='student')
+   if request.user.userprofile.role == 'admin':
+       students = UserProfile.objects.filter(role='student')
+   else:
+       students = UserProfile.objects.filter(role='student', department=request.user.userprofile.department)
+
    number_of_students = students.count()
    context = {
       'students': students,
@@ -406,6 +440,7 @@ def student_delete(request, student_id):
 # course list
 def course_list(request):
 
+#    courses = Course.objects.filter(department= request.user.userprofile.department)
    courses = Course.objects.all()
    number_of_courses = courses.count()
    context = {
@@ -430,8 +465,8 @@ def course_registration(request):
         form_course_registration = CourseRegistrationForm(student_department)
         return render(request, 'admin_app/course/course_registration.html', {'form_course_registration': form_course_registration})
 
-def view_result(request, course_id):
-    selected_course = Course.objects.get(pk=course_id)
+def view_result(request, course_code):
+    selected_course = Course.objects.get(course_code=course_code)
     userObj = request.user
     print('username= ,', userObj.username)
     marks = Mark.objects.filter(student=userObj.userprofile, course=selected_course)
@@ -439,12 +474,17 @@ def view_result(request, course_id):
     # assessments = mark.assessment
     assessments = Assessment.objects.all()
     my_mark = []
+    total_mark = 0
     for mark in marks:
-        print('mark =', mark.mark)
+        total_mark+= mark.mark
         my_mark.append(mark)
+
+    grade = letter_grade(total_mark)
     return render(request, 'admin_app/student/view_result.html', { 'assessments': assessments,
 
-           'course': selected_course, 'my_mark': my_mark, 'userObj': userObj})
+           'course': selected_course, 'my_mark': my_mark, 'userObj': userObj,
+           'total_mark': total_mark,
+           'grade': grade})
 
 
 
@@ -463,10 +503,16 @@ def add_course_offering(request):
     else:
         initial_department = Department.objects.get(id=head_department.id)
         form = AddCourseOfferingForm(head_department, initial={'department': initial_department})
-
     return render(request, 'admin_app/head/add_course_offering.html', {'form': form})
 
-
+def remove_course_offering(request, course_code):
+    course = Course.objects.get(course_code=course_code)
+    print('course-codes= ', course)
+    course.offered = False
+    teachers = {}
+    course.teachers.set(teachers)
+    course.save()
+    return redirect('course-offering-view')
 
 def student_courses(request):
     user_profile = UserProfile.objects.get(user=request.user)

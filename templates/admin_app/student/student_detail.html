@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Details of a student named {{ student.name }} {% endblock %}
+{% block title %} Details of a student named {{ student.user.username }} {% endblock %}
 
 {% block content %}
 
@@ -18,19 +18,14 @@
       {% endfor %}
     {% endif %}
 
-    <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
-            {% url 'admin-dashboard' %}
-            {% else %}
-                {% url 'cs-bsc' %}
-            {% endif %}">My homepage
+    <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage
     </a>
     <a class="nav-link text-black" href="{% url 'student-list' %}"> View students </a>
 
 
-    <h3>Student details</h3>
-    <div class="container my-5">
-      {{ student.profile_picture.url }} <br>
-        <img src="{{ student.profile_picture.url }}" class="d-block w-5 h-5">
+    <h3>Student details of a student {{ student.user.username|capfirst }} </h3>
+    <div class="container mb-5">
+        <img src="{{ student.profile_picture.url }}" style="width:150px; height: 150px;">
         <p>Username: {{ student.user.username }} </p>
 
         <p>Role: {{ student.role }}</p>

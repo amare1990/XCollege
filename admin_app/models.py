@@ -101,7 +101,7 @@ class UserProfile(models.Model):
         return self.user.username
 
 class Course(models.Model):
-    course_code = models.CharField(max_length=50, default='XCC-101')
+    course_code = models.CharField(max_length=50, unique=True)
     name = models.CharField(max_length=100)
     teachers = models.ManyToManyField(UserProfile, related_name="courses_taught", blank=True)
     students = models.ManyToManyField(UserProfile, related_name="courses_registered", blank=True)
@@ -112,12 +112,15 @@ class Course(models.Model):
     semester = models.CharField(max_length=20, choices=semester, default='first')
     offered = models.BooleanField(default=False)
 
+    # class Meta:
+    #     unique_together = ('name', 'department')
 
     def __str__(self):
         return self.name
 
 class Assessment(models.Model):
     assessment_name = models.CharField(max_length=100)
+    # comment = models.CharField(max_length=100, blank=True, null=True)
     weight = models.DecimalField(max_digits=5, decimal_places=2)
 
     def __str__(self):
@@ -128,3 +131,11 @@ class Mark(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
     mark = models.DecimalField(max_digits=5, decimal_places=2, default=10)
+    comment = models.CharField(max_length=100, blank=True, null=True)
+
+class LeaveRequest(models.Model):
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    reason = models.TextField()
+    approved = models.BooleanField(default=False)

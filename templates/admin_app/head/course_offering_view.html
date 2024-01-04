@@ -26,6 +26,7 @@
     <table class="table table-dark">
         <thead>
             <tr>
+                <th>Course Code</th>
                 <th>Course Name</th>
                 <th>Department</th>
                 <th>Teachers</th>
@@ -34,12 +35,15 @@
         <tbody>
             {% for course in courses_with_teachers %}
             <tr>
+                <td>
+                    <a href="{% url 'course-detail' course_code=course.course_code %}">{{ course.course_code }}</a>
+                </td>
                 <td>{{ course.name }}</td>
                 <td>{{ course.department.name }}</td>
                 <td>
                     <ul class="list-unstyled">
                         {% for teacher in course.teachers.all %}
-                        <li>{{ teacher.user.username }}</li>
+                        <li>{{ teacher.user.username }} |  <a href="{% url 'remove-offering' course_code=course.course_code %}">Unassign</a></li>
                         {% endfor %}
                     </ul>
                 </td>

@@ -3,6 +3,7 @@
 
 # Ignore Django migration files for all apps
 **/migrations/
+admin_app/migrations/__pycache__/*
 
 # Ignore the virtual environment directory
 venv-college/

@@ -22,7 +22,7 @@
 
 
   <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage </a>
-    <a href="{% url 'course-detail' course_id=course.pk %}">Course detail</a>
+    <a href="{% url 'course-detail' course_code=course.course_code %}">Course detail</a>
 
   <h3> Edit a course</h3>
   <form method="post">

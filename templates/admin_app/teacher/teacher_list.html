@@ -18,11 +18,7 @@
       {% endfor %}
     {% endif %}
 
-    <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
-            {% url 'admin-dashboard' %}
-            {% else %}
-                {% url 'cs-bsc' %}
-            {% endif %}">My homepage
+    <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage
     </a>
     <a class="nav-link text-black" href="{% url 'add-teacher' %}"> Add more </a>
 
@@ -48,15 +44,23 @@
             {% for teacher in teachers %}
             <tr>
               <th scope="row">{{ forloop.counter }}</th>
-              <td><a href="{% url 'teacher-detail' teacher_id=teacher.pk %}">{{ teacher.pk }}</a></td>
+              <td>
+                <button class="btn btn-primary">
+                  <a href="{% url 'teacher-detail' teacher_id=teacher.pk %}">{{ teacher.pk }}</a>
+                </button>
+              </td>
               <td>{{ teacher.user.username }}</td>
               <td>{{ teacher.role }}</td>
               <td>{{ teacher.bio|truncatechars:50 }}</td>
               <td> {{ teacher.title }} </td>
               <td> {{ teacher.department }} </td>
               <td> {{ teacher.position }} </td>
-              <td><a href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>|<a href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a>|
-                <a href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a></td>
+              <td>
+                <button class="btn btn-primary">
+                  <a href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>|<a href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a>|
+                <a href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a>
+                </button>
+              </td>
             </tr>
             {% endfor %}
 

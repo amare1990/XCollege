@@ -35,6 +35,9 @@
               <a class="nav-link text-white" href="{% url 'my-all-department-courses' %}">Our department courses</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'student-list' %}">Our department students</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-teacher' %}">Call meetings</a>
             </li>
 
@@ -66,20 +69,63 @@
 
     <!-- body-->
 
-    <div class="statbox">
+    <div class="statbox pl-5">
       <span class="text-primary">
         <i class="fas fa-user-graduate fa-3x"></i>
       </span>
-      <P>{{ profile.user.username }} </P>
+      <P>
+        {% if profile.role == 'teacher' %}
+          Teacher
+        {% elif profile.role == 'student' %}
+           Student
+        {% elif profile.role == 'staff' %}
+
+        {% endif %}
+        {% if profile.user.first_name %}
+          Welcome back, {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
+        {% else %}
+          Welcome back, {{ profile.user.username|capfirst }}!
+        {% endif %}
+        {% if profile.position == 'head' %}
+        <br>
+        <small>
+          Head of <span>{{ profile.department }} department</span>
+        </small>
+      {% endif %}
+      </P>
+
+      <div class="card bg-secondary" style="width: 40rem;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{ profile.profile_picture.url }}" class="card-img-top" alt="Profile picture">
+          </div>
+         <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">
+              Welcome back, {{ profile.title }}
+              {% if profile.user.first_name %}
+              Welcome back, {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
+            {% else %}
+              {{ profile.user.username|capfirst }}!
+            {% endif %}
+            </h5>
+            <p class="card-text">Username: {{ profile.user.username }} <br>
+              Role: {{ profile.role }} <br>
+              Title: {{ profile.title }} <br>
+              Faculty member in the department of {{ profile.department }} <br>
+              Position: {{ profile.position|capfirst }} <br>
+              Brief bio: <br> {{ profile.bio }}</p>
+            <button class="btn btn-primary">
+              <a href="{% url 'teacher-edit' teacher_id=profile.pk %}">Edit my profile </a>| <a href="{% url 'teacher-delete' teacher_id=profile.pk %}">Delete profile </a>
+            </button>
+          </div>
+         </div>
+
+        </div>
+      </div>
+
     </div>
 
-
-
-
-
-
-
   </div>
-
 
 {% endblock %}

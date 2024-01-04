@@ -2,55 +2,52 @@
 
 {% block title %}  User Registration Page  {% endblock %}
 
-<!-- {% load static %} -->
-
 {% block content%}
 
-  <div class="container my-5 py-3">
+  <div class="container my-5 py-3 bg-secondary" style="max-width: 400px;">
+    <div class="text-center mb-4">
+      {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endfor %}
+      {% endif %}
 
-    {% if messages %}
-      {% for message in messages %}
-      <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      {% endfor %}
-    {% endif %}
-
-
-        <h2>Register Here!</h2>
-
-
-
-    <div  class="form-group">
-      <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-secondary">
-          Register
-        </button>
-      </form>
+      <h2>Register Here!</h2>
     </div>
 
+    <form method="POST">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="id_first_name">First Name:</label>
+        {{ form.first_name }}
+      </div>
+      <div class="mb-3">
+        <label for="id_last_name">Last Name:</label>
+        {{ form.last_name }}
+      </div>
+      <div class="mb-3">
+        <label for="id_email">Email:</label>
+        {{ form.email }}
+      </div>
+      <div class="mb-3">
+        <label for="id_username">Username:</label>
+        {{ form.username }}
+      </div>
+      <div class="mb-3">
+        <label for="id_password1">Password:</label>
+        {{ form.password1 }}
+      </div>
+      <div class="mb-3">
+        <label for="id_password2">Confirm Password:</label>
+        {{ form.password2 }}
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Register</button>
+    </form>
   </div>
 
- <!-- Your HTML content for the signup form -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Clear the username and password fields on page load
-    document.getElementById('id_username').value = '';
-    document.getElementById('id_password1').value = '';
-    document.getElementById('id_password2').value = '';
-  });
-</script>
-
-
-
-
 {% endblock %}
-
-
-

@@ -21,7 +21,7 @@
     <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage
     </a>
     <a class="nav-link text-black" href="{% url 'course-list' %}"> Course List </a>
-    <a class="nav-link text-black" href="{% url 'course-detail' course_id=course.pk %}"> Course details </a>
+    <a class="nav-link text-black" href="{% url 'course-detail' course_code=course.course_code %}"> Course details </a>
 
 
     <h3>Course deletion</h3>

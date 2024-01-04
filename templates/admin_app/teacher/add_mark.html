@@ -36,7 +36,11 @@
                   <td>{{ student.user.username }}</td>
                   <input type="hidden" name="student" value="{{ student.id }}">
                   {% for assessment in assessments %}
-                      <td><input type="number" name="marks_{{ student.id }}_{{ assessment.id }}"></td>
+                      {% if assessment.assessment_name == 'Comment' %}
+                        <td><input type="text" name="marks_{{ student.id }}_{{ assessment.id }}"></td>
+                      {% else %}
+                        <td><input type="number" name="marks_{{ student.id }}_{{ assessment.id }}"></td>
+                      {% endif %}
                   {% endfor %}
                 </tr>
               {% endfor %}
