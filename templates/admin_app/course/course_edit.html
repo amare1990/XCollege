@@ -1,37 +1,28 @@
 {% extends 'base.html' %}
-
 {% block title %}  Edit course  {% endblock %}
-
-<!-- {% load static %} -->
-
 {% block content%}
-
-<div class="container my-5">
-  {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-
+  <div class="container my-5 py-3 bg-secondary" style="max-width: 400px;">
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+    {% endif %}
+    <div class="btn-group" role="group" aria-label="Course update">
+      <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
+      <a class="btn btn-primary" href="{% url 'course-detail' course_code=course.course_code %}">Course detail</a>
     </div>
-
-    {% endfor %}
-  {% endif %}
-
-
-  <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage </a>
-    <a href="{% url 'course-detail' course_code=course.course_code %}">Course detail</a>
-
-  <h3> Edit a course</h3>
-  <form method="post">
-    {% csrf_token %}
-    {{ form_course.as_p }}
-    <button type="submit">Save Changes</button>
-</form>
-
-
-</div>
-
+    <h3 class="text-center my-4"> Edit a course</h3>
+    <form method="post">
+      {% csrf_token %}
+      {{ form_course.as_p }}
+      <div class="text-center">
+        <button class="btn btn-primary" type="submit">Save Changes</button>
+      </div>
+    </form>
+  </div>
 {% endblock %}
