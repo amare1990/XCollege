@@ -1,37 +1,23 @@
 {% extends 'base.html' %}
-
 {% block title %}  Get registered for courses  {% endblock %}
-
-<!-- {% load static %} -->
-
 {% block content%}
-
-<div class="container my-5">
-  {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-
-    </div>
-
-    {% endfor %}
-  {% endif %}
-
-
-  <a class="nav-link text-black" href="{% url 'admin-dashboard' %}"> My homepage </a>
-
-  <h3> Get registered for courses</h3>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form_course_registration.as_p }}
-
-    <button class="btn btn-secondary">Register courses</button>
-
-  </form>
-
-</div>
-
+  <div class="container my-5 py-3 bg-secondary" style="max-width: 700px;">
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+    {% endif %}
+    <a class="btn btn-primary text-white" href="{% url 'admin-dashboard' %}">My homepage</a>
+    <h2 class="text-center"> Get registered for courses</h2>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form_course_registration.as_p }}
+      <button class="btn btn-primary" type="submit">Register courses</button>
+    </form>
+  </div>
 {% endblock %}
