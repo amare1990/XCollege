@@ -1,38 +1,29 @@
 {% extends 'base.html' %}
-
 {% block title %}  Edit student  {% endblock %}
-
-<!-- {% load static %} -->
-
 {% block content%}
-
-<div class="container my-5">
+<div class="container my-5 py-3 bg-secondary" style="max-width: 500px;">
   {% if messages %}
     {% for message in messages %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-
-    </div>
-
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
     {% endfor %}
   {% endif %}
-
-
-  <a class="nav-link text-black" href="{% url 'admin-dashboard' %}"> My homepage </a>
-  <a href="{% url 'student-list' %}"> List of students </a> |
-  <a href="{% url 'student-detail' student_id=student.pk %}"> Student details </a>
-
-  <h3> Edit a student profile </h3>
+  <div class="btn-group">
+    <a href="{% url 'admin-dashboard' %}" class="btn btn-primary"> My homepage </a>
+    <a href="{% url 'student-list' %}" class="btn btn-primary"> List of students </a>
+    <a href="{% url 'student-detail' student_id=student.pk %}" class="btn btn-primary"> Student details </a>
+  </div>
+  <h3 class="text-center pt-3"> Edit a student profile </h3>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form_student.as_p }}
-    <button type="submit">Save Changes</button>
+    <div class="text-center">
+      <button class="btn btn-primary" type="submit">Save Changes</button>
+    </div>
 </form>
-
-
 </div>
-
 {% endblock %}

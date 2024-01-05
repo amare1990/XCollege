@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse bg-primary p-2" id="navbarNav">
           <ul class="navbar-nav flex-column">
             <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'admin-dashboard' %}">Home</a>
+              <a class="nav-link text-white active" aria-current="page" href="{% url 'admin-dashboard' %}">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'student-courses' %}">My courses</a>
@@ -33,16 +33,18 @@
       </nav>
     </div>
     <div class="statbox pl-5">
-      <span class="text-primary">
-        <i class="fas fa-user-graduate fa-3x"></i>
-      </span>
-      <P>
-        {% if profile.user.first_name %}
-          Welcome back, {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
-        {% else %}
-          Welcome back, {{ profile.user.username|capfirst }}!
-        {% endif %}
-      </P>
+      <div class="bg-secondary d-flex align-items-center mb-3" style="width: 40rem;">
+        <span class="text-primary mr-2">
+          <i class="fas fa-user-graduate fa-3x"></i>
+        </span>
+        <P>
+          {% if profile.user.first_name %}
+            Welcome back, {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
+          {% else %}
+            Welcome back, {{ profile.user.username|capfirst }}!
+          {% endif %}
+        </P>
+      </div>
       <div class="card bg-secondary" style="width: 40rem;">
         <div class="row g-0">
           <div class="col-md-4">

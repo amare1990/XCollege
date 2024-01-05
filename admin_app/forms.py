@@ -59,6 +59,20 @@ class AddTeacherForm(forms.ModelForm):
             'position': forms.Select(attrs={'class': 'form-control'}),
         }
 
+class EditTeacherForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['role', 'department', 'title', 'position', 'bio', 'profile_picture']
+
+        widgets = {
+            # 'user': forms.Select(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control'}),
+            'role': forms.Select(attrs={'class': 'form-control'}),
+            'department': forms.Select(attrs={'class': 'form-control'}),
+            'title': forms.Select(attrs={'class': 'form-control'}),
+            'position': forms.Select(attrs={'class': 'form-control'}),
+        }
+
 class AddCourseForm(forms.ModelForm):
     class Meta:
         model = Course

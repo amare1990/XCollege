@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import UserProfile, Department, Course, Assessment, Mark
-from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarksForm, AssessmentForm, AcademicYear
+from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarksForm, AssessmentForm, AcademicYear, EditTeacherForm
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models import Count
@@ -291,8 +291,10 @@ def my_all_department_students(request):
 def teacher_edit(request, teacher_id):
     teacher = get_object_or_404(UserProfile, pk=teacher_id)
     if request.method == 'POST':
-        form_teacher = AddTeacherForm(request.POST, request.FILES, instance=teacher)
+        form_teacher = EditTeacherForm(request.POST, request.FILES, instance=teacher)
         if form_teacher.is_valid():
+            # form_teacher.save(commit=False)
+            # teacher.user= request.user
             form_teacher.save()
             return redirect('teacher-detail', teacher_id=teacher_id)
     else:

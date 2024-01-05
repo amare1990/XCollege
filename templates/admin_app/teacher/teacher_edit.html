@@ -15,19 +15,19 @@
   <button class="btn btn-primary">
     <a href="{% url 'admin-dashboard'%}">My homepage</a>|<a href="{% url 'teacher-detail' teacher_id=teacher.id %}">Teacher details</a>
   </button>
-  <h3 class="text-center bg-primary my-3">
+  <h3 class="text-center bg- my-3">
     {% if user.is_authenticated %}
-      {% if profile.role == 'admin' %}
+      {% if user.profile.role == 'admin' %}
         Edit a teacher
       {% else %}
-        Update my profile
+        Update my profile??
       {% endif %}
     {% endif %}
   </h3>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form_teacher.as_p }}
-    <button type="submit">Save Changes</button>
+    <button class="btn btn-primary" type="submit">Save Changes</button>
   </form>
 </div>
 {% endblock %}
