@@ -12,7 +12,7 @@
       </div>
     {% endfor %}
   {% endif %}
-  <div class="btn-group rounded">
+  <div class="btn-group rounded" role="group" aria-label="Basic example">
     <a href="{% url 'admin-dashboard' %}" class="btn btn-primary"> My homepage </a>
     <a href="{% url 'student-list' %}" class="btn btn-primary"> List of students </a>
     <a href="{% url 'student-detail' student_id=student.pk %}" class="btn btn-primary"> Student details </a>

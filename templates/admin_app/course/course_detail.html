@@ -12,27 +12,27 @@
           </div>
         {% endfor %}
       {% endif %}
-      <button class="btn-group bg-primary">
-      <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage </a>
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage </a>
         {% if user.userprofile.role == 'admin' %}
           <a class="btn btn-primary" href="{% url 'course-list' %}">List of all courses </a>
         {% else %}
           <a class="text-white btn btn-primary" href="{% url 'my-all-department-courses' %}">List of all my department courses </a>
         {% endif %}
-      </button>
+      </div>
       <h2 class="text-center mt-5">Details of <strong>{{ course.name }}</strong> course</h2>
       <div class="container mt-5">
           <p>Course name: {{ course.name }} </p>
           <p>Year: {{ course.academic_year }} and </p>
           <p>Semester: {{ course.semester }} </p>
           <p>Department:  {{ department.name }} </p>
-          <button class="btn-group">
+          <div class="btn-group" role="group" aria-label="Basic example">
             <a class="btn btn-primary" href="{% url 'course-edit' course_code=course.course_code %}">Edit Course</a>
             <a class="btn btn-primary" href="{% url 'course-delete' course_code=course.course_code %}">Delete Course</a>
             <a class="btn btn-primary" href="{% url 'add-mark' course_code=course.course_code %}">Add marks</a>
             <a class="btn btn-primary" href="{% url 'mark-list' course_code=course.course_code %}">Mark sheet</a>
             <a class="btn btn-primary" href="{% url 'view-result' course_code=course.course_code %}">View my result</a>
-          </button>
+          </div>
           <hr class="my-5">
           <h5>Teachers in charge for this course</h5>
           <p><small>
@@ -61,11 +61,11 @@
                 <td>{{ teacher.user.username }}</td>
                 <td>{{ teacher.department }}</td>
                 <td>
-                  <button class="btn-group p-1 rounded" style="border: none;">
+                  <div class="btn-group" role="group" aria-label="Basic example">
                     <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>
                     <a class="btn btn-primary" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a>
                     <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a>
-                  </button>
+                  </div>
                 </td>
               </tr>
               {% endfor %}
@@ -98,11 +98,11 @@
                 <td>{{ student.user.username }}</td>
                 <td>{{ student.department }}</td>
                 <td>
-                <button class="btn-group">
-                  <a class="text-white btn btn-primary" href="{% url 'student-edit' student_id=student.pk %}">Edit</a>
-                  <a class="text-white btn btn-primary" href="{% url 'student-detail' student_id=student.pk %}">View</a>
-                  <a class="text-white btn btn-primary" href="{% url 'student-delete' student_id=student.pk %}">Delete</a>
-                </button>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <a class="text-white btn btn-primary" href="{% url 'student-edit' student_id=student.pk %}">Edit</a>
+                    <a class="text-white btn btn-primary" href="{% url 'student-detail' student_id=student.pk %}">View</a>
+                    <a class="text-white btn btn-primary" href="{% url 'student-delete' student_id=student.pk %}">Delete</a>
+                  </div>
                 </td>
               </tr>
               {% endfor %}

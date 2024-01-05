@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}  Edit teacher  {% endblock %}
 {% block content %}
-<div class="container my-5 py-3 bg-secondary" style="max-width: 400px;">
+<div class="container my-5 py-3 bg-secondary" style="max-width: 500px;">
   {% if messages %}
     {% for message in messages %}
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,22 +12,25 @@
       </div>
     {% endfor %}
   {% endif %}
-  <button class="btn btn-primary">
-    <a href="{% url 'admin-dashboard'%}">My homepage</a>|<a href="{% url 'teacher-detail' teacher_id=teacher.id %}">Teacher details</a>
-  </button>
-  <h3 class="text-center bg- my-3">
+  <div class="btn-group rounded" role="group" aria-label="Basic example">
+    <a class="btn btn-primary" href="{% url 'admin-dashboard'%}">My homepage</a>
+    <a class="btn btn-primary" href="{% url 'teacher-detail' teacher_id=teacher.id %}">Teacher details</a>
+  </div>
+  <h3 class="text-center my-3">
     {% if user.is_authenticated %}
       {% if user.profile.role == 'admin' %}
         Edit a teacher
       {% else %}
-        Update my profile??
+        Update my profile
       {% endif %}
     {% endif %}
   </h3>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form_teacher.as_p }}
-    <button class="btn btn-primary" type="submit">Save Changes</button>
+    <div class="text-center">
+      <button class="btn btn-primary" type="submit">Save Changes</button>
+    </div>
   </form>
 </div>
 {% endblock %}

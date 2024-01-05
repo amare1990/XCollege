@@ -1,51 +1,44 @@
 {% extends 'base.html' %}
-
 {% block title %} Details of a teacher named {{ teacher.name }} {% endblock %}
-
 {% block content %}
-
-<div class="container my-5 d-flex justify-content-center">
-  <div class="col-lg-8">
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+  <div class="container my-5 d-flex justify-content-center">
+    <div class="col-lg-8">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endfor %}
+      {% endif %}
+      <div class="btn-group" role="group" aria-label="Basic example">
+        <a href="{% url 'admin-dashboard' %}" class="btn btn-primary">My homepage </a>
+        <a class="btn btn-primary" href="{% url 'teacher-list' %}"> View teachers </a>
+      </div>
+      <h3 class="my-3">Teacher details</h3>
+      <div class="card bg-secondary" style="width: 40rem;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{ teacher.profile_picture.url }}" class="card-img-top" alt="Profile picture">
+          </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{ teacher.title }}: {{ teacher.user.username|capfirst }} </h5>
+            <p class="card-text">Role: {{ teacher.role }} <br>
+            Title:{{ teacher.title }} <br>
+            Title:{{ teacher.position }} <br>
+            Faculty member in the department of {{ teacher.department }} <br>
+            Brief bio of {{ teacher.title }}: <br> {{ teacher.bio }} <br>
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit a teacher </a>
+              <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete teacher </a>
+            </div>
+          </div>
         </div>
-      {% endfor %}
-    {% endif %}
-
-    <div class="btn-group" role="group" aria-label="Basic example">
-      <a href="{% url 'admin-dashboard' %}" class="nav-link btn btn-primary">My homepage </a>
-      <a class="nav-link btn btn-primary" href="{% url 'teacher-list' %}"> View teachers </a>
-    </div>
-
-    <h3 class="my-3">Teacher details</h3>
-
-    <div class="card bg-secondary" style="width: 40rem;">
-      <div class="row g-0">
-        <div class="col-md-4">
-          <img src="{{ teacher.profile_picture.url }}" class="card-img-top" alt="Profile picture">
         </div>
-       <div class="col-md-8">
-        <div class="card-body">
-          <h5 class="card-title">{{ teacher.title }}: {{ teacher.user.username|capfirst }} </h5>
-          <p class="card-text">Role: {{ teacher.role }} <br>
-          Title:{{ teacher.title }} <br>
-          Title:{{ teacher.position }} <br>
-          Faculty member in the department of {{ teacher.department }} <br>
-          Brief bio of {{ teacher.title }}: <br> {{ teacher.bio }} <br>
-          <button class="btn btn-primary">
-            <a href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit a teacher </a>|
-            <a href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete teacher </a>
-          </button>
-        </div>
-       </div>
       </div>
     </div>
   </div>
-</div>
-
 {% endblock %}
