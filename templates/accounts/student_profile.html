@@ -67,8 +67,8 @@
                 Registered in the department of {{ profile.department }} <br>
                 Brief bio: <br> {{ profile.bio }}
               </p>
-              <button class="btn btn-primary">
-                <a href="{% url 'student-edit' student_id=profile.pk %}">Edit a student </a>| <a href="{% url 'student-delete' student_id=profile.pk %}">Delete student </a>
+              <button class="btn-group" style="border: none; background-color: unset;">
+                <a class="btn btn-primary" href="{% url 'student-edit' student_id=profile.pk %}">Edit a student </a> <a class="btn btn-primary" href="{% url 'student-delete' student_id=profile.pk %}">Delete student </a>
               </button>
             </div>
           </div>
