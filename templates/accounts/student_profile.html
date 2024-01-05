@@ -56,7 +56,7 @@
                 {% if profile.user.first_name %}
                    {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
                 {% else %}
-                  {{ profile.user.username|capfirst }}!
+                  {{ profile.user.username }}!
                 {% endif %}
               </h5>
               <p class="card-text pl-3 pr-2">
@@ -67,7 +67,7 @@
                 Registered in the department of {{ profile.department }} <br>
                 Brief bio: <br> {{ profile.bio }}
               </p>
-              <div class="btn-group" role="group" aria-label="Basic example">
+              <div class="btn-group" role="group" aria-label="Student profile">
                 <a class="btn btn-primary" href="{% url 'student-edit' student_id=profile.pk %}">Edit a student </a>
                 <a class="btn btn-primary" href="{% url 'student-delete' student_id=profile.pk %}">Delete student </a>
               </div>

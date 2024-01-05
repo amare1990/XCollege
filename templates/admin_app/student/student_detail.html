@@ -1,44 +1,51 @@
 {% extends 'base.html' %}
-
 {% block title %} Details of a student named {{ student.user.username }} {% endblock %}
-
 {% block content %}
-
-<div class="container my-5">
-    {% if messages %}
-      {% for message in messages %}
-      <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-
+  <div class="container my-5 py-5" style="max-width: 40rem;">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endfor %}
+      {% endif %}
+      <div class="btn-group" role="group" aria-label="student detail">
+        <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
+        <a class="btn btn-primary" href="{% url 'student-list' %}">View students</a>
       </div>
-
-      {% endfor %}
-    {% endif %}
-
-    <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage
-    </a>
-    <a class="nav-link text-black" href="{% url 'student-list' %}"> View students </a>
-
-
-    <h3>Student details of a student {{ student.user.username|capfirst }} </h3>
-    <div class="container mb-5">
-        <img src="{{ student.profile_picture.url }}" style="width:150px; height: 150px;">
-        <p>Username: {{ student.user.username }} </p>
-
-        <p>Role: {{ student.role }}</p>
-        <p>Academic year:{{ student.academic_year }}</p>
-        <p>Semester:{{ student.semester }}</p>
-        <p>Registered in the department of {{ student.department }} </p>
-        <p>Brief bio: <br> {{ student.bio }}</p>
-
-
-        <a href="{% url 'student-edit' student_id=student.pk %}">Edit a student </a>|<a href="{% url 'student-delete' student_id=student.pk %}">Delete student </a>
-
-    </div>
-
-</div>
-
+      <h3 class="text-center mt-4">Student details</h3>
+      <div class="card bg-secondary">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{ student.profile_picture.url }}" class="card-img-top" alt="Profile picture">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title text-center pt-3">
+                {% if student.user.first_name %}
+                   {{ student.user.first_name|capfirst }} {{ student.user.last_name|capfirst }}!
+                {% else %}
+                  {{ student.user.username }}!
+                {% endif %}
+              </h5>
+              <p class="card-text pl-3 pr-2">
+                Username: {{ student.user.username|capfirst }} <br>
+                Role: {{ student.role|capfirst }} <br>
+                Academic year: {{ student.academic_year }} <br>
+                Semester: {{ student.semester }} <br>
+                Registered in the department of {{ student.department }} <br>
+                Brief bio: <br> {{ student.bio }}
+              </p>
+              <div class="btn-group" role="group" aria-label="Student profile">
+                <a class="btn btn-primary" href="{% url 'student-edit' student_id=student.pk %}">Edit a student </a>
+                <a class="btn btn-primary" href="{% url 'student-delete' student_id=student.pk %}">Delete student </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
 {% endblock %}
