@@ -61,6 +61,7 @@
           <i class="fas fa-user-graduate fa-3x"></i>
         </span>
         <P class="pt-3">
+          Welcome back,
           {% if profile.role == 'teacher' %}
             Teacher
           {% elif profile.role == 'student' %}
@@ -68,9 +69,9 @@
           {% elif profile.role == 'staff' %}
           {% endif %}
           {% if profile.user.first_name %}
-            Welcome back, {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
+            {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
           {% else %}
-            Welcome back, {{ profile.user.username|capfirst }}!
+            {{ profile.user.username }}!
           {% endif %}
           {% if profile.position == 'head' %}
             <br>
