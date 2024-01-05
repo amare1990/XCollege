@@ -1,12 +1,7 @@
 {% extends 'base.html' %}
-
 {% block title %} Add course offering  {% endblock %}
-
-<!-- {% load static %} -->
-
 {% block content%}
-
-<div class="container my-5">
+<div class="container my-5 py-3 bg-secondary" style="max-width: 500px;">
   {% if messages %}
     {% for message in messages %}
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -14,24 +9,21 @@
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-
     </div>
-
     {% endfor %}
   {% endif %}
-
-  <a class="nav-link text-black" href="{% url 'admin-dashboard' %} ">My homepage </a>
-  <a class="nav-link text-black" href="{% url 'course-offering-view' %} ">View courses offered </a>
-
-  <p> H! {{ user.username }} | Head of {{ user.userprofile.department }} </p>
-  <h3> Add course offering </h3>
+  <div class="btn-group" role="group" aria-label="Basic example">
+    <a class="btn btn-primary" href="{% url 'admin-dashboard' %} ">My homepage </a>
+    <a class="btn btn-primary" href="{% url 'course-offering-view' %} ">View courses offered</a>
+  </div>
+  <p class="pt-3 text-center"> H! {{ user.username }} | Head of {{ user.userprofile.department }} </p>
+  <h3 class="text-center"> Offer course here </h3>
   <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-
-    <button class="btn btn-secondary">Course offer</button>
+    <div class="text-center">
+      <button class="btn btn-primary">Offer the course</button>
+    </div>
   </form>
-
 </div>
-
 {% endblock %}

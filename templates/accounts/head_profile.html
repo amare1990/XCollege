@@ -56,26 +56,28 @@
 
     <!-- body-->
     <div class="statbox pl-5">
-      <span class="text-primary">
-        <i class="fas fa-user-graduate fa-3x"></i>
-      </span>
-      <P>
-        {% if profile.role == 'teacher' %}
-          Teacher
-        {% elif profile.role == 'student' %}
-           Student
-        {% elif profile.role == 'staff' %}
-        {% endif %}
-        {% if profile.user.first_name %}
-          Welcome back, {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
-        {% else %}
-          Welcome back, {{ profile.user.username|capfirst }}!
-        {% endif %}
-        {% if profile.position == 'head' %}
-          <br>
-          <small>Head of <span>{{ profile.department }} department</span></small>
-        {% endif %}
-      </P>
+      <div class="bg-secondary d-flex align-items-center mb-3 pl-3" style="width: 40rem;">
+        <span class="text-primary pr-2">
+          <i class="fas fa-user-graduate fa-3x"></i>
+        </span>
+        <P class="pt-3">
+          {% if profile.role == 'teacher' %}
+            Teacher
+          {% elif profile.role == 'student' %}
+             Student
+          {% elif profile.role == 'staff' %}
+          {% endif %}
+          {% if profile.user.first_name %}
+            Welcome back, {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
+          {% else %}
+            Welcome back, {{ profile.user.username|capfirst }}!
+          {% endif %}
+          {% if profile.position == 'head' %}
+            <br>
+            <small>Head of <span>{{ profile.department }} department</span></small>
+          {% endif %}
+        </P>
+      </div>
       <div class="card bg-secondary" style="width: 40rem;">
         <div class="row g-0">
           <div class="col-md-4">
@@ -97,9 +99,10 @@
               Faculty member in the department of {{ profile.department }} <br>
               Position: {{ profile.position|capfirst }} <br>
               Brief bio: <br> {{ profile.bio }}</p>
-            <button class="btn btn-primary">
-              <a href="{% url 'teacher-edit' teacher_id=profile.pk %}">Edit my profile </a>| <a href="{% url 'teacher-delete' teacher_id=profile.pk %}">Delete profile </a>
-            </button>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=profile.pk %}">Edit my profile</a>
+                <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=profile.pk %}">Delete profile</a>
+              </div>
           </div>
          </div>
         </div>
