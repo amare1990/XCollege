@@ -1,10 +1,7 @@
 {% extends 'base.html' %}
-
 {% block title %} Student deletion {% endblock %}
-
 {% block content %}
-
-<div class="container my-5">
+<div class="container my-5 py-3 bg-secondary" style="max-width: 500px;">
     {% if messages %}
       {% for message in messages %}
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,29 +9,24 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-
       </div>
-
       {% endfor %}
     {% endif %}
-
-    <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage </a>
-    <a class="nav-link text-black" href="{% url 'student-list' %}"> Student list </a>
-    <a class="nav-link text-black" href="{% url 'student-detail' student_id=student.pk %}"> Student detail </a>
-
-
-    <h3> Delete student </h3>
+    <button class="btn-group">
+      <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
+      <a class="btn btn-primary" href="{% url 'student-list' %}">Student list</a>
+      <a class="btn btn-primary" href="{% url 'student-detail' student_id=student.pk %}">Student detail</a>
+    </button>
+    <h3 class="text-center mt-4"> Delete student </h3>
     <div class="container my-5">
-      <h2>Confirm Deletion</h2>
+      <h5>Confirm Deletion</h5>
       <p>Are you sure you want to delete "{{ student.user.username }}"?</p>
       <form method="post">
           {% csrf_token %}
-          <button type="submit">Delete</button>
+          <div class="text-center">
+            <button class="btn btn-danger" type="submit">Delete</button>
+          </div>
       </form>
-
-
     </div>
-
 </div>
-
 {% endblock %}
