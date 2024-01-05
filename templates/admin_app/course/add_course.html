@@ -1,38 +1,33 @@
 {% extends 'base.html' %}
-
 {% block title %}  Add course  {% endblock %}
-
-<!-- {% load static %} -->
-
 {% block content%}
-
-<div class="container my-5">
-  {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-
+  <div class="container my-5 py-5 bg-secondary" style="max-width: 40rem;">
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+    {% endif %}
+    <div class="btn-group" role="group" aria-label="add-course">
+      <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage </a>
+      <a class="btn btn-primary" href="{% if reques.user.profile.role == 'admin' %}
+        {% url 'course-list' %}
+      {% else %}
+        {% url 'my-all-department-courses' %}
+      {% endif %}">
+         List of Courses </a>
     </div>
-
-    {% endfor %}
-  {% endif %}
-
-
-  <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage </a>
-  <a class="nav-link text-black" href="{% url 'course-list' %}">List of Courses </a>
-
-  <h3> Add a course</h3>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form_course.as_p }}
-
-    <button class="btn btn-secondary">Add course</button>
-
-  </form>
-
-</div>
-
+    <h3 class="text-center mt-4"> Add a course here</h3>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form_course.as_p }}
+      <div class="text-center">
+        <button class="btn btn-primary">Add course</button>
+      </div>
+    </form>
+  </div>
 {% endblock %}
