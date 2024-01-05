@@ -12,7 +12,7 @@
       </div>
       {% endfor %}
     {% endif %}
-    <a class="text-white bg-primary p-2" href="{% url 'admin-dashboard' %}">My homepage</a>
+    <a class="text-white bg-primary p-2 rounded" href="{% url 'admin-dashboard' %}">My homepage</a>
     <h2 class="text-center">
       {% if profile.user.first_name %}
         Hi, {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }} !
@@ -38,18 +38,18 @@
         {% for course in courses %}
           <tr>
             <th scope="row">{{ forloop.counter }}</th>
-            <td><a style="color: rgb(15, 48, 231);" class="nav-link" href="{% url 'course-detail' course_code=course.course_code %}">{{ course.course_code }}</a></td>
+            <td><a class="bg-primary text-white p-1 rounded" href="{% url 'course-detail' course_code=course.course_code %}">{{ course.course_code }}</a></td>
             <td>{{ course.name }}</td>
             <td>{{ course.department.name }}</td>
             <td>{{ course.academic_year }}</td>
             <td> {{ course.semester }} </td>
             <td>
               {% for teacher in course.teachers.all %}
-                {{ teacher.user.username }}{% if not forloop.last %}, {% endif %}
+                <a class="text-white bg-primary p-1 rounded" href="{% url 'teacher-detail' teacher_id=teacher.id %}">{{ teacher.user.username }}{% if not forloop.last %}, {% endif %}</a>
               {% endfor %}
             </td>
             <td>
-              <a class="nav-link" style="color: rgb(15, 48, 231);" href="{% url 'view-result' course_code=course.course_code %}">View result</a>
+              <a class="bg-primary text-white p-1 rounded" href="{% url 'view-result' course_code=course.course_code %}">View result</a>
             </td>
           </tr>
         {% endfor %}

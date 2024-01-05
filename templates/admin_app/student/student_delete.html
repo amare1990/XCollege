@@ -12,7 +12,7 @@
       </div>
       {% endfor %}
     {% endif %}
-    <button class="btn-group">
+    <button class="btn-group bg-primary">
       <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
       <a class="btn btn-primary" href="{% url 'student-list' %}">Student list</a>
       <a class="btn btn-primary" href="{% url 'student-detail' student_id=student.pk %}">Student detail</a>
