@@ -1,59 +1,50 @@
 {% extends 'base.html' %}
-
 {% block title %} Course offering view {% endblock %}
-
 {% block content %}
-
-<div class="container my-5">
-    {% if messages %}
-      {% for message in messages %}
-      <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-
-      </div>
-
-      {% endfor %}
-    {% endif %}
-
-    <a class="nav-link text-black" href="
-        {% url 'admin-dashboard' %}">My homepage </a>
-
-    <p> H! {{ profile.user.username }} | Head of {{ profile.department }} </p>
-    <h4>Course Offered View</h4>
-    <table class="table table-dark">
-        <thead>
-            <tr>
-                <th>Course Code</th>
-                <th>Course Name</th>
-                <th>Department</th>
-                <th>Teachers</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for course in courses_with_teachers %}
-            <tr>
-                <td>
-                    <a href="{% url 'course-detail' course_code=course.course_code %}">{{ course.course_code }}</a>
-                </td>
-                <td>{{ course.name }}</td>
-                <td>{{ course.department.name }}</td>
-                <td>
-                    <ul class="list-unstyled">
-                        {% for teacher in course.teachers.all %}
-                        <li>{{ teacher.user.username }} |  <a href="{% url 'remove-offering' course_code=course.course_code %}">Unassign</a></li>
-                        {% endfor %}
-                    </ul>
-                </td>
-            </tr>
+    <div class="container my-5 py-3 bg-secondary">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             {% endfor %}
-        </tbody>
-    </table>
-
-
-
-
-
+        {% endif %}
+        <a class="text-white btn btn bg-primary" href="
+            {% url 'admin-dashboard' %}">My homepage</a>
+        <p>
+            Hi {{ profile.user.username }} | Head of {{ profile.department }}
+        </p>
+        <h3 class="text-center mb-3">Course Breakdown</h3>
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th>Course Code</th>
+                    <th>Course Name</th>
+                    <th>Department</th>
+                    <th>Teachers</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses_with_teachers %}
+                <tr>
+                    <td>
+                        <a class="text-white bg-primary p-1 rounded" href="{% url 'course-detail' course_code=course.course_code %}">{{ course.course_code }}</a>
+                    </td>
+                    <td>{{ course.name }}</td>
+                    <td>{{ course.department.name }}</td>
+                    <td>
+                        <ul class="list-unstyled">
+                            {% for teacher in course.teachers.all %}
+                            <li>{{ teacher.user.username }} |  <a class="text-white bg-primary p-1 rounded" href="{% url 'remove-offering' course_code=course.course_code %}">Unassign</a></li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
