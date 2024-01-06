@@ -19,7 +19,7 @@
       <h3 class="text-center my-5">Department deletion</h3>
       <div class="container pb-5">
         <h5>Confirm Deletion</h5>
-        <p>Are you sure you want to delete "{{ department.name }}"?</p>
+        <p>Are you sure you want to delete <strong>{{ department.name }}</strong> department?</p>
         <form method="post">
             {% csrf_token %}
             <div class="text-center">
