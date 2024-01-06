@@ -2,7 +2,7 @@
 {% block title %}  Home Page  {% endblock %}
 {% block content %}
   <br/><br/>
-  <div class="row my-5">
+  <div class="row my-5 bg-secondary mr-3 pb-5">
     <div class="col-md-2 d-none d-md-block bg-secondary">
       <nav class="navbar navbar-expand-lg flex-column my-5 bg-secondary">
         <button class="navbar-toggler bg-primary" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,9 @@
               </span>
               <div class="text">
                 <p>students</p>
-                <h3>{{ total_students }}</h3>
+                <h3>
+                  <a class="text-white bg-primary px-3 py-1 rounded" href="{% url 'student-list' %}">{{ total_students }}</a>
+                </h3>
               </div>
             </div>
             <div class="statbox">
@@ -76,7 +78,9 @@
               </span>
               <div class="text">
                 <p>teachers</p>
-                <h3>{{ total_teachers }}</h3>
+                <h3>
+                  <a class="text-white bg-primary px-3 py-1 rounded" href="{% url 'teacher-list' %}">{{ total_teachers }}</a>
+                </h3>
               </div>
             </div>
             <div class="statbox">
