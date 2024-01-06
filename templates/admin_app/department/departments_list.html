@@ -1,59 +1,50 @@
-s{% extends 'base.html' %}
-
+{% extends 'base.html' %}
 {% block title %}  List of Departments  {% endblock %}
-
-<!-- {% load static %} -->
-
 {% block content%}
-
-<div class="container my-5">
-  {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-
-    </div>
-
-    {% endfor %}
-  {% endif %}
-  <h3> List of departments</h3>
-  <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
-          {% url 'admin-dashboard' %}
-          {% else %}
-            {% url 'cs-bsc' %}
-          {% endif %}">My homepage
-  </a>
-  <a class="nav-link text-black" href="{% url 'add-department' %}"> Add more </a>
-
-  <p>Number of departments = {{ number_of_departments }}</p>
-  <p>List of departments</p>
-
-  <table class="table table-dark">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Department Id</th>
-        <th scope="col">name </th>
-        <th scope="col">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for dept in departments %}
-      <tr>
-        <th scope="row">{{ forloop.counter }}</th>
-        <td><a href="{% url 'department-detail' department_id=dept.pk %}">{{ dept.pk }}</a></td>
-        <td>{{ dept.name }}</td>
-        <td><a href="{% url 'department-edit' department_id=dept.pk %}">Edit</a>|<a href="{% url 'department-detail' department_id=dept.pk %}">View</a>|
-          <a href="{% url 'department-delete' department_id=dept.pk %}">Delete</a></td>
-      </tr>
+  <div class="container my-5 py-5 bg-secondary">
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       {% endfor %}
-
-    </tbody>
-  </table>
-
-</div>
-
+    {% endif %}
+    <div class="btn-group" role="group" aria-label="departments' list">
+      <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
+      <a class="btn btn-primary" href="{% url 'add-department' %}">Add more</a>
+    </div>
+    <h3 class="text-center pt-5"> List of departments</h3>
+    <p>Total of {{ number_of_departments }} departments</p>
+    <table class="table table-dark">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Department Id</th>
+          <th scope="col">Name</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for dept in departments %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td>
+            <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'department-detail' department_id=dept.pk %}">{{ dept.pk }}</a>
+          </td>
+          <td>{{ dept.name }}</td>
+          <td>
+            <div class="btn-group" role="group" aria-label="List of departments">
+              <a class="btn btn-primary" href="{% url 'department-edit' department_id=dept.pk %}">Edit</a>
+              <a class="btn btn-primary" href="{% url 'department-detail' department_id=dept.pk %}">View</a>
+              <a class="btn btn-primary" href="{% url 'department-delete' department_id=dept.pk %}">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}
