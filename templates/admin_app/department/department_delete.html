@@ -1,44 +1,31 @@
 {% extends 'base.html' %}
-
 {% block title %} Department deletion {% endblock %}
-
 {% block content %}
-
-<div class="container my-5">
-    {% if messages %}
-      {% for message in messages %}
-      <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-
+  <div class="container my-5 pt-5 bg-secondary" style="max-width: 40rem;">
+      {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endfor %}
+      {% endif %}
+      <div class="btn-group" role="group" aria-label="delete department">
+        <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
+        <a class="btn btn-primary" href="{% url 'department-list' %}">View departments</a>
       </div>
-
-      {% endfor %}
-    {% endif %}
-
-    <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
-            {% url 'admin-dashboard' %}
-            {% else %}
-                {% url 'cs-bsc' %}
-            {% endif %}">My homepage
-    </a>
-    <a class="nav-link text-black" href="{% url 'department-list' %}"> view departments </a>
-
-
-    <h3>Department deletion</h3>
-    <div class="container my-5">
-      <h2>Confirm Deletion</h2>
-      <p>Are you sure you want to delete "{{ department.name }}"?</p>
-      <form method="post">
-          {% csrf_token %}
-          <button type="submit">Delete</button>
-      </form>
-
-
-    </div>
-
-</div>
-
+      <h3 class="text-center my-5">Department deletion</h3>
+      <div class="container pb-5">
+        <h5>Confirm Deletion</h5>
+        <p>Are you sure you want to delete "{{ department.name }}"?</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="text-center">
+              <button class="btn bg-danger" type="submit">Delete</button>
+            </div>
+        </form>
+      </div>
+  </div>
 {% endblock %}
