@@ -1,36 +1,28 @@
 {% extends 'base.html' %}
-
 {% block title %}  Offer position  {% endblock %}
-
-<!-- {% load static %} -->
-
 {% block content%}
-
-<div class="container my-5">
-  {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-
+  <div class="container my-5 pt-3 pb-5 bg-secondary" style="max-width: 40rem;">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+    {% endif %}
+    <div class="btn-group" role="group" aria-label="Offer position">
+      <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
+      <a class="btn btn-primary" href="{% url 'view-position' %}">View positions</a>
     </div>
-
-    {% endfor %}
-  {% endif %}
-
-  <a class="nav-link text-black" href="{% url 'admin-dashboard' %}"> My homepage </a>
-  <a class="nav-link text-black" href="{% url 'view-position' %}"> View positions </a>
-
-  <h3> Offer position</h3>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-
-    <button class="btn btn-secondary">Offer position</button>
-  </form>
-
-</div>
-
+    <h3 class="text-center pt-5">Offer position</h3>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="text-center">
+        <button class="btn btn-primary">Offer position</button>
+      </div>
+    </form>
+  </div>
 {% endblock %}
