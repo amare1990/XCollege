@@ -59,19 +59,19 @@ class AddTeacherForm(forms.ModelForm):
             'position': forms.Select(attrs={'class': 'form-control'}),
         }
 
-class EditTeacherForm(forms.ModelForm):
-    class Meta:
-        model = UserProfile
-        fields = ['role', 'department', 'title', 'position', 'bio', 'profile_picture']
+# class EditTeacherForm(forms.ModelForm):
+#     class Meta:
+#         model = UserProfile
+#         fields = ['role', 'department', 'title', 'position', 'bio', 'profile_picture']
 
-        widgets = {
-            # 'user': forms.Select(attrs={'class': 'form-control'}),
-            'bio': forms.Textarea(attrs={'class': 'form-control'}),
-            'role': forms.Select(attrs={'class': 'form-control'}),
-            'department': forms.Select(attrs={'class': 'form-control'}),
-            'title': forms.Select(attrs={'class': 'form-control'}),
-            'position': forms.Select(attrs={'class': 'form-control'}),
-        }
+#         widgets = {
+#             # 'user': forms.Select(attrs={'class': 'form-control'}),
+#             'bio': forms.Textarea(attrs={'class': 'form-control'}),
+#             'role': forms.Select(attrs={'class': 'form-control'}),
+#             'department': forms.Select(attrs={'class': 'form-control'}),
+#             'title': forms.Select(attrs={'class': 'form-control'}),
+#             'position': forms.Select(attrs={'class': 'form-control'}),
+#         }
 
 class AddCourseForm(forms.ModelForm):
     class Meta:
@@ -134,3 +134,58 @@ year = (
 
 class AcademicYear(forms.Form):
     year = forms.Select(choices=year)
+
+
+
+from django import forms
+from admin_app.models import UserProfile
+
+class EditTeacherForm(forms.ModelForm):
+    # Fields from the User model
+    username = forms.CharField(max_length=150, required=True)
+    first_name = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=150, required=True)
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = UserProfile
+        fields = ['role', 'department', 'title', 'position', 'bio', 'profile_picture']
+
+        widgets = {
+            'bio': forms.Textarea(attrs={'class': 'form-control'}),
+            'role': forms.Select(attrs={'class': 'form-control'}),
+            'department': forms.Select(attrs={'class': 'form-control'}),
+            'title': forms.Select(attrs={'class': 'form-control'}),
+            'position': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(EditTeacherForm, self).__init__(*args, **kwargs)
+        if 'password' in self.fields:
+            self.fields.pop('password')  # Remove the 'password' field if it exists
+
+        # Populate initial data from the User model
+        if self.instance.user:
+            self.fields['username'].initial = self.instance.user.username
+            self.fields['first_name'].initial = self.instance.user.first_name
+            self.fields['last_name'].initial = self.instance.user.last_name
+            self.fields['email'].initial = self.instance.user.email
+
+    def save(self, commit=True):
+        # Save the UserProfile fields
+        user_profile = super(EditTeacherForm, self).save(commit=False)
+        if commit:
+            user_profile.save()
+
+        # Save the User fields
+        if user_profile.user:
+            user = user_profile.user
+            user.username = self.cleaned_data['username']
+            user.first_name = self.cleaned_data['first_name']
+            user.last_name = self.cleaned_data['last_name']
+            user.email = self.cleaned_data['email']
+            if commit:
+                user.save()
+
+        return user_profile
+
