@@ -14,12 +14,11 @@
     {% endif %}
     <div class="btn-group" role="group" aria-label="add-course">
       <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage </a>
-      <a class="btn btn-primary" href="{% if reques.user.profile.role == 'admin' %}
-        {% url 'course-list' %}
-      {% else %}
-        {% url 'my-all-department-courses' %}
-      {% endif %}">
-         List of Courses </a>
+      <a class="btn btn-primary" href="{% if profile.role == 'admin' %}
+          {% url 'course-list' %}
+        {% else %}
+          {% url 'my-all-department-courses' %}
+        {% endif %}">List of Courses</a>
     </div>
     <h3 class="text-center mt-4"> Add a course here</h3>
     <form method="POST">

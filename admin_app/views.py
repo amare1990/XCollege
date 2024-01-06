@@ -150,6 +150,7 @@ def add_teacher(request):
         return render(request, 'admin_app/teacher/add_teacher.html', {'form_teacher': form_teacher})
 
 def add_course(request):
+    profile = request.user.userprofile
     if request.method == 'POST':
         form_course = AddCourseForm(request.POST)
         if form_course.is_valid():
@@ -163,10 +164,10 @@ def add_course(request):
                 return redirect('course-list')
         else:
             messages.error(request, "You didn't fill the form successfully!")
-            return render(request, 'admin_app/course/add_course.html', {'form_course': form_course})
+            return render(request, 'admin_app/course/add_course.html', {'form_course': form_course, 'profile': profile })
     else:
         form_course = AddCourseForm()
-        return render(request, 'admin_app/course/add_course.html', {'form_course': form_course})
+        return render(request, 'admin_app/course/add_course.html', {'form_course': form_course, 'profile': profile })
 
 def course_detail(request, course_code):
     course = Course.objects.get(course_code=course_code)
