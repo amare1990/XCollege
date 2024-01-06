@@ -1,35 +1,28 @@
 {% extends 'base.html' %}
-
 {% block title %}  Home Page  {% endblock %}
-
-<!-- {% load static %} -->
-
 {% block content%}
-
-<div class="container my-5">
-  {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-
+  <div class="container my-5 pt-3 pb-5 bg-secondary" style="max-width: 40rem;">
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+    {% endif %}
+    <div class="btn-group" role="group" aria-label="Add teacher form">
+      <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
+      <a class="btn btn-primary" href="{% url 'teacher-list' %}">List of teachers</a>
     </div>
-
-    {% endfor %}
-  {% endif %}
-
-  <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage </a>
-
-  <h3> Add a teacher</h3>
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form_teacher.as_p }}
-
-    <button class="btn btn-primary">Add teacher</button>
-  </form>
-
-</div>
-
+    <h3 class="text-center p-5"> Add a teacher</h3>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form_teacher.as_p }}
+      <div class="text-center">
+        <button class="btn btn-primary">Add teacher</button>
+      </div>
+    </form>
+  </div>
 {% endblock %}
