@@ -1,139 +1,132 @@
 {% extends 'base.html' %}
-
 {% block title %} Position view {% endblock %}
-
 {% block content %}
-
-<div class="container my-5">
-    {% if messages %}
-      {% for message in messages %}
-      <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-
-      </div>
-
-      {% endfor %}
-    {% endif %}
-
-    <a class="nav-link text-black" href="{% if user.is_superuser or user.is_staff %}
-            {% url 'admin-dashboard' %}
-            {% else %}
-                {% url 'cs-bsc' %}
-            {% endif %}">My homepage
-    </a>
-    <a class="nav-link text-black" href="{% url 'offer-position' %}"> Offer position </a>
-
-    <div class="container my-5">
-
-      <h3>All Positions</h3>
-
-      <h5>College Dean Table</h5>
-      <table class="table table-dark">
-          <thead>
-              <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">College Name</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for profile in college_dean_profiles %}
-                  <tr>
-                      <th scope="row">{{ forloop.counter }}</th>
-                      <td>{{ profile.user.username }}</td>
-                      <td>{{ profile.college_name }}</td>
-                  </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-
-      <h5>School Dean Table</h5>
-      <table class="table table-dark">
-          <thead>
-              <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">School Name</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for profile in school_dean_profiles %}
-                  <tr>
-                      <th scope="row">{{ forloop.counter }}</th>
-                      <td>{{ profile.user.username }}</td>
-                      <td>{{ profile.school_name }}</td>
-                  </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-
-      <h5>Program Coordinators Table</h5>
-      <table class="table table-dark">
-          <thead>
-              <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">School Name</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for profile in program_coordinator_profiles %}
-                  <tr>
-                      <th scope="row">{{ forloop.counter }}</th>
-                      <td>{{ profile.user.username }}</td>
-                      <td>{{ profile.school_name }}</td>
-                  </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-
-      <h5>Department Head Table</h5>
-      <table class="table table-dark">
-          <thead>
-              <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">Department</th>
-                  <th scope="col">Head</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for profile in department_head_profiles %}
-                  <tr>
-                      <th scope="row">{{ forloop.counter }}</th>
-                      <td>{{ profile.user.username }}</td>
-                      <td>{{ profile.department }}</td>
-                      <td>{{ profile.position }}</td>
-                  </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-
-      <h5>Stream Chair Table</h5>
-      <table class="table table-dark">
-          <thead>
-              <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">Stream</th>
-                  <th scope="col">Chair</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for profile in chair_head_profiles %}
-                  <tr>
-                      <th scope="row">{{ forloop.counter }}</th>
-                      <td>{{ profile.user.username }}</td>
-                      <td>{{ profile.chair }}</td>
-                      <td>{{ profile.position }}</td>
-                  </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-    </div>
-
+    <div class="container my-5 pt-3 pb-5 bg-secondary">
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+        {% endif %}
+        <div class="btn-group" role="group" aria-label="View positions">
+            <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
+            <a class="btn btn-primary" href="{% url 'offer-position' %}">Offer position</a>
+        </div>
+        <h3 class="text-center pt-5">All Positions</h3>
+        <div class="container my-5">
+        <h5>College Dean Table</h5>
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">College Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in college_dean_profiles %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>
+                            <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=profile.id %}">{{ profile.user.username }}</a>
+                        </td>
+                        <td>{{ profile.college_name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h5>School Dean Table</h5>
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">School Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in school_dean_profiles %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>
+                            <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=profile.id %}">{{ profile.user.username }}</a>
+                        </td>
+                        <td>{{ profile.school_name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h5>Program Coordinators Table</h5>
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">School Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in program_coordinator_profiles %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>
+                            <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=profile.id %}">{{ profile.user.username }}</a>
+                        </td>
+                        <td>{{ profile.school_name }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h5>Department Head Table</h5>
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Head</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in department_head_profiles %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>
+                            <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=profile.id %}">{{ profile.user.username }}</a>
+                        </td>
+                        <td>{{ profile.department }}</td>
+                        <td>{{ profile.position }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h5>Stream Chair Table</h5>
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Stream</th>
+                    <th scope="col">Chair</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in chair_head_profiles %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>
+                            <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=profile.id %}">{{ profile.user.username }}</a>
+                        </td>
+                        <td>{{ profile.chair }}</td>
+                        <td>{{ profile.position }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
     </div>
 {% endblock %}
