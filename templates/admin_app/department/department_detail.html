@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %} Details of {{ department.name }} {% endblock %}
 {% block content %}
-  <div class="container my-5 py-5 bg-secondary" style="max-width: 40rem;">
+  <div class="container my-5 pb-5 pt-3 bg-secondary">
       {% if messages %}
         {% for message in messages %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -22,7 +22,7 @@
           <p>Department Head: {{ department.department_head }}</p>
           <p> {{ department.name }} has thre streams and five programs executing with regular, extension and summer programs.</p>
           <div class="btn-group" role="group" aria-label="Department details">
-            <a class="btn btn-primary" href="{% url 'department-edit' department_id=department.pk %}">Edit Course</a>
+            <a class="btn btn-primary" href="{% url 'department-edit' department_id=department.pk %}">Edit department</a>
             <a class="btn btn-primary" href="{% url 'department-delete' department_id=department.pk %}">Delete department</a>
           </div>
       </div>
