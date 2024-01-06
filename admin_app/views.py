@@ -101,17 +101,18 @@ def view_position(request):
         'chair_profiles': chair_profiles,
     })
 
-
-
 def add_department(request):
     if request.method == 'POST':
         form_department = AddDepartmentForm(request.POST)
         if form_department.is_valid():
             form_department.save()
             return redirect('department-list')
+        else:
+            messages.error(request, "You didn't fill the form proporly!")
+            return redirect('add-department')
     else:
         form_department = AddDepartmentForm()
-    return render(request, 'admin_app/department/add_department.html', {'form_department': form_department})
+        return render(request, 'admin_app/department/add_department.html', {'form_department': form_department})
 
 def add_student(request):
     if request.method == 'POST':
@@ -463,6 +464,9 @@ def course_registration(request):
             user_profile = UserProfile.objects.get(user=request.user)
             user_profile.courses_registered.add(*selected_courses)
             return redirect('student-courses')
+        else:
+            messages.error(request, "You didn't check the courses properly! Please select at least one course!")
+            return redirect('course-register')
     else:
         form_course_registration = CourseRegistrationForm(student_department)
         return render(request, 'admin_app/course/course_registration.html', {'form_course_registration': form_course_registration})
