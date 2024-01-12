@@ -40,6 +40,8 @@ def admin_dashboard(request):
     total_students = UserProfile.objects.filter(role='student').count()
     total_teachers = UserProfile.objects.filter(role='teacher').count()
 
+    # print('User profile= ', request.user.userprofile)
+
     context1 = {
         'total_students': total_students,
         'total_teachers': total_teachers
@@ -438,6 +440,22 @@ def student_list(request):
 
    return render(request, 'admin_app/student/student_list.html', context)
 
+# Student list by department
+def department_student_list(request, department_id, role):
+
+   if role == 'admin':
+       students = UserProfile.objects.filter(role='student')
+   else:
+       students = UserProfile.objects.filter(role='student', department=department_id)
+
+   number_of_students = students.count()
+   context = {
+      'students': students,
+      'number_of_students': number_of_students,
+   }
+
+   return render(request, 'admin_app/student/student_list.html', context)
+
 def student_edit(request, student_id):
     student = get_object_or_404(UserProfile, pk=student_id)
     if request.method == 'POST':
@@ -458,11 +476,17 @@ def student_detail(request, student_id):
     return render(request, 'admin_app/student/student_detail.html', context)
 
 def student_delete(request, student_id):
+    profile = request.user.userprofile
+    department_id = profile.department.id
+    role = profile.role
     student = get_object_or_404(UserProfile, pk=student_id)
     if request.method == 'POST':
         student.delete()
         messages.info(request, "Deleted successfully!")
-        return redirect('student-list')
+        if role == 'admin':
+            return redirect('student-list')
+        else:
+            return redirect('department-student-list', department_id, role)
     return render(request, 'admin_app/student/student_delete.html', {'student': student })
 
 # course list

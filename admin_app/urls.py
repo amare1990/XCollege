@@ -40,6 +40,7 @@ urlpatterns = [
     path('view_result/<str:course_code>/', views.view_result, name='view-result'),
 
     path('student_list/', views.student_list, name='student-list'),
+    path('student_list/<int:department_id>/<role>/', views.department_student_list, name='department-student-list'),
     path('student/<int:student_id>/detail/', views.student_detail, name='student-detail'),
     path('student/<int:student_id>/edit/', views.student_edit, name='student-edit'),
     path('student/<int:student_id>/delete/', views.student_delete, name='student-delete'),
