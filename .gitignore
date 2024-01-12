@@ -34,6 +34,16 @@ venv-college/lib/python3.8/site-packages/PIL/__pycache__/BlpImagePlugin.cpython-
 venv-college/lib/python3.8/site-packages/PIL/__pycache__/BmpImagePlugin.cpython-38.pyc
 venv-college/lib/python3.8/site-packages/PIL/__pycache__/BufrStubImagePlugin.cpython-38.pyc
 
+# Ignore media files
+/media/
+# Ignore sensitive or environment-specific settings
+.env
+
+# Exclude any compiled or minified files
+/static/**/*.min.js
+/static/**/*.min.css
+
+
 
 
 
