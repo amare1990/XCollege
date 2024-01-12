@@ -136,14 +136,16 @@ def add_teacher(request):
         form_teacher = AddTeacherForm(request.POST, request.FILES)
         if form_teacher.is_valid():
             user_instance = form_teacher.save(commit=False)
-            if UserProfile.objects.filter(user=user_instance).exists():
+            print('user_instance= ', user_instance)
+            if UserProfile.objects.filter(user_id=user_instance.id).exists():
                 messages.error(request, 'This user profile already exists')
                 return redirect('teacher-list')
             else:
                 form_teacher.save()
                 return redirect('teacher-list')
         else:
-            messages.error(request, "You didn't fill the form successfully!")
+            messages.error(request, "You didn't fill the form correctly!")
+            return redirect('add-teacher')
             # return render(request, 'admin_app/teacher/add_teacher.html', {'form_teacher': form_teacher})
     else:
         form_teacher = AddTeacherForm()
@@ -280,6 +282,19 @@ def teacher_list(request):
       'number_of_teachers': number_of_teachers,}
     return render(request, 'admin_app/teacher/teacher_list.html', context)
 
+# Teachers list
+def department_teacher_list(request, department_id, role):
+    print('department ID= ', department_id)
+    if role == 'admin':
+       teachers = UserProfile.objects.filter(role='teacher')
+    else:
+       teachers = UserProfile.objects.filter(role='teacher', department=department_id)
+    number_of_teachers = teachers.count()
+    context = {
+      'teachers': teachers,
+      'number_of_teachers': number_of_teachers,}
+    return render(request, 'admin_app/teacher/teacher_list.html', context)
+
 def my_all_department_students(request):
     user = request.user
     user_profile = user.userprofile
@@ -312,12 +327,21 @@ def teacher_detail(request, teacher_id):
     return render(request, 'admin_app/teacher/teacher_detail.html', context)
 
 def teacher_delete(request, teacher_id):
+    profile = request.user.userprofile
+    department_id = profile.department.id
+    print('department in teacher_delete view= ', department_id)
+    role = profile.role
+    print('Profile= ', profile)
     teacher = get_object_or_404(UserProfile, pk=teacher_id)
     if request.method == 'POST':
         teacher.delete()
+        # teacher.user.delete()
         messages.info(request, "Deleted successfully!")
-        return redirect('teacher-list')
-    return render(request, 'admin_app/teacher/teacher_delete.html', {'teacher': teacher })
+        if role == 'admin':
+            return redirect('teacher-list')
+        else:
+            return redirect('department-teacher-list', department_id, role)
+    return render(request, 'admin_app/teacher/teacher_delete.html', {'teacher': teacher, 'department': department_id})
 
 
 

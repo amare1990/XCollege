@@ -85,17 +85,48 @@ class Program(models.Model):
         return self.name
 
 class UserProfile(models.Model):
+
+    ROLE_CHOICES = (
+        ('admin', 'admin'),
+        # ('head', 'head'),
+        ('teacher', 'Teacher'),
+        ('staff', 'Staff'),
+        ('student', 'Student')
+    )
+    TITLE_CHOICES = (
+        ('Mr.', 'Mr.'),
+        ('Mrs.', 'Mrs.'),
+        ('Dr.', 'Dr.'),
+        ('Professor', 'Professor'),
+        ('Assistant Professor', 'Assistant Professor'),
+        ('Associate Professor', 'Associate Professor')
+    )
+
+    year = (
+        ('1st', 'First'),
+        ('2nd', 'Second'),
+        ('3rd', 'Third'),
+        ('4th', 'Fourth'),
+        ('5th', 'Fifth')
+    )
+
+    semester= (
+        ('1st', 'First'),
+        ('2nd', 'Second'),
+        ('summer', 'Summer')
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(default='Enter your bio briefly')
     role = models.CharField(max_length=20, choices=roles, default='student')
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, blank=True)
     academic_year = models.CharField(max_length=20, choices=year, null=True, blank=True)
     semester = models.CharField(max_length=20, choices=semester, null=True, blank=True)
-    title = models.CharField(max_length=20, choices=title_choices, null=True, blank=True)
+    title = models.CharField(max_length=20, choices=TITLE_CHOICES, null=True, blank=True)
     stream = models.ForeignKey(Stream, on_delete=models.CASCADE, null=True, blank=True)
     program = models.ForeignKey(Program, on_delete=models.CASCADE, null=True, blank=True)
     position = models.CharField(max_length=50, choices=position, null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', default='profile_pictures/default_profile.jpg')
+    # profile_picture = models.ImageField(upload_to='profile_pictures/', default='profile_pictures/default_profile.jpg')
+    profile_picture = models.ImageField(upload_to='profile_pictures/', default='profile_pictures/default_profile.jpg', blank=True, null=True)
 
     def __str__(self):
         return self.user.username

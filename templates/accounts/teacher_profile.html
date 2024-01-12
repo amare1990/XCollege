@@ -73,9 +73,10 @@
             email: {{ profile.user.email }} <br>
             Brief bio: <br> {{ profile.bio }}
           </p>
-          <button class="btn btn-primary">
-            <a href="{% url 'teacher-edit' teacher_id=profile.pk %}">Edit a teacher </a>|<a href="{% url 'teacher-delete' teacher_id=profile.pk %}">Delete teacher </a>
-          </button>
+          <div class="btn-group" role="group" aria-label="Edit and delete buttons">
+            <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=profile.pk %}">Edit a teacher </a>
+            <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=profile.pk %}">Delete teacher </a>
+          </div>
         </div>
        </div>
        </div>
