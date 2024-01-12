@@ -2,6 +2,7 @@ from typing import Any
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
+from admin_app.models import UserProfile, Department
 
 
 class SignUpForm(UserCreationForm):
@@ -26,22 +27,6 @@ class SignUpForm(UserCreationForm):
     self.fields['password1'].widget.attrs['autocomplete'] = 'off'
     self.fields['password2'].widget.attrs['autocomplete'] = 'off'
 
-# Edit profile form
-# class EditProfileForm(UserChangeForm):
-#   first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
-#   last_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
-#   email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
-#   username = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
-#   last_login = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-#   # is_superuser = forms.CharField(widget=forms.CheckboxInput(attrs={'class': 'form-check'}))
-#   # is_staff = forms.CharField(widget=forms.CheckboxInput(attrs={'class': 'form-check'}))
-#   # is_active = forms.CharField(widget=forms.CheckboxInput(attrs={'class': 'form-check'}))
-#   date_joined = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
-
-#   class Meta:
-#     model = User
-#     fields = ('username', 'first_name', 'last_name', 'email', 'password', 'last_login', 'date_joined')
-
 # Password change form
 class PasswordChangingForm(PasswordChangeForm):
   old_password = forms.CharField(max_length=50, widget=forms.PasswordInput(attrs={'class': 'form-control', 'type': 'password'}))
@@ -53,38 +38,37 @@ class PasswordChangingForm(PasswordChangeForm):
     fields = ('old_password', 'new_password1', 'new_password2')
 
 
-from django import forms
-from django.contrib.auth.forms import UserChangeForm
-from admin_app.models import UserProfile
-from django.contrib.auth.models import User
+class EditProfileForm(forms.ModelForm):
+    # Fields from the User model
+    username = forms.CharField(max_length=150, required=True)
+    email = forms.EmailField(max_length=254, required=True)
+    first_name = forms.CharField(max_length=30, required=False)
+    last_name = forms.CharField(max_length=150, required=False)
 
-class EditProfileForm(UserChangeForm):
-    first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    last_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
-    username = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    # Add fields from the UserProfile model
-    role = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    department = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    # Add other fields from the UserProfile model as needed
+    # Fields from the UserProfile model
+    role = forms.ChoiceField(choices=UserProfile.ROLE_CHOICES, required=False)
+    title = forms.ChoiceField(choices=UserProfile.TITLE_CHOICES, required=False)
+    department = forms.ModelChoiceField(queryset=Department.objects.all(), required=False)
+    bio = forms.CharField(widget=forms.Textarea, required=False)
+    profile_picture = forms.ImageField(required=False)
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'last_login', 'date_joined')
+        fields = ['username', 'email', 'first_name', 'last_name', 'role', 'title', 'department', 'bio']
 
     def __init__(self, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
-        if 'password' in self.fields:
-            self.fields.pop('password')  # Remove the 'password' field if it exists
+        # Customize form initialization if needed
 
     def save(self, commit=True):
         user = super(EditProfileForm, self).save(commit=False)
-        # Save the UserProfile fields
         user_profile, created = UserProfile.objects.get_or_create(user=user)
         user_profile.role = self.cleaned_data['role']
+        user_profile.title = self.cleaned_data['title']
         user_profile.department = self.cleaned_data['department']
-        # Save other fields from the UserProfile model as needed
+        user_profile.bio = self.cleaned_data['bio']
+        user_profile.profile_picture = self.cleaned_data['profile_picture']
         if commit:
             user.save()
             user_profile.save()
-        return user
+        return user, user_profile

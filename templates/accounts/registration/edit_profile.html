@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}  User Edit Form  {% endblock %}
 {% block content%}
-  <div class="container my-5 py-3 bg-secondary" style="max-width: 400px;">
+  <div class="container my-5 py-3 bg-secondary" style="max-width: 40rem;">
     {% if messages %}
       {% for message in messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -15,7 +15,7 @@
     <p>You are logined as <span class="text-success"><strong>{{ user.username|capfirst }}</strong></span></p>
     <h3 class="text-center bg-primary">Edit your profile here!</h3>
     <div  class="form-group">
-      <form method="POST">
+      <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">
@@ -25,6 +25,3 @@
     </div>
   </div>
 {% endblock %}
-
-
-

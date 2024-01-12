@@ -7,6 +7,7 @@ from .forms import SignUpForm, EditProfileForm, PasswordChangingForm
 from django.views import generic
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
 
 # Password change view
 class PasswordsChangeView(PasswordChangeView):
@@ -31,16 +32,16 @@ def user_login(request):
             if profile is not None:
                 context = {'profile': profile}
                 messages.success(request, 'You have successfully logged in! %s' % (user.first_name))
-                # if user.is_staff or profile.role == 'admin':
-                return redirect('admin-dashboard')
-                # elif profile.role == 'student':
-                #     return render(request, 'accounts/student_profile.html', context)
-                # elif profile.role == 'teacher' and profile.position is None:
-                #     return render(request, 'accounts/teacher_profile.html', context)
-                # elif profile.position == 'head':
-                #     return render(request, 'accounts/head_profile.html', context)
-                # elif profile.role is None or profile.position is None:
-                #     return redirect('home')
+                if user.is_staff or profile.role == 'admin':
+                  return redirect('admin-dashboard')
+                elif profile.role == 'student':
+                    return render(request, 'accounts/student_profile.html', context)
+                elif profile.role == 'teacher' and profile.position is None:
+                    return render(request, 'accounts/teacher_profile.html', context)
+                elif profile.position == 'head':
+                    return render(request, 'accounts/head_profile.html', context)
+                elif profile.role is None or profile.position is None:
+                    return redirect('home')
             else:
                 # Handle the case where the UserProfile does not exist
                 messages.error(request, 'User profile does not exist')
@@ -58,12 +59,19 @@ class UserRegistrationView(generic.CreateView):
   success_url= reverse_lazy('user-login')
 
 # User Profile editing
-class UserEditView(generic.UpdateView):
-  form_class = EditProfileForm
-  template_name ='accounts/registration/edit_profile.html'
-  success_url= reverse_lazy('home')
-
-  def get_object(self) :
-    return self.request.user
-
-
+@login_required
+def edit_profile(request):
+    # profile = request.user.userprofile
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            user, user_profile = form.save()
+            # form.save()
+            if 'profile_picture' in request.FILES:
+                user_profile.profile_picture = request.FILES['profile_picture']
+                user.save()
+                user_profile.save()
+            return redirect('admin-dashboard')
+    else:
+        form = EditProfileForm(instance=request.user)
+    return render(request, 'accounts/registration/edit_profile.html', {'form': form })
