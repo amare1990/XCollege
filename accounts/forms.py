@@ -46,9 +46,13 @@ class EditProfileForm(forms.ModelForm):
     last_name = forms.CharField(max_length=150, required=False)
 
     # Fields from the UserProfile model
-    role = forms.ChoiceField(choices=UserProfile.ROLE_CHOICES, required=False)
-    title = forms.ChoiceField(choices=UserProfile.TITLE_CHOICES, required=False)
+    role = forms.ChoiceField(choices=[('', '---------')] + list(UserProfile.ROLE_CHOICES), required=False)
+    title = forms.ChoiceField(choices=[('', '---------')] + list(UserProfile.TITLE_CHOICES), required=False)
+    position = forms.ChoiceField(choices=[('', '---------')] + list(UserProfile.POSITION), required=False)
+    # position = [('', '---------')] + list(UserProfile.POSITION)
     department = forms.ModelChoiceField(queryset=Department.objects.all(), required=False)
+    academic_year = forms.ChoiceField(choices=[('', '---------')] + list(UserProfile.year), required=False)
+    semester = forms.ChoiceField(choices=[('', '---------')] + list(UserProfile.SEMESTER), required=False)
     bio = forms.CharField(widget=forms.Textarea, required=False)
     profile_picture = forms.ImageField(required=False)
 
@@ -67,6 +71,9 @@ class EditProfileForm(forms.ModelForm):
         user_profile.title = self.cleaned_data['title']
         user_profile.department = self.cleaned_data['department']
         user_profile.bio = self.cleaned_data['bio']
+        user_profile.position = self.cleaned_data['position']
+        user_profile.academic_year = self.cleaned_data['academic_year']
+        user_profile.semester = self.cleaned_data['semester']
         user_profile.profile_picture = self.cleaned_data['profile_picture']
         if commit:
             user.save()

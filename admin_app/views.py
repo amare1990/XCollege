@@ -272,10 +272,10 @@ def staff_list(request):
 
 # Teachers list
 def teacher_list(request):
-    if request.user.userprofile.role == 'admin':
-       teachers = UserProfile.objects.filter(role='teacher')
-    else:
-       teachers = UserProfile.objects.filter(role='teacher', department=request.user.userprofile.department)
+    # if request.user.userprofile.role == 'admin':
+    teachers = UserProfile.objects.filter(role='teacher')
+    # else:
+    #    teachers = UserProfile.objects.filter(role='teacher', department=request.user.userprofile.department)
     number_of_teachers = teachers.count()
     context = {
       'teachers': teachers,

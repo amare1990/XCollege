@@ -110,11 +110,28 @@ class UserProfile(models.Model):
         ('5th', 'Fifth')
     )
 
-    semester= (
+    SEMESTER= (
         ('1st', 'First'),
         ('2nd', 'Second'),
         ('summer', 'Summer')
     )
+
+    # ACADEMIC_YEAR = (
+    #     ('1st', 'First'),
+    #     ('2nd', 'Second'),
+    #     ('3rd', 'Third'),
+    #     ('4th', 'Fourth'),
+    #     ('5th', 'Fifth')
+    # )
+
+    POSITION = (
+        ('head', 'Head'),
+        ('school dean', 'School Dean'),
+        ('chair', 'Chair'),
+        ('program coordinator', 'Program Coordinator'),
+        ('college dean', 'College Dean')
+    )
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(default='Enter your bio briefly')
     role = models.CharField(max_length=20, choices=roles, default='student')
