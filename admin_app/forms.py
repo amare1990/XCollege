@@ -114,7 +114,13 @@ class CourseSelectionForm(forms.Form):
 class AssessmentForm(forms.ModelForm):
     class Meta:
         model = Assessment
-        fields = ['assessment_name', 'weight']
+        fields = ['teacher', 'assessment_name', 'weight']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(AssessmentForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['teacher'].queryset = UserProfile.objects.filter(user=user)
 
 
 class AddMarksForm(forms.Form):

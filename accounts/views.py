@@ -66,12 +66,13 @@ def edit_profile(request):
         form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             user, user_profile = form.save()
-            # form.save()
+            form.save()
             if 'profile_picture' in request.FILES:
                 user_profile.profile_picture = request.FILES['profile_picture']
                 user.save()
                 user_profile.save()
             return redirect('admin-dashboard')
     else:
+        print('instance= ', request.user)
         form = EditProfileForm(instance=request.user)
     return render(request, 'accounts/registration/edit_profile.html', {'form': form })

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}  User Edit Form  {% endblock %}
+{% block content%}
+  <div class="container my-5 py-3 bg-secondary" style="max-width: 40rem;">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+    {% endif %}
+    <p>You are logged in as <span class="text-success"><strong>{{ user.username|capfirst }}</strong></span></p>
+    <h3 class="text-center bg-primary">Edit your profile here!</h3>
+    <div class="form-group">
+      <form id="editProfileForm" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="id_role">Role:</label>
+          <select class="form-control" id="id_role" name="role">
+            <option value="">---------</option>
+            <option value="teacher">Teacher</option>
+            <option value="student">Student</option>
+          </select>
+        </div>
+        <div class="form-group" id="titlePositionFields" style="display: none;">
+          <label for="id_title">Title:</label>
+          <select class="form-control" id="id_title" name="title">
+            <!-- Options for title -->
+          </select>
+          <label for="id_position">Position:</label>
+          <select class="form-control" id="id_position" name="position">
+            <!-- Options for position -->
+          </select>
+        </div>
+        <div class="form-group" id="academicYearSemesterFields" style="display: none;">
+          <label for="id_academic_year">Academic Year:</label>
+          <select class="form-control" id="id_academic_year" name="academic_year">
+            <!-- Options for academic year -->
+          </select>
+          <label for="id_semester">Semester:</label>
+          <select class="form-control" id="id_semester" name="semester">
+            <!-- Options for semester -->
+          </select>
+        </div>
+        <!-- Other form fields -->
+        <button type="submit" class="btn btn-primary">
+          Update
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript to show/hide fields based on selected role
+    document.getElementById('id_role').addEventListener('change', function() {
+      var role = this.value;
+      var titlePositionFields = document.getElementById('titlePositionFields');
+      var academicYearSemesterFields = document.getElementById('academicYearSemesterFields');
+
+      if (role === 'teacher') {
+        titlePositionFields.style.display = 'block';
+        academicYearSemesterFields.style.display = 'none';
+      } else if (role === 'student') {
+        titlePositionFields.style.display = 'none';
+        academicYearSemesterFields.style.display = 'block';
+      } else {
+        titlePositionFields.style.display = 'none';
+        academicYearSemesterFields.style.display = 'none';
+      }
+    });
+  </script>
+{% endblock %}

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}  Add Assessment  {% endblock %}
+{% block title %}  Edit Assessment  {% endblock %}
 {% block content%}
   <div class="container my-5 py-5 bg-secondary" style="max-width: 40rem;">
     {% if messages %}
@@ -12,13 +12,13 @@
         </div>
       {% endfor %}
     {% endif %}
-    <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'admin-dashboard' %}">My homepage </a>
-    <h3 class="text-center py-3"> Add assessment</h3>
+    <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'assessments' %}">View assessments</a>
+    <h3 class="text-center py-3"> Edit assessment</h3>
     <form method="POST">
       {% csrf_token %}
       {{ form.as_p }}
       <div class="text-center">
-        <button class="btn btn-primary">Add assessment</button>
+        <button class="btn btn-primary">Edit assessment</button>
       </div>
     </form>
   </div>

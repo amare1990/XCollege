@@ -35,6 +35,8 @@ urlpatterns = [
 
     path('add_assessment/', views.add_assessment, name='add-assessment'),
     path('assessments/', views.assessments, name='assessments'),
+    path('assessment/<assessment_id>/edit/', views.edit_assessment, name='edit-assessment'),
+    path('assessment/<assessment_id>/delete/', views.delete_assessment, name='delete-assessment'),
     path('fill_mark/<str:course_code>/', views.add_mark, name='add-mark'),
     path('mark_list/<str:course_code>/', views.mark_list, name='mark-list'),
     path('view_result/<str:course_code>/', views.view_result, name='view-result'),

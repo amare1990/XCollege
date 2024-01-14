@@ -62,18 +62,27 @@ class EditProfileForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
-        # Customize form initialization if needed
+        user_profile = self.instance.userprofile  # Assuming UserProfile is related to User
+        if user_profile.role == 'student':
+            self.fields.pop('title')
+            self.fields.pop('position')
+        elif user_profile.role == 'teacher':
+            self.fields.pop('academic_year')
+            self.fields.pop('semester')
 
     def save(self, commit=True):
         user = super(EditProfileForm, self).save(commit=False)
         user_profile, created = UserProfile.objects.get_or_create(user=user)
         user_profile.role = self.cleaned_data['role']
-        user_profile.title = self.cleaned_data['title']
+        if user_profile.role == 'teacher':
+           user_profile.title = self.cleaned_data['title']
         user_profile.department = self.cleaned_data['department']
         user_profile.bio = self.cleaned_data['bio']
-        user_profile.position = self.cleaned_data['position']
-        user_profile.academic_year = self.cleaned_data['academic_year']
-        user_profile.semester = self.cleaned_data['semester']
+        if user_profile.role == 'teacher':
+           user_profile.position = self.cleaned_data['position']
+        if user_profile.role == 'student':
+          user_profile.academic_year = self.cleaned_data['academic_year']
+          user_profile.semester = self.cleaned_data['semester']
         user_profile.profile_picture = self.cleaned_data['profile_picture']
         if commit:
             user.save()

@@ -40,31 +40,35 @@ def admin_dashboard(request):
     total_students = UserProfile.objects.filter(role='student').count()
     total_teachers = UserProfile.objects.filter(role='teacher').count()
 
-    # print('User profile= ', request.user.userprofile)
+    print('User profile ID= ', request.user.userprofile.id)
 
     context1 = {
         'total_students': total_students,
         'total_teachers': total_teachers
     }
 
-    try:
-        profile = UserProfile.objects.get(user=request.user)
-        context = {
-            'profile': profile
-        }
+    if request.user:
+        try:
+            profile = UserProfile.objects.get(user=request.user.id)
+            print('Profile in admin= ', profile)
+            context = {
+                'profile': profile
+            }
 
-        if profile.role == 'admin' or request.user.is_staff:
-            return render(request, 'admin_app/admin_dashboard.html', context1)
-        elif profile.role == 'student':
-            return render(request, 'accounts/student_profile.html', context)
-        elif profile.position == 'head':
-            return render(request, 'accounts/head_profile.html', context)
-        elif profile.role == 'teacher' and profile.position is None:
-            return render(request, 'accounts/teacher_profile.html', context)
-        else:
-            return HttpResponse("Unauthorized access")
-    except UserProfile.DoesNotExist:
-        return redirect('add-teacher')
+            if profile.role == 'admin' or request.user.is_staff:
+                return render(request, 'admin_app/admin_dashboard.html', context1)
+            elif profile.role == 'student':
+                return render(request, 'accounts/student_profile.html', context)
+            elif profile.position == 'head':
+                return render(request, 'accounts/head_profile.html', context)
+            elif profile.role == 'teacher' and profile.position is None:
+                return render(request, 'accounts/teacher_profile.html', context)
+            else:
+                return HttpResponse("Unauthorized access")
+        except UserProfile.DoesNotExist:
+            return redirect('home')
+    else:
+        return redirect('user-register')
 
 
 def offer_position(request):
@@ -361,19 +365,56 @@ def teacher_courses(request):
 
 def add_assessment(request):
     if request.method == 'POST':
-        form = AssessmentForm(request.POST)
+        form = AssessmentForm(request.POST, user=request.user)
         if form.is_valid():
-            form.save()
-            return redirect('assessments')
+            assessment = form.save(commit=False)
+            if not Assessment.objects.filter(teacher=assessment.teacher, assessment_name=assessment.assessment_name).exists():
+                assessment.save()
+                return redirect('assessments')
+            else:
+                messages.error(request, 'Assessment with the same name already exists for this teacher')
+                return redirect('assessments')
         else:
             messages.error(request, 'Invalid form')
+            return redirect('add-assessment')
     else:
-        form = AssessmentForm()
+        form = AssessmentForm(user=request.user)
         return render(request, 'admin_app/teacher/add_assessment.html', {'form': form})
 
 def assessments(request):
-    assessments = Assessment.objects.all()
+    assessments = Assessment.objects.filter(teacher=request.user.userprofile)
+    print('Number of assessments= ', assessments.count())
     return render(request, 'admin_app/teacher/assessments.html', {'assessments': assessments})
+
+def edit_assessment(request, assessment_id):
+    assessment = get_object_or_404(Assessment, pk=assessment_id)
+
+    if request.method == 'POST':
+        form = AssessmentForm(request.POST, instance=assessment, user=request.user)
+        if form.is_valid():
+            edited_assessment = form.save(commit=False)
+            if not Assessment.objects.filter(teacher=edited_assessment.teacher, assessment_name=edited_assessment.assessment_name).exclude(pk=edited_assessment.pk).exists():
+                edited_assessment.save()
+                return redirect('assessments')
+            else:
+                messages.error(request, 'Assessment with the same name already exists for this teacher')
+        else:
+            messages.error(request, 'Invalid form')
+    else:
+        form = AssessmentForm(instance=assessment, user=request.user)
+
+    return render(request, 'admin_app/teacher/edit_assessment.html', {'form': form})
+
+def delete_assessment(request, assessment_id):
+    assessment = get_object_or_404(Assessment, pk=assessment_id)
+
+    if request.method == 'POST':
+        assessment.delete()
+        messages.success(request, 'Assessment deleted successfully')
+        return redirect('assessments')
+
+    return render(request, 'admin_app/teacher/delete_assessment.html', {'assessment': assessment})
+
 
 def add_mark(request, course_code):
     course = Course.objects.get(course_code=course_code)
@@ -482,12 +523,14 @@ def student_delete(request, student_id):
     student = get_object_or_404(UserProfile, pk=student_id)
     if request.method == 'POST':
         student.delete()
+        # student.user.delete()
         messages.info(request, "Deleted successfully!")
         if role == 'admin':
-            return redirect('student-list')
+            return redirect('student-list')  # Redirect to the student list view
         else:
-            return redirect('department-student-list', department_id, role)
+            return redirect('department-student-list', department_id, role)  # Redirect to the department student list view
     return render(request, 'admin_app/student/student_delete.html', {'student': student })
+
 
 # course list
 def course_list(request):

@@ -167,6 +167,7 @@ class Course(models.Model):
         return self.name
 
 class Assessment(models.Model):
+    teacher = models.ForeignKey(UserProfile, on_delete=models.CASCADE, default=8)
     assessment_name = models.CharField(max_length=100)
     # comment = models.CharField(max_length=100, blank=True, null=True)
     weight = models.DecimalField(max_digits=5, decimal_places=2)
