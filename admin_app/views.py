@@ -8,30 +8,33 @@ from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 
 
-def letter_grade(total_marks):
+def letter_grade(total_weights, total_marks):
     grade = ''
-    if total_marks >= 90:
-            grade= 'A+'
-    elif total_marks >=85:
-        grade = 'A'
-    elif total_marks >= 80:
-        grade = 'A-'
-    elif total_marks >= 75:
-        grade = 'B+'
-    elif total_marks >= 70:
-        grade = 'B'
-    elif total_marks >= 65:
-        grade = 'B-'
-    elif total_marks >= 60:
-        grade = 'C+'
-    elif total_marks >= 50:
-        grade = 'C'
-    elif total_marks >= 45:
-        grade = 'C-'
-    elif total_marks >= 40:
-        grade = 'D'
+    if total_weights < 100:
+        grade = 'NOT YET'
     else:
-        grade = 'F'
+        if total_marks >= 90:
+            grade= 'A+'
+        elif total_marks >=85:
+            grade = 'A'
+        elif total_marks >= 80:
+            grade = 'A-'
+        elif total_marks >= 75:
+            grade = 'B+'
+        elif total_marks >= 70:
+            grade = 'B'
+        elif total_marks >= 65:
+            grade = 'B-'
+        elif total_marks >= 60:
+            grade = 'C+'
+        elif total_marks >= 50:
+            grade = 'C'
+        elif total_marks >= 45:
+            grade = 'C-'
+        elif total_marks >= 40:
+            grade = 'D'
+        else:
+            grade = 'F'
 
     return grade
 
@@ -419,7 +422,7 @@ def delete_assessment(request, assessment_id):
 def add_mark(request, course_code):
     course = Course.objects.get(course_code=course_code)
     students = course.students.all()
-    assessments = Assessment.objects.all()
+    assessments = Assessment.objects.filter(teacher=request.user.userprofile)
 
     if request.method == 'POST':
         for student in students:
@@ -441,13 +444,15 @@ def add_mark(request, course_code):
 def mark_list(request, course_code):
     selected_course = Course.objects.get(course_code=course_code)
     students = selected_course.students.all()
-    assessments = Assessment.objects.all()
+    assessments = Assessment.objects.filter(teacher=request.user.userprofile)
     marks_data = []
     grade = ''
     for student in students:
         total_marks = 0
         student_marks = []
+        total_weights = 0
         for assessment in assessments:
+            total_weights += assessment.weight
             marks = Mark.objects.filter(student=student, assessment=assessment)
             if marks.exists():
                 mark = marks.first()
@@ -455,14 +460,12 @@ def mark_list(request, course_code):
                 student_marks.append(mark)
             else:
                 student_marks.append(None)
-        grade = letter_grade(total_marks)
+
+        grade = letter_grade(total_weights, total_marks)
 
         marks_data.append({'student': student, 'marks': student_marks, 'total_marks': total_marks, 'grade': grade})
 
     return render(request, 'admin_app/teacher/mark_list.html', {'course': selected_course, 'assessments': assessments, 'marks_data': marks_data})
-
-
-
 
 
 # Student list
@@ -570,20 +573,24 @@ def view_result(request, course_code):
     marks = Mark.objects.filter(student=userObj.userprofile, course=selected_course)
     # print('Mark assessment queryset= ', mark.assessment)
     # assessments = mark.assessment
-    assessments = Assessment.objects.all()
+    assessments = Assessment.objects.filter(teacher=request.user.userprofile)
+
+    total_weights = 0
+    for assessment in assessments:
+        total_weights += assessment.weight
+
     my_mark = []
     total_mark = 0
     for mark in marks:
         total_mark+= mark.mark
         my_mark.append(mark)
+    print('my mark= ', my_mark)
 
-    grade = letter_grade(total_mark)
+    grade = letter_grade(total_weights,total_mark)
     return render(request, 'admin_app/student/view_result.html', { 'assessments': assessments,
-
            'course': selected_course, 'my_mark': my_mark, 'userObj': userObj,
            'total_mark': total_mark,
            'grade': grade})
-
 
 
 def add_course_offering(request):

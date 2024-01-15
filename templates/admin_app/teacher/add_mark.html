@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %} Fill Marks {% endblock %}
 {% block content %}
-  <div class="container my-5">
+  <div class="container my-5 py-5 bg-secondary">
     {% if messages %}
       {% for message in messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,9 +12,9 @@
         </div>
       {% endfor %}
     {% endif %}
-    <a class="nav-link text-black" href="{% url 'admin-dashboard' %}">My homepage</a>
+    <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'assessments' %}">Assessments</a>
 
-    <h5>Fill Marks for {{ selected_course.name }} course</h5>
+    <h3 class="text-center py-3">Fill Marks for <strong>{{ course.name }}</strong> course</h3>
 
     <form method="post">
       {% csrf_token %}
