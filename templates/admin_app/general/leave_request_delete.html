@@ -14,8 +14,8 @@
     {% endif %}
     <button class="btn-group bg-primary">
       <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
-      <a class="btn btn-primary" href="{% url 'student-list' %}">Student list</a>
-      <a class="btn btn-primary" href="{% url 'student-detail' student_id=student.pk %}">Student detail</a>
+      <a class="btn btn-primary" href="{% url 'manage-leave-request' %}">Manage leave requests</a>
+      <a class="btn btn-primary" href="{% url 'leave-request-details' leave_request_id=leave_request.pk %}">Leaver request details</a>
     </button>
     <h3 class="text-center mt-4">Leave/Remove leave request</h3>
     <div class="container my-5">

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}  Edit leave request  {% endblock %}
+{% block content%}
+<div class="container my-5 py-3 bg-secondary" style="max-width: 500px;">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="btn-group rounded" role="group" aria-label="Basic example">
+    <a href="{% url 'admin-dashboard' %}" class="btn btn-primary"> My homepage </a>
+    <a href="{% url 'leave-request-details' leave_request_id=leave_request.pk %}" class="btn btn-primary"> Leave request details </a>
+  </div>
+  <h3 class="text-center pt-3"> Edit a leave request </h3>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="text-center rounded">
+      <button class="btn btn-primary" type="submit">Update</button>
+    </div>
+</form>
+</div>
+{% endblock %}

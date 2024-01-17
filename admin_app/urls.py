@@ -57,4 +57,5 @@ urlpatterns = [
     path('manage_leave_request/', views.manage_leave_request, name='manage-leave-request'),
     path('leave_request_details/<int:leave_request_id>/', views.leave_request_details, name='leave-request-details'),
     path('delete_leave_request/<int:leave_request_id>/', views.delete_leave_request, name='delete-leave-request'),
+    path('edit_leave_request/<int:leave_request_id>/', views.edit_leave_request, name='edit-leave-request'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

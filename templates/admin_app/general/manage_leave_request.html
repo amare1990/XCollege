@@ -50,8 +50,8 @@
           </td>
           <td>
             <div class="btn-group" role="group" aria-label="Edit assessment">
-              <a class="btn btn-primary" href="{% url 'leave-request' %}">Edit</a>
-              <a class="btn btn-primary" href="{% url 'delete-leave-request' %}">Delete</a>
+              <a class="btn btn-primary" href="{% url 'edit-leave-request' leave_request_id=leave_request.id %}">Edit</a>
+              <a class="btn btn-primary" href="{% url 'delete-leave-request' leave_request_id=leave_request.id %}">Delete</a>
             </div>
           </td>
         </tr>

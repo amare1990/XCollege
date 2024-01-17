@@ -679,7 +679,7 @@ def edit_leave_request(request, leave_request_id):
     else:
         form = LeaveRequestForm(instance=leave_request)
 
-    return render(request, 'admin_app/general/edit_leave_request.html', {'form': form})
+    return render(request, 'admin_app/general/edit_leave_request.html', {'form': form, 'leave_request': leave_request})
 
 
 def delete_leave_request(request, leave_request_id):
