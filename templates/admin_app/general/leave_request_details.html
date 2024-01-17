@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Leave request details {% endblock %}
+{% block content%}
+  <div class="container my-5 py-5 bg-secondary">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+    {% endif %}
+    <div class="btn-group" role="group" aria-label="Leave request form">
+      <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">Homepage</a>
+      <a class="btn btn-primary" href="{% url 'leave-request' %}">Request leave</a>
+    </div>
+    <h3 class="text-center py-3">Leave request details requested by {{leave.request.userprofile}}</h3>
+
+    <ul>
+      {% for leave_request in leave_requests %}
+        <li>
+          Start Date: {{ leave_request.start_date }} | End Date: {{ leave_request.end_date }} | Status: {% if leave_request.approved %} Approved {% else %} Pending {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+  </div>
+{% endblock %}

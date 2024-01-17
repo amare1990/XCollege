@@ -1,7 +1,7 @@
 # forms.py
 from django import forms
 from django.forms import formset_factory
-from .models import UserProfile, Department, Course, Assessment
+from .models import UserProfile, Department, Course, Assessment, LeaveRequest
 
 class AddDepartmentForm(forms.ModelForm):
      department_head = forms.ModelChoiceField(queryset=UserProfile.objects.filter(role='teacher'), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
@@ -112,15 +112,16 @@ class CourseSelectionForm(forms.Form):
     course = forms.ModelChoiceField(queryset=Course.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
 
 class AssessmentForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        teacher = kwargs.pop('teacher', None)
+        teacher_dept = teacher.department
+        super(AssessmentForm, self).__init__(*args, **kwargs)
+        if teacher_dept:
+            self.fields['course'].queryset = Course.objects.filter(department=teacher_dept)
+
     class Meta:
         model = Assessment
-        fields = ['teacher', 'assessment_name', 'weight']
-
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        super(AssessmentForm, self).__init__(*args, **kwargs)
-        if user:
-            self.fields['teacher'].queryset = UserProfile.objects.filter(user=user)
+        fields = ['course', 'assessment_name', 'weight']
 
 
 class AddMarksForm(forms.Form):
@@ -194,4 +195,15 @@ class EditTeacherForm(forms.ModelForm):
                 user.save()
 
         return user_profile
+
+class LeaveRequestForm(forms.ModelForm):
+    class Meta:
+        model = LeaveRequest
+        fields ='__all__'
+        exclude = ('userprofile', 'approved', 'leave_request_comments', 'notification_viewed',)
+
+        widgets = {
+        'start_date': forms.DateInput(attrs={'type': 'date'}),
+        'end_date': forms.DateInput(attrs={'type': 'date'}),
+        }
 

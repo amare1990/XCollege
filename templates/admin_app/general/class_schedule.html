@@ -1,0 +1,9 @@
+<!-- class_schedule.html -->
+<h2>Class Schedule</h2>
+<ul>
+  {% for schedule_entry in class_schedule %}
+    <li>
+      Day: {{ schedule_entry.day }} | Time: {{ schedule_entry.time }} | Class: {{ schedule_entry.class_name }} | Instructor: {{ schedule_entry.instructor }} | Room: {{ schedule_entry.room }}
+    </li>
+  {% endfor %}
+</ul>

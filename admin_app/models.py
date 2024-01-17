@@ -168,6 +168,7 @@ class Course(models.Model):
 
 class Assessment(models.Model):
     teacher = models.ForeignKey(UserProfile, on_delete=models.CASCADE, default=8)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, default=4)
     assessment_name = models.CharField(max_length=100)
     # comment = models.CharField(max_length=100, blank=True, null=True)
     weight = models.DecimalField(max_digits=5, decimal_places=2)
@@ -177,14 +178,22 @@ class Assessment(models.Model):
 
 class Mark(models.Model):
     student = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
     mark = models.DecimalField(max_digits=5, decimal_places=2, default=10)
     comment = models.CharField(max_length=100, blank=True, null=True)
 
 class LeaveRequest(models.Model):
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    userprofile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
     reason = models.TextField()
     approved = models.BooleanField(default=False)
+    leave_request_comments = models.TextField(blank=True)
+    notification_viewed = models.BooleanField(default=False)
+
+class ClassSchedule(models.Model):
+    day = models.CharField(max_length=20)
+    time = models.TimeField()
+    class_name = models.CharField(max_length=100)
+    instructor = models.CharField(max_length=100)
+    room = models.CharField(max_length=50)

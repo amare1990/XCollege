@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import UserProfile, Department, Course, Assessment, Mark
-from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarksForm, AssessmentForm, AcademicYear, EditTeacherForm
+from .models import UserProfile, Department, Course, Assessment, Mark, LeaveRequest
+from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarksForm, AssessmentForm, LeaveRequestForm, EditTeacherForm
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models import Count
@@ -367,21 +367,19 @@ def teacher_courses(request):
 
 
 def add_assessment(request):
+    teacher = request.user.userprofile
     if request.method == 'POST':
-        form = AssessmentForm(request.POST, user=request.user)
+        form = AssessmentForm(request.POST, teacher=teacher)
         if form.is_valid():
             assessment = form.save(commit=False)
-            if not Assessment.objects.filter(teacher=assessment.teacher, assessment_name=assessment.assessment_name).exists():
-                assessment.save()
-                return redirect('assessments')
-            else:
-                messages.error(request, 'Assessment with the same name already exists for this teacher')
-                return redirect('assessments')
+            assessment.course = Course.objects.get(teachers=request.user.userprofile)
+            assessment.save()
+            return redirect('assessments')
         else:
             messages.error(request, 'Invalid form')
             return redirect('add-assessment')
     else:
-        form = AssessmentForm(user=request.user)
+        form = AssessmentForm(teacher=teacher)
         return render(request, 'admin_app/teacher/add_assessment.html', {'form': form})
 
 def assessments(request):
@@ -634,7 +632,63 @@ def student_courses(request):
 def course_offering_view(request):
     user_profile = UserProfile.objects.get(user=request.user)
     department = user_profile.department
-
     courses_with_teachers = Course.objects.filter(department=department, offered = True).prefetch_related('teachers').all()
     return render(request, 'admin_app/head/course_offering_view.html', {'courses_with_teachers': courses_with_teachers,
                                                                         'profile':user_profile })
+
+def leave_request(request):
+    if request.method == 'POST':
+        form = LeaveRequestForm(request.POST)
+        if form.is_valid():
+            leave_request = form.save(commit=False)
+            leave_request.userprofile = request.user.userprofile
+            leave_request.save()
+            return redirect('leave-request-details', leave_request.id)
+    else:
+        form = LeaveRequestForm()
+
+    return render(request, 'admin_app/general/leave_request_form.html', {'form': form})
+
+def manage_leave_request(request):
+    leave_requests = LeaveRequest.objects.filter(userprofile= request.user.userprofile)
+    return render(request, 'admin_app/general/manage_leave_request.html', {'leave_requests': leave_requests})
+
+def leave_request_approval(request):
+    pending_leave_requests = LeaveRequest.objects.filter(approved=False)
+    return render(request, 'admin_app/general/leave_request_approval.html', {'pending_leave_requests': pending_leave_requests})
+
+def leave_request_details(request, leave_request_id):
+    leave_request = get_object_or_404(LeaveRequest, pk=leave_request_id)
+
+    # Mark the notification as viewed when the user accesses the leave request details
+    if not leave_request.notification_viewed:
+        leave_request.notification_viewed = True
+        leave_request.save()
+
+    return render(request, 'admin_app/general/leave_request_details.html', {'leave_request': leave_request})
+
+def edit_leave_request(request, leave_request_id):
+    leave_request = get_object_or_404(LeaveRequest, pk=leave_request_id)
+
+    if request.method == 'POST':
+        form = LeaveRequestForm(request.POST, instance=leave_request)
+        if form.is_valid():
+            form.save()
+            # Redirect to a success page or any other appropriate action
+            return redirect('manage-leave-request')
+    else:
+        form = LeaveRequestForm(instance=leave_request)
+
+    return render(request, 'admin_app/general/edit_leave_request.html', {'form': form})
+
+
+def delete_leave_request(request, leave_request_id):
+    leave_request = get_object_or_404(LeaveRequest, pk=leave_request_id)
+    if request.method =='POST':
+        leave_request.delete()
+        return redirect('manage-leave-request')
+    return render(request, 'admin_app/general/leave_request_delete.html', {'leave_request': leave_request})
+
+def view_class_schedule(request):
+    class_schedule = ClassSchedule.objects.all()
+    return render(request, 'class_schedule.html', {'class_schedule': class_schedule})

@@ -32,13 +32,13 @@
               <a class="nav-link text-white" href="{% url 'add-teacher' %}">Call meetings</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'department-list' %}">Manage leave request</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'teacher-list' %}">View schedules</a>
             </li>
               <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'add-student' %}">Ask for leave</a>
+              <a class="nav-link text-white" href="{% url 'leave-request' %}">Request for leave</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'manage-leave-request' %}">Manage leave request</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-course' %}">Give feedback</a>
@@ -47,7 +47,7 @@
               <a class="nav-link text-white" href="{% url 'add-assessment' %}">Add assessment</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'assessments' %}"> View assessments </a>
+              <a class="nav-link text-white" href="{% url 'assessments' %}">View assessments </a>
             </li>
           </ul>
         </div>

@@ -1,10 +1,7 @@
 from django.urls import path
-
 from django.conf.urls.static import static
 from django.conf import settings
-
 from . import views
-
 
 urlpatterns = [
     path('', views.admin_dashboard, name='admin-dashboard'),
@@ -55,4 +52,9 @@ urlpatterns = [
     path('head/department_students/', views.my_all_department_students, name='department-students'),
 
     path('staff_list/', views.staff_list, name='staff-list'),
+
+    path('leave_request/', views.leave_request, name='leave-request'),
+    path('manage_leave_request/', views.manage_leave_request, name='manage-leave-request'),
+    path('leave_request_details/<int:leave_request_id>/', views.leave_request_details, name='leave-request-details'),
+    path('delete_leave_request/<int:leave_request_id>/', views.delete_leave_request, name='delete-leave-request'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
