@@ -191,9 +191,20 @@ class LeaveRequest(models.Model):
     leave_request_comments = models.TextField(blank=True)
     notification_viewed = models.BooleanField(default=False)
 
+class Room(models.Model):
+    name = models.CharField(max_length=50)
+    capacity = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.name
+
 class ClassSchedule(models.Model):
     day = models.CharField(max_length=20)
     time = models.TimeField()
     class_name = models.CharField(max_length=100)
     instructor = models.CharField(max_length=100)
-    room = models.CharField(max_length=50)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.class_name} - {self.day} - {self.time}"
+

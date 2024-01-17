@@ -16,15 +16,11 @@
       <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">Homepage</a>
       <a class="btn btn-primary" href="{% url 'leave-request' %}">Request leave</a>
     </div>
-    <h3 class="text-center py-3">Leave request details requested by {{leave.request.userprofile}}</h3>
+    <h3 class="text-center py-3">Leave request details requested by {{leave_request.userprofile}}</h3>
 
-    <ul>
-      {% for leave_request in leave_requests %}
-        <li>
-          Start Date: {{ leave_request.start_date }} | End Date: {{ leave_request.end_date }} | Status: {% if leave_request.approved %} Approved {% else %} Pending {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
+    <div class="bg-dark p-3">
+      Requested by {{ leave_request.userprofile }} | Reason: {{ leave_request.reason }}| Start Date: {{ leave_request.start_date }} | End Date: {{ leave_request.end_date }} | Status: {% if leave_request.approved %} Approved {% else %} Pending {% endif %}
+    </div>
 
   </div>
 {% endblock %}

@@ -22,9 +22,10 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Id</th>
+          <th scope="col">Requested by</th>
+          <th scope="col">Reason</th>
           <th scope="col"> Start Date </th>
           <th scope="col">End Date</th>
-          <th scope="col">Requested by</th>
           <th scope="col">Status</th>
           <th scope="col">Action</th>
         </tr>
@@ -36,11 +37,12 @@
           <td>
             <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'leave-request' %}">{{ leave_request.id }}</a>
           </td>
+          <td>
+            <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=userprofile.id %}">{{ leave_request.userprofile }}</a>
+          </td>
+          <td>{{ leave_request.reason }}</td>
           <td>{{ leave_request.start_date }}</td>
           <td>{{ leave_request.end_date }}</td>
-          <td>
-            <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'admin-dashboard' %}">{{ leave_request.userprofile }}</a>
-          </td>
           <td>
             {% if leave_request.approved %}
               <span style="color: darkgoldenrod;">Approved</span>

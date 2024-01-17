@@ -650,8 +650,9 @@ def leave_request(request):
     return render(request, 'admin_app/general/leave_request_form.html', {'form': form})
 
 def manage_leave_request(request):
-    leave_requests = LeaveRequest.objects.filter(userprofile= request.user.userprofile)
-    return render(request, 'admin_app/general/manage_leave_request.html', {'leave_requests': leave_requests})
+    userprofile = request.user.userprofile
+    leave_requests = LeaveRequest.objects.filter(userprofile= userprofile)
+    return render(request, 'admin_app/general/manage_leave_request.html', {'leave_requests': leave_requests, 'userprofile': userprofile})
 
 def leave_request_approval(request):
     pending_leave_requests = LeaveRequest.objects.filter(approved=False)

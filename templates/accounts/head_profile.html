@@ -87,12 +87,12 @@
          <div class="col-md-8">
           <div class="card-body">
             <h5 class="card-title">
-              Welcome back, {{ profile.title }}
+              {{ profile.title }}
               {% if profile.user.first_name %}
-              Welcome back, {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
-            {% else %}
-              {{ profile.user.username|capfirst }}!
-            {% endif %}
+                {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
+              {% else %}
+                {{ profile.user.username|capfirst }}!
+              {% endif %}
             </h5>
             <p class="card-text">Username: {{ profile.user.username }} <br>
               Role: {{ profile.role }} <br>
