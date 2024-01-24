@@ -1,7 +1,7 @@
 s{% extends 'base.html' %}
 {% block title %}  Add department {% endblock %}
 {% block content%}
-  <div class="container my-5 py-5 bg-secondary" style="max-width: 40rem;">
+  <div class="my-5 pt-3 pb-5">
     {% if messages %}
       {% for message in messages %}
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,14 +12,21 @@ s{% extends 'base.html' %}
       </div>
       {% endfor %}
     {% endif %}
-    <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'admin-dashboard' %}">My homepage</a>
-    <h3 class="text-center my-3"> Add a department</h3>
-    <form method="POST">
-      {% csrf_token %}
-      {{ form_department.as_p }}
-      <div class="text-center">
-        <button class="btn btn-primary">Add department</button>
+    <div class="row">
+      <div class="col-md-2 d-none d-md-block bg-secondary">
+        {% include 'admin_app/admin_navbar.html' %}
       </div>
-    </form>
+      <div class="col-md-10 py-5 ml-5" style="max-width: 40rem; background-color: rgb(40, 109, 109);">
+        <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'admin-dashboard' %}">My homepage</a>
+        <h3 class="text-center my-3">Add a department</h3>
+        <form method="POST">
+          {% csrf_token %}
+          {{ form_department.as_p }}
+          <div class="text-center">
+            <button class="btn btn-primary">Add department</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 {% endblock %}

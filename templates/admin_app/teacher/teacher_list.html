@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}List of teachers {% endblock %}
 {% block content %}
-  <div class="container my-5 pt-3 pb-5 bg-secondary">
       {% if messages %}
         {% for message in messages %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,51 +11,59 @@
           </div>
         {% endfor %}
       {% endif %}
-      <div class="btn-group" role="group" aria-label="Teachers' lis">
-        <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
-        <a class="btn btn-primary" href="{% url 'add-teacher' %}">Add more</a>
+      <div class="my-5 mr-5 pt-3 pb-5">
+        <div class="row">
+          <div class="col-md-2 d-none d-md-block bg-secondary px-2 mr-2">
+            {% include 'admin_app/admin_navbar.html' %}
+          </div>
+          <div class="col-md-10 py-5" style="background-color: rgb(40, 109, 109); max-width: 65rem;">
+            <div class="btn-group" role="group" aria-label="Teachers' lis">
+              <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
+              <a class="btn btn-primary" href="{% url 'add-teacher' %}">Add more</a>
+            </div>
+            <h3 class="text-center py-3">List of teachers </h3>
+            <div class="my-5">
+                <p>{{ number_of_teachers }} total teachers </p>
+                <table class="table table-dark table-responsive">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Id</th>
+                      <th scope="col"> Username </th>
+                      <th scope="col">Role</th>
+                      <th scope="col">Bio</th>
+                      <th scope="col">Tiltle</th>
+                      <th scope="col">Department</th>
+                      <th scope="col">Position</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for teacher in teachers %}
+                      <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>
+                          <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">{{ teacher.pk }}</a>
+                        </td>
+                        <td>{{ teacher.user.username }}</td>
+                        <td>{{ teacher.role }}</td>
+                        <td>{{ teacher.bio|truncatechars:50 }}</td>
+                        <td> {{ teacher.title }} </td>
+                        <td> {{ teacher.department }} </td>
+                        <td> {{ teacher.position }} </td>
+                        <td>
+                          <div class="btn-group" role="group" aria-label="List of teachers actions">
+                            <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>
+                            <a class="btn btn-primary" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a>
+                            <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a>
+                          </div>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
       </div>
-      <h3 class="text-center py-3">List of teachers </h3>
-      <div class="container my-5">
-          <p>{{ number_of_teachers }} total teachers </p>
-          <table class="table table-dark">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Id</th>
-                <th scope="col"> Username </th>
-                <th scope="col">Role</th>
-                <th scope="col">Bio</th>
-                <th scope="col">Tiltle</th>
-                <th scope="col">Department</th>
-                <th scope="col">Position</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for teacher in teachers %}
-                <tr>
-                  <th scope="row">{{ forloop.counter }}</th>
-                  <td>
-                    <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">{{ teacher.pk }}</a>
-                  </td>
-                  <td>{{ teacher.user.username }}</td>
-                  <td>{{ teacher.role }}</td>
-                  <td>{{ teacher.bio|truncatechars:50 }}</td>
-                  <td> {{ teacher.title }} </td>
-                  <td> {{ teacher.department }} </td>
-                  <td> {{ teacher.position }} </td>
-                  <td>
-                    <div class="btn-group" role="group" aria-label="List of teachers actions">
-                      <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>
-                      <a class="btn btn-primary" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a>
-                      <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a>
-                    </div>
-                  </td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-      </div>
-  </div>
 {% endblock %}

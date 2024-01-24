@@ -2,157 +2,55 @@
 {% block title %}  Home Page  {% endblock %}
 {% block content %}
   <br/><br/>
-  <div class="row my-5 pb-5">
-    <div class="col-md-2 d-none d-md-block">
-      <nav class="navbar navbar-expand-lg flex-column my-5 bg-secondary">
-        <button class="navbar-toggler bg-primary" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon text-white"><i class="fas fa-bars"></i></span>
-        </button>
-        <div class="collapse navbar-collapse bg-primary" id="navbarNav">
-          <ul class="navbar-nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'admin-dashboard' %}">Home</a>
-            </li>
-            <div id="accordion">
-              <a class="nav-link text-white" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                Manage staffs<i class="fas fa-caret-down"></i>
-              </a>
-              <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                  <ul class="nav flex-column">
-                    <li class="nav-item">
-                      <a class="nav-link text-white" href="{% url 'add-teacher' %}">Add teacher</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link text-white" href="{% url 'teacher-list' %}">View teachers</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link text-white" href="{% url 'staff-list' %}">Staff lists</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link text-white" href="#">Manage staff</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div id="accordion">
-              <a class="nav-link text-white" data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                Manage students<i class="fas fa-caret-down"></i>
-              </a>
-              <div id="collapseTwo" class="collapse" aria-labelledby="headingtwo" data-parent="#accordion">
-                <div class="card-body">
-                  <ul class="nav flex-column">
-                    <li class="nav-item">
-                      <a class="nav-link text-white" href="{% url 'add-student' %}">Add student</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link text-white" href="{% url 'student-list' %}">View students</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div id="accordion">
-              <a class="nav-link text-white" data-toggle="collapse" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                Manage courses<i class="fas fa-caret-down"></i>
-              </a>
-              <div id="collapseThree" class="collapse" aria-labelledby="headingthree" data-parent="#accordion">
-                <div class="card-body">
-                  <ul class="nav flex-column">
-                    <li class="nav-item">
-                      <a class="nav-link text-white" href="{% url 'add-course' %}">Add course</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link text-white" href="{% url 'course-list' %}">View courses</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div id="accordion">
-              <a class="nav-link text-white" data-toggle="collapse" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-                Manage departments<i class="fas fa-caret-down"></i>
-              </a>
-              <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
-                <div class="card-body">
-                  <ul class="nav flex-column">
-                    <li class="nav-item">
-                      <a class="nav-link text-white" href="{% url 'add-department' %}">Add department</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link text-white" href="{% url 'department-list' %}">View departments</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div id="accordion">
-              <a class="nav-link text-white" data-toggle="collapse" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
-                Manage positions<i class="fas fa-caret-down"></i>
-              </a>
-              <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
-                <div class="card-body">
-                  <ul class="nav flex-column">
-                    <li class="nav-item">
-                      <a class="nav-link text-white" href="{% url 'offer-position' %}">Offer position</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link text-white" href="{% url 'view-position' %}">View positions</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </ul>
-        </div>
-      </nav>
+  <div class="row my-5 mr-2 py-5">
+    <div class="col-md-2 d-none d-md-block pl-2">
+      {% include "admin_app/admin_navbar.html" %}
     </div>
 
     <!-- content -->
-    <div class="col-md-10 ml-sm-auto px-4">
-      <p>Hi     <span class="text-success fs-4 display-4"> {{ user.username|capfirst }}</span> </p>
+    <div class="col-md-10 ml-sm-auto px-4 py-5" style="background-color: rgb(40, 109, 109)">
+      <p>Hi     <span class="text-success bg-white my-3 rounded p-2" style="font-size: 25px;"> {{ user.username }} </span> </p>
       <div class="row m-0 px-5">
         <h3 class="mb-3">Dashboard</h3>
         <div class="col-12 p-0">
           <div class="topstat d-flex justify-content-between">
             <div class="statbox">
-              <span class="text-primary">
+              <span class="text-white">
                 <i class="fas fa-user-graduate fa-3x"></i>
               </span>
               <div class="text">
-                <p>students</p>
+                <p>Students</p>
                 <h3>
                   <a class="text-white bg-primary px-3 py-1 rounded" href="{% url 'student-list' %}">{{ total_students }}</a>
                 </h3>
               </div>
             </div>
             <div class="statbox">
-              <span class="text-primary">
+              <span class="text-white">
                 <i class="fas fa-chalkboard-teacher fa-3x"></i>
               </span>
               <div class="text">
-                <p>teachers</p>
+                <p>Teachers</p>
                 <h3>
                   <a class="text-white bg-primary px-3 py-1 rounded" href="{% url 'teacher-list' %}">{{ total_teachers }}</a>
                 </h3>
               </div>
             </div>
             <div class="statbox">
-              <span class="text-primary">
+              <span class="text-white">
                 <i class="fas fa-users fa-3x"></i>
               </span>
               <div class="text">
-                <p>clubs</p>
+                <p>Clubs</p>
                 <h3>20</h3>
               </div>
             </div>
             <div class="statbox">
-              <span class="text-primary">
+              <span class="text-white">
                 <i class="fas fa-book fa-3x"></i>
               </span>
               <div class="text">
-                <p>books</p>
+                <p>Books</p>
                 <h3>2000</h3>
               </div>
             </div>
@@ -163,34 +61,34 @@
       <!-- second row -->
       <div id="second-row" class="row m-0 px-5">
         <div class="col-12 mt-5 p-0 d-flex justify-content-between">
-          <div class="card">
+          <div class="card bg-secondary">
             <div class="card-header">
-              <h5>upcoming events</h5>
+              <h5>Upcoming events</h5>
             </div>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item d-flex justify-content-between">
+              <li class="list-group-item d-flex justify-content-between bg-secondary">
                 <span class="name">Seminar on Machine Learning</span>
                 <span class="date">december 12</span>
                 <span class="organizer">dpi decoder</span>
               </li>
-              <li class="list-group-item d-flex justify-content-between">
+              <li class="list-group-item d-flex justify-content-between bg-secondary">
                 <span class="name">Spelling Bee</span>
                 <span class="date">november 26</span>
                 <span class="organizer">english club</span>
               </li>
-              <li class="list-group-item d-flex justify-content-between">
+              <li class="list-group-item d-flex justify-content-between bg-secondary">
                 <span class="name">hello! you.</span>
                 <span class="date">december 2</span>
                 <span class="organizer">cultural club</span>
               </li>
             </ul>
           </div>
-          <div class="card">
+          <div class="card bg-secondary">
             <div class="card-header">
               <h5>Notice Board</h5>
             </div>
             <ul class="list-group">
-              <li class="list-group-item">
+              <li class="list-group-item bg-secondary">
                 <h5 class="date">23 nov 2019</h5>
                 <h5>Admit card collecting notice.</h5>
               </li>
@@ -206,27 +104,27 @@
         <div class="col-12 p-0 d-flex justify-content-between">
           <div class="unpaid card">
             <ul class="list-group list-group-flush">
-              <li class="title list-group-item">
+              <li class="title list-group-item bg-secondary">
                 <h5>unpaid</h5>
               </li>
-              <li class="list-group-item">
+              <li class="list-group-item bg-secondary">
                 <input type="checkbox" name="paid"> Md. Shariful Islam
               </li>
-              <li class="list-group-item">
+              <li class="list-group-item bg-secondary">
                 <input type="checkbox" name="paid"> Md. Shariful Islam
               </li>
-              <li class="list-group-item">
+              <li class="list-group-item bg-secondary">
                 <input type="checkbox" name="paid"> Md. Shariful Islam
               </li>
             </ul>
           </div>
-          <div class="paid card">
+          <div class="paid card bg-secondary">
             <ul class="list-group list-group-flush">
-              <li class="title list-group-item">
+              <li class="title list-group-item bg-secondary">
                 <h5>paid</h5>
               </li>
-              <li class="list-group-item">Suma rani das</li>
-              <li class="list-group-item">Johir chy</li>
+              <li class="list-group-item bg-secondary">Suma rani das</li>
+              <li class="list-group-item bg-secondary">Johir chy</li>
             </ul>
           </div>
         </div>
