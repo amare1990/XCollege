@@ -38,8 +38,7 @@
                 <td>{{ student.id }}</td>
                 <td>{{ student.user.username }}</td>
                 {% for assessment in assessments %}
-                  {% with mark=existing_marks|
-                  get_item:student.id|get_item:assessment.id %}
+                  {% with mark=existing_marks.student.id.assessment.id %}
                     {% if assessment.assessment_name == 'Comment' %}
                       <td>
                         {% if mark %}
@@ -51,7 +50,7 @@
                     {% else %}
                       <td>
                         {% if mark %}
-                          {{ mark.mark }}
+                          <span class="text-danger">{{ mark.mark }}</span>
                         {% else %}
                           <input type="number" name="marks_{{ student.id }}_{{ assessment.id }}" value="">
                         {% endif %}
@@ -61,8 +60,8 @@
                 {% endfor %}
               </tr>
             {% endfor %}
-
           </tbody>
+
         </table>
       </div>
       <button class="btn btn-primary" type="submit">Save Marks</button>

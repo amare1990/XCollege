@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}  Add Assessment  {% endblock %}
 {% block content%}
-  <div class="container my-5 py-5 bg-secondary" style="max-width: 40rem;">
+  <div class="my-5 mr-5 pt-3 pb-5">
     {% if messages %}
       {% for message in messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,14 +12,26 @@
         </div>
       {% endfor %}
     {% endif %}
-    <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'assessments' %}"> Assessments</a>
-    <h3 class="text-center py-3"> Add assessment</h3>
-    <form method="POST">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <!-- <div class="text-center"> -->
-        <button class="btn btn-primary">Add assessment</button>
-      <!-- </div> -->
-    </form>
+
+    <div class="row">
+      <div class="col-md-3 d-none d-md-block bg-secondary">
+        {% if request.user.userprofile.role == 'admin' %}
+        {% include 'admin_app/admin_navbar.html' %}
+        {% else %}
+          {% include 'accounts/head_navbar.html' %}
+        {% endif %}
+      </div>
+      <div class="col-md-10 py-5 ml-5" style="max-width: 40rem; background-color: rgb(40, 109, 109);">
+        <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'assessments' %}"> Assessments</a>
+        <h3 class="text-center py-3"> Add assessment</h3>
+        <form method="POST">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <!-- <div class="text-center"> -->
+            <button class="btn btn-primary">Add assessment</button>
+          <!-- </div> -->
+        </form>
+      </div>
+    </div>
   </div>
 {% endblock %}

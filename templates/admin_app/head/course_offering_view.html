@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %} Course offering view {% endblock %}
 {% block content %}
-    <div class="container my-5 py-3 bg-secondary">
+    <div class="my-5 pt-3 pb-5">
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,39 +12,43 @@
                 </div>
             {% endfor %}
         {% endif %}
-        <a class="text-white btn btn bg-primary" href="
-            {% url 'admin-dashboard' %}">My homepage</a>
-        <p>
-            Hi {{ profile.user.username }} | Head of {{ profile.department }}
-        </p>
-        <h3 class="text-center mb-3">Course Breakdown</h3>
-        <table class="table table-dark">
-            <thead>
-                <tr>
-                    <th>Course Code</th>
-                    <th>Course Name</th>
-                    <th>Department</th>
-                    <th>Teachers</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for course in courses_with_teachers %}
-                <tr>
-                    <td>
-                        <a class="text-white bg-primary p-1 rounded" href="{% url 'course-detail' course_code=course.course_code %}">{{ course.course_code }}</a>
-                    </td>
-                    <td>{{ course.name }}</td>
-                    <td>{{ course.department.name }}</td>
-                    <td>
-                        <ul class="list-unstyled">
-                            {% for teacher in course.teachers.all %}
-                            <li>{{ teacher.user.username }} |  <a class="text-white bg-primary p-1 rounded" href="{% url 'remove-offering' course_code=course.course_code %}">Unassign</a></li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col-md-3 d-none d-md-block bg-secondary">
+              {% include 'accounts/head_navbar.html' %}
+            </div>
+            <div class="container-fluid col-md-10 py-5 mr-5" style="max-width: 65%; background-color: rgb(40, 109, 109);">
+                <a class="text-white btn btn bg-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
+                <p>Hi {{ profile.user.username }} | Head of {{ profile.department }}</p>
+                <h3 class="text-center mb-3">Course Breakdown</h3>
+                <table class="table table-dark table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Course Code</th>
+                            <th>Course Name</th>
+                            <th>Department</th>
+                            <th>Teachers</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in courses_with_teachers %}
+                        <tr>
+                            <td>
+                                <a class="text-white bg-primary p-1 rounded" href="{% url 'course-detail' course_code=course.course_code %}">{{ course.course_code }}</a>
+                            </td>
+                            <td>{{ course.name }}</td>
+                            <td>{{ course.department.name }}</td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    {% for teacher in course.teachers.all %}
+                                    <li>{{ teacher.user.username }} |  <a class="text-white bg-primary p-1 rounded" href="{% url 'remove-offering' course_code=course.course_code %}">Unassign</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}  Manage Leave request {% endblock %}
 {% block content%}
-  <div class="container my-5 py-5 bg-secondary">
+  <div class="my-5 mr-5 pt-3 pb-5">
     {% if messages %}
       {% for message in messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,82 +12,93 @@
         </div>
       {% endfor %}
     {% endif %}
-    <div class="btn-group" role="group" aria-label="Leave request form">
-      <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">Homepage</a>
-      <a class="btn btn-primary" href="{% url 'leave-request' %}">Request leave</a>
+
+    <div class="row">
+      <div class="col-md-3 d-none d-md-block bg-secondary px-2 mr-2">
+        {% if request.user.userprofile.role == 'admin' %}
+          {% include 'admin_app/admin_navbar.html' %}
+        {% else %}
+          {% include 'accounts/head_navbar.html' %}
+        {% endif %}
+      </div>
+      <div class="col-md-10 py-5" style="background-color: rgb(40, 109, 109); max-width: 70%;">
+        <div class="btn-group" role="group" aria-label="Leave request form">
+          <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">Homepage</a>
+          <a class="btn btn-primary" href="{% url 'leave-request' %}">Request leave</a>
+        </div>
+        <h3 class="text-center py-3">Manage leave requests</h3>
+        <table class="table table-dark table-responsive">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Id</th>
+              <th scope="col">Requested by</th>
+              <th scope="col">Requested body</th>
+              <th scope="col">Reason</th>
+              <th scope="col"> Start Date </th>
+              <th scope="col">End Date</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for leave_request in my_leave_requests %}
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>
+                <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'leave-request' %}">{{ leave_request.id }}</a>
+              </td>
+              <td>
+                {% if leave_request.role == 'teacher' %}
+                  <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=requested_by.id %}">{{ leave_request.leave_requests_requested_by }}</a>
+                {% else %}
+                  <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'student-detail' student_id=requested_by.id %}">{{ leave_request.leave_requests_requested_by }}</a>
+                {% endif %}
+              </td>
+              <td>
+                <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=requested_to.id %}">{{ leave_request.leave_requests_requested_to }}</a>
+              </td>
+              <td>{{ leave_request.reason }}</td>
+              <td>{{ leave_request.start_date }}</td>
+              <td>{{ leave_request.end_date }}</td>
+              <td>
+                {% if leave_request.approved %}
+                  <span style="color: darkgoldenrod;">Approved</span>
+                {% else %}
+                  <span style="color: darkgoldenrod;">Pending </span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="btn-group" role="group" aria-label="Edit assessment">
+                  <a class="btn btn-primary" href="{% url 'edit-leave-request' leave_request_id=leave_request.id %}">Edit</a>
+                  <a class="btn btn-primary" href="{% url 'delete-leave-request' leave_request_id=leave_request.id %}">Delete</a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <ul>
+          {% for leave_request in leave_requests %}
+            <li>
+              Start Date: {{ leave_request.start_date }} | End Date: {{ leave_request.end_date }} | Status: {% if leave_request.approved %} Approved {% else %} Pending {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+
+            <!-- manage_leave_request.html -->
+        <h2>Manage Your Leave Requests</h2>
+        <ul>
+          {% for leave_request in leave_requests %}
+            <li>
+              Start Date: {{ leave_request.start_date }} | End Date: {{ leave_request.end_date }} | Reason: {{ leave_request.reason }}
+              {% if not leave_request.notification_viewed %}
+                <span style="color: red;">New</span>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
-    <h3 class="text-center py-3">Manage leave requests</h3>
-    <table class="table table-dark">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Id</th>
-          <th scope="col">Requested by</th>
-          <th scope="col">Requested body</th>
-          <th scope="col">Reason</th>
-          <th scope="col"> Start Date </th>
-          <th scope="col">End Date</th>
-          <th scope="col">Status</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for leave_request in my_leave_requests %}
-        <tr>
-          <th scope="row">{{ forloop.counter }}</th>
-          <td>
-            <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'leave-request' %}">{{ leave_request.id }}</a>
-          </td>
-          <td>
-            {% if leave_request.role == 'teacher' %}
-              <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=requested_by.id %}">{{ leave_request.leave_requests_requested_by }}</a>
-            {% else %}
-              <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'student-detail' student_id=requested_by.id %}">{{ leave_request.leave_requests_requested_by }}</a>
-            {% endif %}
-          </td>
-          <td>
-            <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=requested_to.id %}">{{ leave_request.leave_requests_requested_to }}</a>
-          </td>
-          <td>{{ leave_request.reason }}</td>
-          <td>{{ leave_request.start_date }}</td>
-          <td>{{ leave_request.end_date }}</td>
-          <td>
-            {% if leave_request.approved %}
-              <span style="color: darkgoldenrod;">Approved</span>
-            {% else %}
-              <span style="color: darkgoldenrod;">Pending </span>
-            {% endif %}
-          </td>
-          <td>
-            <div class="btn-group" role="group" aria-label="Edit assessment">
-              <a class="btn btn-primary" href="{% url 'edit-leave-request' leave_request_id=leave_request.id %}">Edit</a>
-              <a class="btn btn-primary" href="{% url 'delete-leave-request' leave_request_id=leave_request.id %}">Delete</a>
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <ul>
-      {% for leave_request in leave_requests %}
-        <li>
-          Start Date: {{ leave_request.start_date }} | End Date: {{ leave_request.end_date }} | Status: {% if leave_request.approved %} Approved {% else %} Pending {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
-
-    <!-- manage_leave_request.html -->
-<h2>Manage Your Leave Requests</h2>
-<ul>
-  {% for leave_request in leave_requests %}
-    <li>
-      Start Date: {{ leave_request.start_date }} | End Date: {{ leave_request.end_date }} | Reason: {{ leave_request.reason }}
-      {% if not leave_request.notification_viewed %}
-        <span style="color: red;">New</span>
-      {% endif %}
-    </li>
-  {% endfor %}
-</ul>
-
   </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %} Teacher's courses {% endblock %}
 {% block content %}
-<div class="container my-5 py-3 bg-secondary">
+<div class="my-5 pt-3 pb-5">
     {% if messages %}
       {% for message in messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,41 +12,48 @@
         </div>
       {% endfor %}
     {% endif %}
-    <div class="btn-group" role="group" aria-label="Basic example">
-      <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
-      <a class="btn btn-primary" href="{% url 'course-offer' %}">Offer more</a>
-    </div>
-    <h3 class="text-center my-1">Courses taught by me </h3>
-    <div class="container">
-        <h3>{{ courses.count }} total courses </h3>
-        <table class="table table-dark">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Course Id</th>
-              <th scope="col">course name</th>
-              <th scope="col">Course department</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for course in courses %}
-              <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td><a class="btn btn-primary p-1 rounded" href="{% url 'course-detail' course_code=course.course_code %}">{{ course.course_code }}</a></td>
-                <td>{{ course.name }}</td>
-                <td> {{ course.department }} </td>
-                <td>
-                  <div class="btn-group" role="group" aria-label="Basic example">
-                    <a class="btn btn-primary" href="{% url 'course-edit' course_code=course.course_code %}">Edit</a>
-                    <a class="btn btn-primary" href="{% url 'course-detail' course_code=course.course_code %}">View</a>
-                    <a class="btn btn-primary" href="{% url 'course-delete' course_code=course.course_code %}">Delete</a>
-                  </div>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+    <div class="row">
+      <div class="col-md-3 d-none d-md-block bg-secondary">
+        {% include 'accounts/head_navbar.html' %}
+      </div>
+      <div class="col-md-10 py-5 ml-3" style="max-width: 60rem; background-color: rgb(40, 109, 109);">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
+          <a class="btn btn-primary" href="{% url 'course-offer' %}">Offer more</a>
+        </div>
+        <h3 class="text-center my-1">Courses taught by me </h3>
+        <div style="max-width: 93%;">
+            <h3>{{ courses.count }} total courses </h3>
+            <table class="table table-dark table-responsive">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Course Id</th>
+                  <th scope="col">course name</th>
+                  <th scope="col">Course department</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for course in courses %}
+                  <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td><a class="btn btn-primary p-1 rounded" href="{% url 'course-detail' course_code=course.course_code %}">{{ course.course_code }}</a></td>
+                    <td>{{ course.name }}</td>
+                    <td> {{ course.department }} </td>
+                    <td>
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <a class="btn btn-primary" href="{% url 'course-edit' course_code=course.course_code %}">Edit</a>
+                        <a class="btn btn-primary" href="{% url 'course-detail' course_code=course.course_code %}">View</a>
+                        <a class="btn btn-primary" href="{% url 'course-delete' course_code=course.course_code %}">Delete</a>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}

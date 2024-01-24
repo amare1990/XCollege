@@ -13,10 +13,14 @@
       {% endif %}
       <div class="my-5 mr-5 pt-3 pb-5">
         <div class="row">
-          <div class="col-md-2 d-none d-md-block bg-secondary px-2 mr-2">
-            {% include 'admin_app/admin_navbar.html' %}
+          <div class="col-md-3 d-none d-md-block bg-secondary px-2 mr-2">
+            {% if request.user.userprofile.role == 'admin' %}
+              {% include 'admin_app/admin_navbar.html' %}
+            {% else %}
+              {% include 'accounts/head_navbar.html' %}
+            {% endif %}
           </div>
-          <div class="col-md-10 py-5" style="background-color: rgb(40, 109, 109); max-width: 65rem;">
+          <div class="col-md-10 py-5" style="background-color: rgb(40, 109, 109); max-width: 70%;">
             <div class="btn-group" role="group" aria-label="Teachers' lis">
               <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
               <a class="btn btn-primary" href="{% url 'add-teacher' %}">Add more</a>
