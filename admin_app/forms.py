@@ -100,7 +100,7 @@ class AddCourseOfferingForm(forms.Form):
 
     def __init__(self, head_department, *args, **kwargs):
         super(AddCourseOfferingForm, self).__init__(*args, **kwargs)
-        self.fields['course'].queryset = Course.objects.filter(department=head_department, offered=False)
+        self.fields['course'].queryset = Course.objects.filter(department=head_department, is_offered=False)
         self.fields['teachers'].queryset = UserProfile.objects.filter(department=head_department, role='teacher')
 
 class OfferPositionForm(forms.Form):
@@ -124,11 +124,27 @@ class AssessmentForm(forms.ModelForm):
         fields = ['course', 'assessment_name', 'weight']
 
 
+# class AddMarksForm(forms.Form):
+#     student = forms.ModelChoiceField(queryset=UserProfile.objects.filter(role='student'))
+#     assessment = forms.ModelChoiceField(queryset=Assessment.objects.all())
+#     marks = forms.DecimalField(max_digits=5, decimal_places=2, initial=0)
+#     comment = forms.CharField(max_length=100)
+
+
 class AddMarksForm(forms.Form):
     student = forms.ModelChoiceField(queryset=UserProfile.objects.filter(role='student'))
     assessment = forms.ModelChoiceField(queryset=Assessment.objects.all())
     marks = forms.DecimalField(max_digits=5, decimal_places=2, initial=0)
     comment = forms.CharField(max_length=100)
+
+    def __init__(self, *args, **kwargs):
+        existing_marks = kwargs.pop('existing_marks', None)
+        super(AddMarksForm, self).__init__(*args, **kwargs)
+
+        if existing_marks:
+            # Pre-fill the form with existing marks
+            self.fields['marks'].initial = existing_marks.get('marks', 0)
+            self.fields['comment'].initial = existing_marks.get('comment', '')
 
 
 year = (

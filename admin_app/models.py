@@ -68,26 +68,14 @@ class School(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=50)
-    department_head = models.ForeignKey(
-        'UserProfile',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name='department_head',
-    )
+    department_head = models.CharField(max_length=50, blank=True, null=True)
     def __str__(self):
         return self.name if self.name else "Unnamed Department"
 
 class Stream(models.Model):
     name = models.CharField(max_length=50)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
-    chair = models.ForeignKey(
-        'UserProfile',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name='stream_chair',
-    )
+    chair = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name if self.name else "Unnamed Stream"
@@ -95,13 +83,7 @@ class Stream(models.Model):
 class Program(models.Model):
     program_name = models.CharField(max_length=50, choices=program_name)
     program_type = models.CharField(max_length=50, choices=program_type)
-    stream = models.ForeignKey(
-        'UserProfile',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name='program_coordinator',
-    )
+    stream = models.CharField(max_length=50)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -149,7 +131,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(default='Enter your bio briefly')
     role = models.CharField(max_length=20, choices=roles, default='student')
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, blank=True, null=True)
     academic_year = models.CharField(max_length=20, choices=year, null=True, blank=True)
     semester = models.CharField(max_length=20, choices=semester, null=True, blank=True)
     title = models.CharField(max_length=20, choices=TITLE_CHOICES, null=True, blank=True)
@@ -166,7 +148,7 @@ class Course(models.Model):
     name = models.CharField(max_length=100)
     teachers = models.ManyToManyField(UserProfile, related_name="courses_taught", blank=True)
     students = models.ManyToManyField(UserProfile, related_name="courses_registered", blank=True)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, blank=True, default=1)
     stream = models.ForeignKey(Stream, on_delete=models.CASCADE, null=True, blank=True)
     program = models.ForeignKey(Program, on_delete=models.CASCADE, null=True, blank=True)
     academic_year = models.CharField(max_length=20, choices=year)
@@ -188,8 +170,8 @@ class Assessment(models.Model):
 class Mark(models.Model):
     student = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
-    mark = models.DecimalField(max_digits=5, decimal_places=2)
-    comment = models.CharField(max_length=100, blank=True, null=True)
+    mark = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    comment = models.CharField(max_length=100, blank=True, null=True, default='Ok!')
 
 class LeaveRequest(models.Model):
     requested_by = models.ForeignKey(UserProfile, related_name='leave_requests_requested_by', on_delete=models.CASCADE)

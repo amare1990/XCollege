@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from admin_app.models import UserProfile
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
-from .forms import SignUpForm, EditProfileForm, PasswordChangingForm
+from .forms import SignUpForm, EditProfileForm
 from django.views import generic
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 # Password change view
 class PasswordsChangeView(PasswordChangeView):
-  form_class = PasswordChangingForm
+  form_class = PasswordChangeForm
   success_url = reverse_lazy('password-change-done')
 
 def password_change_done(request):
@@ -65,14 +65,12 @@ def edit_profile(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            user, user_profile = form.save()
-            form.save()
-            if 'profile_picture' in request.FILES:
-                user_profile.profile_picture = request.FILES['profile_picture']
-                user.save()
-                user_profile.save()
+            user = form.save(commit=False)
+            user.save()
+            user_profile, created = UserProfile.objects.get_or_create(user=user)
+            user_profile.profile_picture = request.FILES.get('profile_picture')
+            user_profile.save()
             return redirect('admin-dashboard')
     else:
-        print('instance= ', request.user)
         form = EditProfileForm(instance=request.user)
     return render(request, 'accounts/registration/edit_profile.html', {'form': form })

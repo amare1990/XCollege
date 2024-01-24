@@ -2,7 +2,7 @@
 {% block title %}  Home Page  {% endblock %}
 {% block content %}
   <br/><br/>
-  <div class="row my-5 mr-3 pb-5">
+  <div class="row my-5 pb-5">
     <div class="col-md-2 d-none d-md-block">
       <nav class="navbar navbar-expand-lg flex-column my-5 bg-secondary">
         <button class="navbar-toggler bg-primary" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,42 +13,97 @@
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'admin-dashboard' %}">Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'add-department' %}">Add department</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'add-teacher' %}">Add teacher</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'add-student' %}">Add student</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'add-course' %}">Add course</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'department-list' %}">View departments</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'teacher-list' %}">View teachers</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'offer-position' %}">Offer position</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'view-position' %}">View positions</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'student-list' %}">View students</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'course-list' %}">View courses</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'staff-list' %}">Staff lists</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="#">Manage staff</a>
-            </li>
+            <div id="accordion">
+              <a class="nav-link text-white" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Manage staffs<i class="fas fa-caret-down"></i>
+              </a>
+              <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                  <ul class="nav flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'add-teacher' %}">Add teacher</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'teacher-list' %}">View teachers</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'staff-list' %}">Staff lists</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-white" href="#">Manage staff</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div id="accordion">
+              <a class="nav-link text-white" data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                Manage students<i class="fas fa-caret-down"></i>
+              </a>
+              <div id="collapseTwo" class="collapse" aria-labelledby="headingtwo" data-parent="#accordion">
+                <div class="card-body">
+                  <ul class="nav flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'add-student' %}">Add student</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'student-list' %}">View students</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div id="accordion">
+              <a class="nav-link text-white" data-toggle="collapse" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                Manage courses<i class="fas fa-caret-down"></i>
+              </a>
+              <div id="collapseThree" class="collapse" aria-labelledby="headingthree" data-parent="#accordion">
+                <div class="card-body">
+                  <ul class="nav flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'add-course' %}">Add course</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'course-list' %}">View courses</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div id="accordion">
+              <a class="nav-link text-white" data-toggle="collapse" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                Manage departments<i class="fas fa-caret-down"></i>
+              </a>
+              <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                <div class="card-body">
+                  <ul class="nav flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'add-department' %}">Add department</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'department-list' %}">View departments</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div id="accordion">
+              <a class="nav-link text-white" data-toggle="collapse" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+                Manage positions<i class="fas fa-caret-down"></i>
+              </a>
+              <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+                <div class="card-body">
+                  <ul class="nav flex-column">
+                    <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'offer-position' %}">Offer position</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link text-white" href="{% url 'view-position' %}">View positions</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </ul>
         </div>
       </nav>

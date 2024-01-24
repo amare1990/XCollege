@@ -43,14 +43,14 @@ def admin_dashboard(request):
     total_students = UserProfile.objects.filter(role='student').count()
     total_teachers = UserProfile.objects.filter(role='teacher').count()
 
-    print('User profile ID= ', request.user.userprofile.id)
+    # print('User profile ID= ', request.user.userprofile.id)
 
     context1 = {
         'total_students': total_students,
         'total_teachers': total_teachers
     }
 
-    if request.user:
+    if hasattr(request.user, 'userprofile'):
         try:
             profile = UserProfile.objects.get(user=request.user.id)
             print('Profile in admin= ', profile)
@@ -64,7 +64,7 @@ def admin_dashboard(request):
                 return render(request, 'accounts/student_profile.html', context)
             elif profile.position == 'head':
                 return render(request, 'accounts/head_profile.html', context)
-            elif profile.role == 'teacher' and profile.position is None:
+            elif profile.role == 'teacher':
                 return render(request, 'accounts/teacher_profile.html', context)
             else:
                 return HttpResponse("Unauthorized access")
@@ -281,10 +281,10 @@ def staff_list(request):
 
 # Teachers list
 def teacher_list(request):
-    # if request.user.userprofile.role == 'admin':
-    teachers = UserProfile.objects.filter(role='teacher')
-    # else:
-    #    teachers = UserProfile.objects.filter(role='teacher', department=request.user.userprofile.department)
+    if request.user.userprofile.role == 'admin':
+        teachers = UserProfile.objects.filter(role='teacher')
+    else:
+       teachers = UserProfile.objects.filter(role='teacher', department=request.user.userprofile.department)
     number_of_teachers = teachers.count()
     context = {
       'teachers': teachers,
@@ -304,15 +304,15 @@ def department_teacher_list(request, department_id, role):
       'number_of_teachers': number_of_teachers,}
     return render(request, 'admin_app/teacher/teacher_list.html', context)
 
-def my_all_department_students(request):
-    user = request.user
-    user_profile = user.userprofile
-    print('userprofile= ', user_profile)
-    my_department = user_profile.department
-    department_students = UserProfile.objects.filter(role='student', department=my_department)
-    print('dept students= ', department_students)
+# def my_all_department_students(request):
+#     user = request.user
+#     user_profile = user.userprofile
+#     print('userprofile= ', user_profile)
+#     my_department = user_profile.department
+#     department_students = UserProfile.objects.filter(role='student', department=my_department)
+#     print('dept students= ', department_students)
 
-    return render(request, 'admin_app/head/my_all_department_students.html', {'department_students': department_students})
+#     return render(request, 'admin_app/head/my_all_department_students.html', {'department_students': department_students})
 
 def teacher_edit(request, teacher_id):
     teacher = get_object_or_404(UserProfile, pk=teacher_id)
@@ -352,8 +352,6 @@ def teacher_delete(request, teacher_id):
             return redirect('department-teacher-list', department_id, role)
     return render(request, 'admin_app/teacher/teacher_delete.html', {'teacher': teacher, 'department': department_id})
 
-
-
 def teacher_courses(request):
     user_profile = UserProfile.objects.get(user=request.user)
     courses_taught = user_profile.courses_taught.all()
@@ -365,16 +363,21 @@ def teacher_courses(request):
 
     return render(request, 'admin_app/teacher/teacher_courses.html', context)
 
-
 def add_assessment(request):
     teacher = request.user.userprofile
     if request.method == 'POST':
         form = AssessmentForm(request.POST, teacher=teacher)
         if form.is_valid():
+            print('add ass form is valid')
             assessment = form.save(commit=False)
-            assessment.course = Course.objects.get(teachers=request.user.userprofile)
-            assessment.save()
-            return redirect('assessments')
+            course_for_teacher = Course.objects.filter(teachers=teacher).first()
+            # print('course_for_teacher =', course_for_teacher )
+            if course_for_teacher:
+                assessment.course = course_for_teacher
+                print('Course inside= ', assessment.course)
+                assessment.save()
+                return redirect('assessments')
+                # return redirect('assessments')
         else:
             messages.error(request, 'Invalid form')
             return redirect('add-assessment')
@@ -383,9 +386,14 @@ def add_assessment(request):
         return render(request, 'admin_app/teacher/add_assessment.html', {'form': form})
 
 def assessments(request):
-    assessments = Assessment.objects.filter(teacher=request.user.userprofile)
-    print('Number of assessments= ', assessments.count())
-    return render(request, 'admin_app/teacher/assessments.html', {'assessments': assessments})
+    teacher = request.user.userprofile
+    course_taught_by_teacher = Course.objects.filter(teachers=teacher).first()
+    if course_taught_by_teacher:
+        assessments = Assessment.objects.filter(course=course_taught_by_teacher)
+        print('Number of assessments=', assessments.count())
+        return render(request, 'admin_app/teacher/assessments.html', {'assessments': assessments})
+    else:
+        return HttpResponse('No course')
 
 def edit_assessment(request, assessment_id):
     assessment = get_object_or_404(Assessment, pk=assessment_id)
@@ -416,33 +424,72 @@ def delete_assessment(request, assessment_id):
 
     return render(request, 'admin_app/teacher/delete_assessment.html', {'assessment': assessment})
 
-
 def add_mark(request, course_code):
-    course = Course.objects.get(course_code=course_code)
-    students = course.students.all()
-    assessments = Assessment.objects.filter(teacher=request.user.userprofile)
+    selected_course = Course.objects.get(course_code=course_code)
+    students = selected_course.students.all()
+    # teacher = request.user.userprofile
+    assessments = Assessment.objects.filter(course=selected_course) if selected_course else []
+    print('assessments in add_mark=' , assessments)
+
+    existing_marks = {}
 
     if request.method == 'POST':
+        print('I am in Post method')
         for student in students:
-            print('student name= ', student.user.username)
-            # print(request.POST.GET('comment'))
             for assessment in assessments:
                 marks_field_name = f"marks_{student.id}_{assessment.id}"
+                comment_field_name = f"marks_{student.id}_comment"
                 mark = request.POST.get(marks_field_name, 0)
-                Mark.objects.create(student=student, assessment=assessment, mark=mark, course=course)
-                # mark = Mark.objects.get(student=student, assessment=assessment)
-                # mark.comment= comment
+                comment = request.POST.get(comment_field_name, "")
+                existing_mark, created = Mark.objects.get_or_create(student=student, assessment=assessment, defaults={'mark': mark, 'comment': comment})
+                print('existing mark=' , existing_mark)
+                if not created:
+                    print('existing mark=' , existing_mark)
+                    existing_mark.mark = mark
+                    existing_mark.comment = comment
+                    existing_mark.save()
 
-        return redirect('mark-list', course_code=course.course_code)
+        # Redirect after processing POST request
+        return redirect('mark-list', course_code=selected_course.course_code)
+
     else:
-        form = AddMarksForm()
+        print('I am in GET method')
+        # Fetch existing marks for each student and assessment
+        for student in students:
+            existing_marks[student.id] = {}
+            for assessment in assessments:
+                mark = Mark.objects.filter(student=student, assessment=assessment).first()
+                if mark:
+                    existing_marks[student.id][assessment.id] = mark
+                    print(f'Mark for student with username({student.user.username})={existing_marks[student.id][assessment.id].mark}')
+                else:
+                    pass
 
-    return render(request, 'admin_app/teacher/add_mark.html', {'form': form, 'students': students, 'course': course, 'assessments': assessments})
+        form = AddMarksForm()
+        context = {
+            'form': form,
+            'students': students,
+            'course': selected_course,
+            'assessments': assessments,
+            'existing_marks': existing_marks
+        }
+
+        return render(request, 'admin_app/teacher/add_mark.html', context)
+
 
 def mark_list(request, course_code):
     selected_course = Course.objects.get(course_code=course_code)
     students = selected_course.students.all()
-    assessments = Assessment.objects.filter(teacher=request.user.userprofile)
+    # assessments = Assessment.objects.filter(teacher=request.user.userprofile)
+    assessments = {}
+    teacher = request.user.userprofile
+    # course_taught_by_teacher = Course.objects.filter(teachers=teacher).first()
+    print('course_taught_by_teacher' , selected_course)
+    if selected_course:
+        assessments = Assessment.objects.filter(course=selected_course)
+
+    print('assessments in mark list= ', assessments)
+
     marks_data = []
     grade = ''
     for student in students:
@@ -468,7 +515,6 @@ def mark_list(request, course_code):
 
 # Student list
 def student_list(request):
-
    if request.user.userprofile.role == 'admin':
        students = UserProfile.objects.filter(role='student')
    else:
@@ -546,8 +592,6 @@ def course_list(request):
 
    return render(request, 'admin_app/course/course_list.html', context)
 
-
-
 def course_registration(request):
     student_department=request.user.userprofile.department
     if request.method == 'POST':
@@ -566,12 +610,24 @@ def course_registration(request):
 
 def view_result(request, course_code):
     selected_course = Course.objects.get(course_code=course_code)
+    # assessment = Assessment.objects.filter(course=selected_course).first()
+    assessments = {}
+
+    student = request.user.userprofile
+    course_taken_by_student = Course.objects.filter(students=student).first()
+    if course_taken_by_student:
+        assessments = Assessment.objects.filter(course=course_taken_by_student)
+
+    print('assessments in mark list= ', assessments)
+
+
+
     userObj = request.user
     print('username= ,', userObj.username)
-    marks = Mark.objects.filter(student=userObj.userprofile, course=selected_course)
+    marks = Mark.objects.filter(student=userObj.userprofile)
     # print('Mark assessment queryset= ', mark.assessment)
     # assessments = mark.assessment
-    assessments = Assessment.objects.filter(teacher=request.user.userprofile)
+    # assessments = Assessment.objects.filter(teacher=request.user.userprofile, course=selected_course)
 
     total_weights = 0
     for assessment in assessments:
@@ -600,7 +656,7 @@ def add_course_offering(request):
             course = Course.objects.filter(department=head_department, id=form.cleaned_data['course'].id).first()
             teachers = form.cleaned_data['teachers']
             course.teachers.set(teachers)
-            course.offered = True
+            course.is_offered = True
             course.save()
             return redirect('course-offering-view')
     else:
@@ -611,7 +667,7 @@ def add_course_offering(request):
 def remove_course_offering(request, course_code):
     course = Course.objects.get(course_code=course_code)
     print('course-codes= ', course)
-    course.offered = False
+    course.is_offered = False
     teachers = {}
     course.teachers.set(teachers)
     course.save()
@@ -632,7 +688,7 @@ def student_courses(request):
 def course_offering_view(request):
     user_profile = UserProfile.objects.get(user=request.user)
     department = user_profile.department
-    courses_with_teachers = Course.objects.filter(department=department, offered = True).prefetch_related('teachers').all()
+    courses_with_teachers = Course.objects.filter(department=department, is_offered = True).prefetch_related('teachers').all()
     return render(request, 'admin_app/head/course_offering_view.html', {'courses_with_teachers': courses_with_teachers,
                                                                         'profile':user_profile })
 
@@ -650,9 +706,17 @@ def leave_request(request):
     return render(request, 'admin_app/general/leave_request_form.html', {'form': form})
 
 def manage_leave_request(request):
-    userprofile = request.user.userprofile
-    leave_requests = LeaveRequest.objects.filter(userprofile= userprofile)
-    return render(request, 'admin_app/general/manage_leave_request.html', {'leave_requests': leave_requests, 'userprofile': userprofile})
+    # requested_to = None
+    # if request.user.userprofile and request.user.userprofile.department:
+    #     requested_to = request.user.userprofile.department.department_head
+    # else:
+
+    requested_by = request.user.userprofile
+    print('department=', request.user.userprofile.department)
+    requested_to = request.user.userprofile.department.department_head
+    my_leave_requests = LeaveRequest.objects.filter(requested_by= requested_by)
+    return render(request, 'admin_app/general/manage_leave_request.html',
+                  {'my_leave_requests': my_leave_requests, 'requested_by': requested_by, 'requested_to': requested_to})
 
 def leave_request_approval(request):
     pending_leave_requests = LeaveRequest.objects.filter(approved=False)

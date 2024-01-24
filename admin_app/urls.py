@@ -49,7 +49,7 @@ urlpatterns = [
     path('head/course_offer/', views.add_course_offering, name='course-offer'),
     path('head/course_offering_view/', views.course_offering_view, name='course-offering-view'),
     path('head/course/<str:course_code>/unoffer/', views.remove_course_offering, name='remove-offering'),
-    path('head/department_students/', views.my_all_department_students, name='department-students'),
+    # path('head/department_students/', views.my_all_department_students, name='department-students'),
 
     path('staff_list/', views.staff_list, name='staff-list'),
 

@@ -23,6 +23,7 @@
           <th scope="col">#</th>
           <th scope="col">Id</th>
           <th scope="col">Requested by</th>
+          <th scope="col">Requested body</th>
           <th scope="col">Reason</th>
           <th scope="col"> Start Date </th>
           <th scope="col">End Date</th>
@@ -31,14 +32,21 @@
         </tr>
       </thead>
       <tbody>
-        {% for leave_request in leave_requests %}
+        {% for leave_request in my_leave_requests %}
         <tr>
           <th scope="row">{{ forloop.counter }}</th>
           <td>
             <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'leave-request' %}">{{ leave_request.id }}</a>
           </td>
           <td>
-            <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=userprofile.id %}">{{ leave_request.userprofile }}</a>
+            {% if leave_request.role == 'teacher' %}
+              <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=requested_by.id %}">{{ leave_request.leave_requests_requested_by }}</a>
+            {% else %}
+              <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'student-detail' student_id=requested_by.id %}">{{ leave_request.leave_requests_requested_by }}</a>
+            {% endif %}
+          </td>
+          <td>
+            <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=requested_to.id %}">{{ leave_request.leave_requests_requested_to }}</a>
           </td>
           <td>{{ leave_request.reason }}</td>
           <td>{{ leave_request.start_date }}</td>

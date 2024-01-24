@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}  Department Head's Home Page  {% endblock %}
   {% block content %}
   <br/><br/>
   <div class="row my-5">
-    <div class="col-md-2 d-none d-md-block bg-secondary">
+    <div class="col-md-3 d-none d-md-block bg-secondary">
       <nav class="navbar navbar-expand-lg flex-column bg-secondary">
         <button class="navbar-toggler bg-primary" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon text-white"><i class="fas fa-bars"></i></span>
@@ -13,42 +14,78 @@
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'admin-dashboard' %}">Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'course-offer' %}"> Course offer</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'course-offering-view' %}">View courses offered</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'teacher-courses' %}">View my courses</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'my-all-department-courses' %}">Our department courses</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'student-list' %}">Our department students</a>
-            </li>
+
+            <div id="accordion">
+                <a class="nav-link text-white" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Manage Courses<i class="fas fa-caret-down"></i>
+                </a>
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                  <div class="card-body">
+                    <ul class="nav flex-column">
+                      <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'course-offer' %}"> Course offer</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'course-offering-view' %}">View courses offered</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'teacher-courses' %}">View my courses</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'my-all-department-courses' %}">Our department courses</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+
+            <div id="accordion">
+                <a class="nav-link text-white" data-toggle="collapse" href="#collapseSecond" aria-expanded="true" aria-controls="collapseOne">
+                  Our department Staffs<i class="fas fa-caret-down"></i>
+                </a>
+                <div id="collapseSecond" class="collapse" aria-labelledby="headingSecond" data-parent="#accordion">
+                  <div class="card-body">
+                    <ul class="nav flex-column">
+                      <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'teacher-list' %}">Our department teachers</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'student-list' %}">Our department students</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-teacher' %}">Call meetings</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'teacher-list' %}">View schedules</a>
-            </li>
-              <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'leave-request' %}">Request for leave</a>
-            </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'manage-leave-request' %}">Manage leave request</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'add-course' %}">Give feedback</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'add-assessment' %}">Add assessment</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'assessments' %}">View assessments </a>
-            </li>
+
+            <div id="accordion">
+                <a class="nav-link text-white" data-toggle="collapse" href="#collapseThird" aria-expanded="true" aria-controls="collapseOne">
+                  Evaluation and Grading<i class="fas fa-caret-down"></i>
+                </a>
+                <div id="collapseThird" class="collapse" aria-labelledby="headingThird" data-parent="#accordion">
+                  <div class="card-body">
+                    <ul class="nav flex-column">
+                      <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'add-assessment' %}">Add assessment</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'assessments' %}">View assessments</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+
           </ul>
         </div>
       </nav>
@@ -82,7 +119,11 @@
       <div class="card bg-secondary" style="width: 40rem;">
         <div class="row g-0">
           <div class="col-md-4">
-            <img src="{{ profile.profile_picture.url }}" class="card-img-top" alt="Profile picture">
+            {% if profile.profile_picture %}
+              <img src="{{ profile.profile_picture.url }}" class="card-img-top" alt="Profile picture">
+            {% else %}
+              <img src="{% static 'profile_pictures/default_profile.jpg' %}" class="card-img-top" alt="Default profile picture">
+            {% endif %}
           </div>
          <div class="col-md-8">
           <div class="card-body">
