@@ -1,0 +1,44 @@
+<nav class="navbar navbar-expand-lg flex-column my-5 bg-secondary">
+  <button class="navbar-toggler bg-primary" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon text-white"><i class="fas fa-bars"></i></span>
+  </button>
+  <div class="collapse navbar-collapse bg-primary p-2" id="navbarNav">
+    <ul class="navbar-nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{% url 'admin-dashboard' %}">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{% url 'teacher-courses' %}">My courses</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{% url 'manage-leave-request' %}">Manage leave request</a>
+      </li>
+      <div id="accordion">
+        <a class="nav-link text-white" data-toggle="collapse" href="#collapseThird" aria-expanded="true" aria-controls="collapseOne">
+          Evaluation and Grading &nbsp;<i class="fas fa-caret-down"></i>
+        </a>
+        <div id="collapseThird" class="collapse" aria-labelledby="headingThird" data-parent="#accordion">
+          <div class="card-body">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'add-assessment' %}">Add assessment</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="{% url 'assessments' %}">View assessments</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </div>
+    <li class="nav-item">
+      <a class="nav-link text-white" href="#">Notify students</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-white" href="#">View schedules</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link text-white" href="#">Give feedback</a>
+    </li>
+    </ul>
+  </div>
+</nav>
