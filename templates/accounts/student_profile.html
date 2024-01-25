@@ -4,34 +4,8 @@
   {% block content %}
   <br/><br/>
   <div class="row my-5">
-    <div class="col-md-2 d-none d-md-block bg-secondary">
-      <nav class="navbar navbar-expand-lg flex-column my-5 bg-secondary ml-3">
-        <button class="navbar-toggler bg-primary mb-2" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon text-white"><i class="fas fa-bars"></i></span>
-        </button>
-        <div class="collapse navbar-collapse bg-primary p-2" id="navbarNav">
-          <ul class="navbar-nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link text-white active" aria-current="page" href="{% url 'admin-dashboard' %}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'student-courses' %}">My courses</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'course-register' %}">Register for courses</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'teacher-list' %}">View schedules</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'add-student' %}">Ask for leave</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'add-course' %}">Give feedback</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
+    <div class="col-md-3 d-none d-md-block bg-secondary">
+      {% include 'accounts/student_navbar.html' %}
     </div>
     <div class="statbox pl-5">
       <div class="bg-secondary d-flex align-items-center mb-3" style="width: 40rem;">
