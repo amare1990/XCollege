@@ -42,8 +42,10 @@
               <p>Semester: {{ course.semester }} </p>
               <p>Department:  {{ department.name }} </p>
               <div class="btn-group" role="group" aria-label="Basic example">
-                <a class="btn btn-primary" href="{% url 'course-edit' course_code=course.course_code %}">Edit Course</a>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#course-edit-Modal">
+                  Edit course
+                </button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#course-delete-Modal">
                   Delete
                 </button>
                 <a class="btn btn-primary" href="{% url 'add-mark' course_code=course.course_code %}">Add marks</a>
@@ -129,11 +131,11 @@
           </div>
         </div>
       </div>
-      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="course-delete-Modal" tabindex="-1" role="dialog" aria-labelledby="course-delete-ModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header text-secondary">
-              <h5 class="modal-title" id="exampleModalLabel">Course Deletion</h5>
+              <h5 class="modal-title" id="course-delete-ModalLabel">Course Deletion</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -141,9 +143,9 @@
             <div class="modal-body">
               <div class="container my-3 text-secondary">
                 <h5 >Confirm Deletion</h5>
-                <p>Are you sure you want to delete <strong>{{ course.name }}</strong> course?</p>
+                <p>Are you sure you want to delete<strong>{{ course.name }}</strong> course?</p>
 
-                <form method="post">
+                <form method="post" action="{% url 'course-delete' course_code=course.course_code %}">
                   {% csrf_token %}
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -151,6 +153,29 @@
                   </div>
                 </form>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="course-edit-Modal" tabindex="-1" role="dialog" aria-labelledby="course-edit-ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-secondary">
+              <h5 class="modal-title" id="course-edit-ModalLabel">Edit Course</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body text-secondary">
+              <form method="post" action="{% url 'course-edit' course_code=course.course_code %}">
+                {% csrf_token %}
+                {{ form_course.as_p }}
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
