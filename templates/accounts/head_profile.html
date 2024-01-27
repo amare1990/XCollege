@@ -23,7 +23,7 @@
           {% elif profile.role == 'staff' %}
           {% endif %}
           {% if profile.user.first_name %}
-            {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
+            {{ profile.user.first_name }} {{ profile.user.last_name|capfirst }}!
           {% else %}
             {{ profile.user.username }}!
           {% endif %}

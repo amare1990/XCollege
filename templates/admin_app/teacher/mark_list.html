@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Marks List{% endblock %}
 {% block content %}
-  <div class="container my-5 py-5 bg-secondary">
+  <div class="my-5 pt-3 pb-5">
     {% if messages %}
       {% for message in messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,47 +12,63 @@
         </div>
       {% endfor %}
     {% endif %}
-    <div class="btn-group" role="group" aria-label="Student Marks">
-      <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">Homepage</a>
-      <a class="btn btn-primary" href="{% url 'course-detail' course_code=course.course_code %}">Course detail</a>
-    </div>
-    <h3 class="text-center pb-3">Mark List for <strong>{{ course.name }} </strong> course </h3>
-    <table class="table table-dark">
-     <thead>
-      <tr>
-        <th> # </th>
-        <th>Student Name</th>
-          {% for assessment in assessments %}
-            <th>{{ assessment.assessment_name }}</th>
-          {% endfor %}
-        <th> Total marks </th>
-        <th>Grade</th>
-        <th> Comments </th>
-      </tr>
-     </thead>
-     <tbody>
-      {% for data in marks_data %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>
-          <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'student-detail' student_id=data.student.pk %}">{{ data.student.user.username }}</a>
-        </td>
-        {% for assessment in assessments %}
-          <td>
-            {% for mark in data.marks %}
-              {% if mark.assessment == assessment %}
-                {{ mark.mark }}
-              {% endif %}
+
+    <div class="row">
+      <div class="col-md-3 d-none d-md-block bg-secondary">
+        {% if request.user.userprofile.role == 'admin' %}
+          {% include 'admin_app/admin_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
+          {% include 'accounts/head_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
+          {% include 'accounts/teacher_navbar.html' %}
+        {% elif request.user.userprofile.role == 'student' %}
+          {% include 'accounts/student_navbar.html' %}
+        {% endif %}
+      </div>
+      <div class="col-md-10 py-5 ml-5" style="max-width: 68%; background-color: rgb(40, 109, 109);">
+        <div class="btn-group" role="group" aria-label="Student Marks">
+          <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">Homepage</a>
+          <a class="btn btn-primary" href="{% url 'course-detail' course_code=course.course_code %}">Course detail</a>
+        </div>
+        <h3 class="text-center pb-3">Mark List for <strong>{{ course.name }} </strong> course </h3>
+        <table class="table table-dark">
+         <thead>
+          <tr>
+            <th> # </th>
+            <th>Student Name</th>
+              {% for assessment in assessments %}
+                <th>{{ assessment.assessment_name }}</th>
+              {% endfor %}
+            <th> Total marks </th>
+            <th>Grade</th>
+            <th> Comments </th>
+          </tr>
+         </thead>
+         <tbody>
+          {% for data in marks_data %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+              <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'student-detail' student_id=data.student.pk %}">{{ data.student.user.username }}</a>
+            </td>
+            {% for assessment in assessments %}
+              <td>
+                {% for mark in data.marks %}
+                  {% if mark.assessment == assessment %}
+                    {{ mark.mark }}
+                  {% endif %}
+                {% endfor %}
+              </td>
             {% endfor %}
-          </td>
+            <td>{{ data.total_marks }} </td>
+            <td>
+              <span class="text-warning px-2 py-1 rounded">{{ data.grade }}</span>
+            </td>
+          </tr>
         {% endfor %}
-        <td>{{ data.total_marks }} </td>
-        <td>
-          <span class="text-warning px-2 py-1 rounded">{{ data.grade }}</span>
-        </td>
-      </tr>
-    {% endfor %}
-     </tbody>
-    </table>
+         </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 {% endblock %}

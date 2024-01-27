@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}  Leave request form  {% endblock %}
 {% block content%}
-  <div class="container my-5 py-5 bg-secondary" style="max-width: 45rem;">
+  <div class="my-5 mr-5 pt-3 pb-5">
     {% if messages %}
       {% for message in messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,15 +12,31 @@
         </div>
       {% endfor %}
     {% endif %}
-    <div class="btn-group" role="group" aria-label="Leave request form">
-      <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">Homepage</a>
-      <a class="btn btn-primary" href="{% url 'manage-leave-request' %}">Manage leave request</a>
+
+    <div class="row">
+      <div class="col-md-3 d-none d-md-block bg-secondary">
+        {% if request.user.userprofile.role == 'admin' %}
+          {% include 'admin_app/admin_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
+          {% include 'accounts/head_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
+          {% include 'accounts/teacher_navbar.html' %}
+        {% elif request.user.userprofile.role == 'student' %}
+          {% include 'accounts/student_navbar.html' %}
+        {% endif %}
+      </div>
+      <div class="col-md-10 py-5 ml-5" style="max-width: 70%; background-color: rgb(40, 109, 109);">
+        <div class="btn-group" role="group" aria-label="Leave request form">
+          <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">Homepage</a>
+          <a class="btn btn-primary" href="{% url 'manage-leave-request' %}">Manage leave request</a>
+        </div>
+        <h3 class="text-center py-3">Request leave form</h3>
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
     </div>
-    <h3 class="text-center py-3">Request leave form</h3>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
   </div>
 {% endblock %}

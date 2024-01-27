@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %} Details of {{ course.name }} {% endblock %}
 {% block content %}
-  <div class="container my-5 py-3 bg-secondary">
+  <div class="my-5 pt-3 pb-5">
       {% if messages %}
         {% for message in messages %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,103 +12,148 @@
           </div>
         {% endfor %}
       {% endif %}
-      <div class="btn-group" role="group" aria-label="Basic example">
-        <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage </a>
-        {% if user.userprofile.role == 'admin' %}
-          <a class="btn btn-primary" href="{% url 'course-list' %}">List of all courses </a>
-        {% else %}
-          <a class="text-white btn btn-primary" href="{% url 'my-all-department-courses' %}">List of all my department courses </a>
-        {% endif %}
-      </div>
-      <h2 class="text-center mt-5">Details of <strong>{{ course.name }}</strong> course</h2>
-      <div class="container mt-5">
-          <p>Course name: {{ course.name }} </p>
-          <p>Year: {{ course.academic_year }} and </p>
-          <p>Semester: {{ course.semester }} </p>
-          <p>Department:  {{ department.name }} </p>
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <a class="btn btn-primary" href="{% url 'course-edit' course_code=course.course_code %}">Edit Course</a>
-            <a class="btn btn-primary" href="{% url 'course-delete' course_code=course.course_code %}">Delete Course</a>
-            <a class="btn btn-primary" href="{% url 'add-mark' course_code=course.course_code %}">Add marks</a>
-            <a class="btn btn-primary" href="{% url 'mark-list' course_code=course.course_code %}">Mark sheet</a>
-            <a class="btn btn-primary" href="{% url 'view-result' course_code=course.course_code %}">View my result</a>
-          </div>
-          <hr class="my-5">
-          <h5>Teachers in charge for this course</h5>
-          <p><small>
-            Taught by
-            {% if number_of_teachers_registered == 1 %}
-              {{ number_of_teachers_registered }} teacher
-            {% else %}
-              {{ number_of_teachers_registered }} teachers
-          {% endif %}
-          </small> </p>
-          <table class="table table-dark">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Teacher Id</th>
-                <th scope="col">Teacher username </th>
-                <th scope="col">Teacher Department</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for teacher in teachers_taught %}
-              <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td><a class="text-white bg-primary px-2 py-1 rounded"  href="{% url 'teacher-detail' teacher_id=teacher.pk %}">{{ teacher.pk }}</a></td>
-                <td>{{ teacher.user.username }}</td>
-                <td>{{ teacher.department }}</td>
-                <td>
-                  <div class="btn-group" role="group" aria-label="Basic example">
-                    <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>
-                    <a class="btn btn-primary" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a>
-                    <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a>
-                  </div>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          <hr class="my-5">
-          <h5>Students registered for this course</h5>
-          <p> <small>
-            {% if number_of_students_registered == 1 %}
-              {{ number_of_students_registered }} student has already registered for this course
-            {% else %}
-              {{ number_of_students_registered }} students have already registered for this course
-          {% endif %}
-          </small></p>
-          <table class="table table-dark">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Student Id</th>
-                <th scope="col">Student username </th>
-                <th scope="col"> Student's Department</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for student in course.students.all %}
-              <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td><a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'student-detail' student_id=student.pk %}">{{ student.pk }}</a></td>
-                <td>{{ student.user.username }}</td>
-                <td>{{ student.department }}</td>
-                <td>
-                  <div class="btn-group" role="group" aria-label="Basic example">
-                    <a class="text-white btn btn-primary" href="{% url 'student-edit' student_id=student.pk %}">Edit</a>
-                    <a class="text-white btn btn-primary" href="{% url 'student-detail' student_id=student.pk %}">View</a>
-                    <a class="text-white btn btn-primary" href="{% url 'student-delete' student_id=student.pk %}">Delete</a>
-                  </div>
-                </td>
-              </tr>
-              {% endfor %}
 
-            </tbody>
-          </table>
+      <div class="row">
+        <div class="col-md-2 d-none d-md-block bg-secondary">
+          {% if request.user.userprofile.role == 'admin' %}
+            {% include 'admin_app/admin_navbar.html' %}
+          {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
+            {% include 'accounts/head_navbar.html' %}
+          {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
+            {% include 'accounts/teacher_navbar.html' %}
+          {% elif request.user.userprofile.role == 'student' %}
+            {% include 'accounts/student_navbar.html' %}
+          {% endif %}
+        </div>
+        <div class="col-md-10 py-5 ml-3" style="max-width: 75%; background-color: rgb(40, 109, 109);">
+
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage </a>
+            {% if user.userprofile.role == 'admin' %}
+              <a class="btn btn-primary" href="{% url 'course-list' %}">List of all courses </a>
+            {% else %}
+              <a class="text-white btn btn-primary" href="{% url 'my-all-department-courses' %}">List of all my department courses </a>
+            {% endif %}
+          </div>
+          <h2 class="text-center mt-5">Details of <strong>{{ course.name }}</strong> course</h2>
+          <div class="container mt-5">
+              <p>Course name: {{ course.name }} </p>
+              <p>Year: {{ course.academic_year }} and </p>
+              <p>Semester: {{ course.semester }} </p>
+              <p>Department:  {{ department.name }} </p>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <a class="btn btn-primary" href="{% url 'course-edit' course_code=course.course_code %}">Edit Course</a>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                  Delete
+                </button>
+                <a class="btn btn-primary" href="{% url 'add-mark' course_code=course.course_code %}">Add marks</a>
+                <a class="btn btn-primary" href="{% url 'mark-list' course_code=course.course_code %}">Mark sheet</a>
+                <a class="btn btn-primary" href="{% url 'view-result' course_code=course.course_code %}">View my result</a>
+              </div>
+              <hr class="my-5">
+              <h5>Teachers in charge for this course</h5>
+              <p><small>
+                Taught by
+                {% if number_of_teachers_registered == 1 %}
+                  {{ number_of_teachers_registered }} teacher
+                {% else %}
+                  {{ number_of_teachers_registered }} teachers
+              {% endif %}
+              </small> </p>
+              <table class="table table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Teacher Id</th>
+                    <th scope="col">Teacher username </th>
+                    <th scope="col">Teacher Department</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for teacher in teachers_taught %}
+                  <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td><a class="text-white bg-primary px-2 py-1 rounded"  href="{% url 'teacher-detail' teacher_id=teacher.pk %}">{{ teacher.pk }}</a></td>
+                    <td>{{ teacher.user.username }}</td>
+                    <td>{{ teacher.department }}</td>
+                    <td>
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>
+                        <a class="btn btn-primary" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a>
+                        <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <hr class="my-5">
+              <h5>Students registered for this course</h5>
+              <p> <small>
+                {% if number_of_students_registered == 1 %}
+                  {{ number_of_students_registered }} student has already registered for this course
+                {% else %}
+                  {{ number_of_students_registered }} students have already registered for this course
+              {% endif %}
+              </small></p>
+              <table class="table table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Student Id</th>
+                    <th scope="col">Student username </th>
+                    <th scope="col"> Student's Department</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for student in course.students.all %}
+                  <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td><a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'student-detail' student_id=student.pk %}">{{ student.pk }}</a></td>
+                    <td>{{ student.user.username }}</td>
+                    <td>{{ student.department }}</td>
+                    <td>
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <a class="text-white btn btn-primary" href="{% url 'student-edit' student_id=student.pk %}">Edit</a>
+                        <a class="text-white btn btn-primary" href="{% url 'student-detail' student_id=student.pk %}">View</a>
+                        <a class="text-white btn btn-primary" href="{% url 'student-delete' student_id=student.pk %}">Delete</a>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-secondary">
+              <h5 class="modal-title" id="exampleModalLabel">Course Deletion</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="container my-3 text-secondary">
+                <h5 >Confirm Deletion</h5>
+                <p>Are you sure you want to delete <strong>{{ course.name }}</strong> course?</p>
+
+                <form method="post">
+                  {% csrf_token %}
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Confirm Deletion</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
   </div>
 {% endblock %}
