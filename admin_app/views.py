@@ -210,15 +210,12 @@ def course_edit(request, course_code):
            form_course = AddCourseForm(instance=course)
        return render(request, 'admin_app/course/course_edit.html', {'form_course': form_course, 'course':course })
 
-
 def course_delete(request, course_code):
     course = get_object_or_404(Course, course_code=course_code)
     if request.method == 'POST':
         course.delete()
         return redirect('course-list')
     return render(request, 'admin_app/course/course_delete.html', {'course': course})
-
-
 
 # Department list
 def department_list(request):
@@ -374,8 +371,9 @@ def add_assessment(request):
             # print('course_for_teacher =', course_for_teacher )
             if course_for_teacher:
                 assessment.course = course_for_teacher
+                # assessment.save()
+                form.save()
                 print('Course inside= ', assessment.course)
-                assessment.save()
                 return redirect('assessments')
                 # return redirect('assessments')
         else:
@@ -594,6 +592,7 @@ def course_list(request):
 
 def course_registration(request):
     student_department=request.user.userprofile.department
+    registered_courses = request.user.userprofile.courses_registered.all()
     if request.method == 'POST':
         form_course_registration = CourseRegistrationForm(student_department, request.POST)
         if form_course_registration.is_valid():
@@ -606,6 +605,7 @@ def course_registration(request):
             return redirect('course-register')
     else:
         form_course_registration = CourseRegistrationForm(student_department)
+        form_course_registration.fields['courses'].queryset = Course.objects.filter(department=student_department).exclude(id__in=registered_courses)
         return render(request, 'admin_app/course/course_registration.html', {'form_course_registration': form_course_registration})
 
 def view_result(request, course_code):
