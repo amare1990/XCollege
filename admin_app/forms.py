@@ -88,10 +88,9 @@ class AddCourseForm(forms.ModelForm):
 
 class CourseRegistrationForm(forms.Form):
     courses = forms.ModelMultipleChoiceField(queryset=Course.objects.all(), widget=forms.CheckboxSelectMultiple)
-
-    def __init__(self, student_department, *args, **kwargs):
+    def __init__(self, student_department, student_year, student_semester, *args, **kwargs):
         super(CourseRegistrationForm, self).__init__(*args, **kwargs)
-        self.fields['courses'].queryset = Course.objects.filter(department=student_department)
+        self.fields['courses'].queryset = Course.objects.filter(department=student_department, academic_year=student_year, semester=student_semester)
 
 class AddCourseOfferingForm(forms.Form):
     department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))

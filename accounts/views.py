@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from admin_app.models import UserProfile
+from admin_app.models import Department
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from .forms import SignUpForm, EditProfileForm
 from django.views import generic
@@ -61,7 +62,7 @@ class UserRegistrationView(generic.CreateView):
 # User Profile editing
 @login_required
 def edit_profile(request):
-    # profile = request.user.userprofile
+    departments = Department.objects.all()
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
@@ -69,8 +70,23 @@ def edit_profile(request):
             user.save()
             user_profile, created = UserProfile.objects.get_or_create(user=user)
             user_profile.profile_picture = request.FILES.get('profile_picture')
+
+            # Save additional fields based on the role
+            role = request.POST.get('role')
+            if role == 'teacher':
+                user_profile.position = request.POST.get('position')
+                user_profile.title = request.POST.get('title')
+            elif role == 'student':
+                user_profile.academic_year = request.POST.get('academic_year')
+                user_profile.semester = request.POST.get('semester')
+
+            department_id = request.POST.get('department')
+            department = Department.objects.get(pk=department_id)
+            user_profile.department = department
+            user_profile.bio = request.POST.get('bio')
+            user_profile.profile_picture = request.FILES.get('profile_picture')
             user_profile.save()
             return redirect('admin-dashboard')
     else:
         form = EditProfileForm(instance=request.user)
-    return render(request, 'accounts/registration/edit_profile.html', {'form': form })
+    return render(request, 'accounts/registration/edit_profile_dynamic.html', {'form': form, 'departments': departments})

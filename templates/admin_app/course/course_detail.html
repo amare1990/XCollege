@@ -170,7 +170,26 @@
             <div class="modal-body text-secondary">
               <form method="post" action="{% url 'course-edit' course_code=course.course_code %}">
                 {% csrf_token %}
-                {{ form_course.as_p }}
+                <div class="form-group">
+                  <label for="id_course_code">Course Code:</label>
+                  <input type="text" id="id_course_code" name="course_code" value="{{ course.course_code }}" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                  <label for="id_name">Name:</label>
+                  <input type="text" id="id_name" name="name" value="{{ course.name }}" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label for="id_academic_year">Academic Year:</label>
+                  <input type="text" id="id_academic_year" name="academic_year" value="{{ course.academic_year }}" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label for="id_semester">Semester:</label>
+                  <input type="text" id="id_semester" name="semester" value="{{ course.semester }}" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label for="id_department">Department:</label>
+                  <input type="text" id="id_department" name="department" value="{{ course.department }}" class="form-control">
+                </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   <button type="submit" class="btn btn-primary">Save changes</button>

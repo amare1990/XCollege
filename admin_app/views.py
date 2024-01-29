@@ -205,17 +205,20 @@ def course_edit(request, course_code):
            form_course = AddCourseForm(request.POST, instance=course)
            if form_course.is_valid():
                form_course.save()
+               return redirect('course-list')
+           else:
+               messages.error(request, 'Invalid form values')
                return redirect('course-detail', course_code=course_code)
        else:
-           form_course = AddCourseForm(instance=course)
-       return render(request, 'admin_app/course/course_edit.html', {'form_course': form_course, 'course':course })
+        form_course = AddCourseForm(instance=course)
+        return render(request, 'admin_app/course/course_edit.html', {'form_course': form_course, 'course':course })
 
 def course_delete(request, course_code):
     course = get_object_or_404(Course, course_code=course_code)
     if request.method == 'POST':
         course.delete()
         return redirect('course-list')
-    return render(request, 'admin_app/course/course_delete.html', {'course': course})
+    # return render(request, 'admin_app/course/course_delete.html', {'course': course})
 
 # Department list
 def department_list(request):
@@ -242,7 +245,6 @@ def department_edit(request, department_id):
 
 def department_detail(request, department_id):
     department = Department.objects.get(pk=department_id)
-
     context = {
       'department':department
    }
@@ -255,7 +257,6 @@ def department_delete(request, department_id):
         messages.info(request, "Deleted successfully!")
         return redirect('department-list')
     return render(request, 'admin_app/department/department_delete.html', {'department': department })
-
 
 def my_all_department_courses(request):
     user = request.user
@@ -592,9 +593,11 @@ def course_list(request):
 
 def course_registration(request):
     student_department=request.user.userprofile.department
+    student_year = request.user.userprofile.academic_year
+    student_semester = request.user.userprofile.semester
     registered_courses = request.user.userprofile.courses_registered.all()
     if request.method == 'POST':
-        form_course_registration = CourseRegistrationForm(student_department, request.POST)
+        form_course_registration = CourseRegistrationForm(student_department, student_year, student_semester, request.POST)
         if form_course_registration.is_valid():
             selected_courses = form_course_registration.cleaned_data['courses']
             user_profile = UserProfile.objects.get(user=request.user)
@@ -604,8 +607,8 @@ def course_registration(request):
             messages.error(request, "You didn't check the courses properly! Please select at least one course!")
             return redirect('course-register')
     else:
-        form_course_registration = CourseRegistrationForm(student_department)
-        form_course_registration.fields['courses'].queryset = Course.objects.filter(department=student_department).exclude(id__in=registered_courses)
+        form_course_registration = CourseRegistrationForm(student_department, student_year, student_semester)
+        form_course_registration.fields['courses'].queryset = Course.objects.filter(department=student_department, academic_year=student_year, semester=student_semester).exclude(id__in=registered_courses)
         return render(request, 'admin_app/course/course_registration.html', {'form_course_registration': form_course_registration})
 
 def view_result(request, course_code):

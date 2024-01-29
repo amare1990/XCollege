@@ -16,7 +16,7 @@
           {% if profile.user.first_name %}
             Welcome back, {{ profile.user.first_name|capfirst }} {{ profile.user.last_name|capfirst }}!
           {% else %}
-            Welcome back, {{ profile.user.username|capfirst }}!
+            Welcome back, {{ profile.user.username }}!
           {% endif %}
         </P>
       </div>
@@ -47,7 +47,7 @@
                 Brief bio: <br> {{ profile.bio }}
               </p>
               <div class="btn-group" role="group" aria-label="Student profile">
-                <a class="btn btn-primary" href="{% url 'student-edit' student_id=profile.pk %}">Edit a student </a>
+                <a class="btn btn-primary" href="{% url 'edit-profile' %}">Update profile </a>
                 <a class="btn btn-primary" href="{% url 'student-delete' student_id=profile.pk %}">Delete student </a>
               </div>
             </div>
