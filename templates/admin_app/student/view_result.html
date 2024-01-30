@@ -26,11 +26,7 @@
             {% include 'accounts/student_navbar.html' %}
           {% endif %}
         </div>
-        <div class="col-md-10 py-5 ml-5" style="max-width: 68%; background-color: rgb(40, 109, 109);">
-          <div class="btn-group" role="group" aria-label="My result">
-            <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
-            <a class="btn btn-primary" href="{% url 'student-courses' %}">My courses</a>
-          </div>
+        <div class="col-md-10 ml-5" style="max-width: 68%; background-color: rgb(40, 109, 109);">
           <h3 class="pt-5">My result ({{ userObj.username }})  for {{ course.name }} course</h3>
           <div class="container my-5">
               <table class="table table-dark">

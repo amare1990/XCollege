@@ -323,7 +323,7 @@ def teacher_edit(request, teacher_id):
             return redirect('teacher-detail', teacher_id=teacher_id)
     else:
         form_teacher = AddTeacherForm(instance=teacher)
-    return render(request, 'admin_app/teacher/teacher_edit.html', {'form_teacher': form_teacher, 'teacher':teacher })
+    return render(request, 'accounts/registration/edit_profile_dynamic.html', {'form_teacher': form_teacher, 'teacher':teacher })
 
 def teacher_detail(request, teacher_id):
     teacher = UserProfile.objects.get(pk=teacher_id)
@@ -552,7 +552,7 @@ def student_edit(request, student_id):
             return redirect('student-detail', student_id=student_id)
     else:
         form_student = AddStudentForm(instance=student)
-    return render(request, 'admin_app/student/student_edit.html', {'form_student': form_student, 'student':student })
+    return render(request, 'accounts/registration/edit_profile_dynamic.html', {'form_student': form_student, 'student':student })
 
 def student_detail(request, student_id):
     student = UserProfile.objects.get(pk=student_id)
@@ -609,7 +609,10 @@ def course_registration(request):
     else:
         form_course_registration = CourseRegistrationForm(student_department, student_year, student_semester)
         form_course_registration.fields['courses'].queryset = Course.objects.filter(department=student_department, academic_year=student_year, semester=student_semester).exclude(id__in=registered_courses)
-        return render(request, 'admin_app/course/course_registration.html', {'form_course_registration': form_course_registration})
+        number_courses_unregistered = form_course_registration.fields['courses'].queryset.count()
+        return render(request, 'admin_app/course/course_registration.html', {'form_course_registration': form_course_registration,
+            'number_courses_unregistered': number_courses_unregistered,
+            'registered_courses': registered_courses})
 
 def view_result(request, course_code):
     selected_course = Course.objects.get(course_code=course_code)

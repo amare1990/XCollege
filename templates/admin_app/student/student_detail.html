@@ -2,7 +2,7 @@
 {% load static %}
 {% block title %} Details of a student named {{ student.user.username }} {% endblock %}
 {% block content %}
-  <div class="container my-5 py-5" style="max-width: 40rem;">
+  <div class="my-5 pt-3 pb-5">
       {% if messages %}
         {% for message in messages %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -13,40 +13,52 @@
           </div>
         {% endfor %}
       {% endif %}
-      <div class="btn-group" role="group" aria-label="student detail">
-        <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
-        <a class="btn btn-primary" href="{% url 'student-list' %}">View students</a>
-      </div>
-      <h3 class="text-center mt-4">Student details</h3>
-      <div class="card bg-secondary">
-        <div class="row g-0">
-          <div class="col-md-4">
-            {% if profile.profile_picture %}
-              <img src="{{ profile.profile_picture.url }}" class="card-img-top" alt="Profile picture">
-            {% else %}
-              <img src="{% static 'profile_pictures/default_profile.jpg' %}" class="card-img-top" alt="Default profile picture">
-            {% endif %}
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title text-center pt-3">
-                {% if student.user.first_name %}
-                   {{ student.user.first_name|capfirst }} {{ student.user.last_name|capfirst }}!
+
+      <div class="row">
+        <div class="col-md-3 d-none d-md-block bg-secondary">
+          {% if request.user.userprofile.role == 'admin' %}
+            {% include 'admin_app/admin_navbar.html' %}
+          {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
+            {% include 'accounts/head_navbar.html' %}
+          {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
+            {% include 'accounts/teacher_navbar.html' %}
+          {% elif request.user.userprofile.role == 'student' %}
+            {% include 'accounts/student_navbar.html' %}
+          {% endif %}
+        </div>
+        <div class="col-md-10 py-5 ml-3" style="max-width: 60%; background-color: rgb(40, 109, 109);">
+          <h3 class="text-center mt-4">Student details</h3>
+          <div class="card bg-secondary">
+            <div class="row g-0">
+              <div class="col-md-4">
+                {% if profile.profile_picture %}
+                  <img src="{{ profile.profile_picture.url }}" class="card-img-top" alt="Profile picture">
                 {% else %}
-                  {{ student.user.username }}!
+                  <img src="{% static 'profile_pictures/default_profile.jpg' %}" class="card-img-top" alt="Default profile picture">
                 {% endif %}
-              </h5>
-              <p class="card-text pl-3 pr-2">
-                Username: {{ student.user.username|capfirst }} <br>
-                Role: {{ student.role|capfirst }} <br>
-                Academic year: {{ student.academic_year }} <br>
-                Semester: {{ student.semester }} <br>
-                Registered in the department of {{ student.department }} <br>
-                Brief bio: <br> {{ student.bio }}
-              </p>
-              <div class="btn-group" role="group" aria-label="Student profile">
-                <a class="btn btn-primary" href="{% url 'student-edit' student_id=student.pk %}">Edit a student </a>
-                <a class="btn btn-primary" href="{% url 'student-delete' student_id=student.pk %}">Delete student </a>
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title text-center pt-3">
+                    {% if student.user.first_name %}
+                       {{ student.user.first_name|capfirst }} {{ student.user.last_name|capfirst }}!
+                    {% else %}
+                      {{ student.user.username }}!
+                    {% endif %}
+                  </h5>
+                  <p class="card-text pl-3 pr-2">
+                    Username: {{ student.user.username }} <br>
+                    Role: {{ student.role|capfirst }} <br>
+                    Academic year: {{ student.academic_year }} <br>
+                    Semester: {{ student.semester }} <br>
+                    Registered in the department of {{ student.department }} <br>
+                    Brief bio: <br> {{ student.bio }}
+                  </p>
+                  <div class="btn-group" role="group" aria-label="Student profile">
+                    <a class="btn btn-primary" href="{% url 'edit-profile' %}">Edit a student </a>
+                    <a class="btn btn-primary" href="{% url 'student-delete' student_id=student.pk %}">Delete student </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

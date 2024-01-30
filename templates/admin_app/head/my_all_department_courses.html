@@ -26,10 +26,6 @@
           {% endif %}
         </div>
         <div class="col-md-10 py-5 ml-3" style="max-width: 60rem; background-color: rgb(40, 109, 109);">
-          <div class="btn-group" role="group" aria-label="department courses">
-            <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
-            <a class="btn btn-primary" href="{% url 'add-course' %}">Add more course</a>
-          </div>
           <h3 class="text-center my-3">List of courses in our department</h3>
           <div class="container mb-5">
               <h3>{{ courses.count }} total courses</h3>
@@ -54,9 +50,13 @@
                     <td>{{ course.department }}</td>
                     <td>
                       <div class="btn-group" role="group" aria-label="List of my department courses">
-                        <a class="btn btn-primary" href="{% url 'course-edit' course_code=course.course_code %}">Edit</a>
+                        {% if request.user.userprofile == 'admin' %}
+                          <a class="btn btn-primary" href="{% url 'course-edit' course_code=course.course_code %}">Edit</a>
+                        {% endif %}
                         <a class="btn btn-primary" href="{% url 'course-detail' course_code=course.course_code %}">View</a>
-                        <a class="btn btn-primary" href="{% url 'course-delete' course_code=course.course_code %}">Delete</a>
+                        {% if request.user.userprofile == 'admin' %}
+                          <a class="btn btn-primary" href="{% url 'course-delete' course_code=course.course_code %}">Delete</a>
+                        {% endif %}
                       </div>
                     </td>
                   </tr>

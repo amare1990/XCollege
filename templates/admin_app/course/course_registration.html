@@ -26,13 +26,53 @@
             {% endif %}
         </div>
         <div class="col-md-10 py-5 ml-5" style="max-width: 65%; background-color: rgb(40, 109, 109);">
-          <a class="btn btn-primary text-white" href="{% url 'admin-dashboard' %}">My homepage</a>
           <h2 class="text-center"> Get registered for courses</h2>
-          <form method="POST">
+          {% if number_courses_unregistered == 0 %}
+          <div class="alert alert-info" role="alert" style="max-width: 60%;">
+            No courses left to register for this semester
+          </div>
+          {% else %}
+          <form method="POST" id="course-registration-form">
             {% csrf_token %}
             {{ form_course_registration.as_p }}
             <button class="btn btn-primary" type="submit">Register courses</button>
           </form>
+          {% endif %}
+
+          <p>Courses you have been registered</p>
+
+          <div id="registered-courses-list">
+            <ol class="bg-secondary py-2 pl-4" style="max-width: 60%;">
+              {% for course in registered_courses %}
+              <li>
+                {{ course.course_code }} &nbsp; {{ course.name }}
+              </li>
+              {% endfor %}
+            </ol>
+          </div>
+
+          {% block extrascripts %}
+            <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('course-registration-form');
+                const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(function(checkbox) {
+                  checkbox.addEventListener('change', function() {
+                    const checkedCourses = Array.from(checkboxes)
+                      .filter(course => course.checked)
+                      .map(course => course.labels[0].innerText.trim());
+                    const registeredCoursesList = document.getElementById('registered-courses-list');
+                    registeredCoursesList.innerHTML = '';
+                    checkedCourses.forEach(function(course) {
+                      const courseDiv = document.createElement('div');
+                      courseDiv.innerHTML = course;
+                      registeredCoursesList.appendChild(courseDiv);
+                    });
+                  });
+                });
+              });
+            </script>
+          {% endblock %}
         </div>
       </div>
   </div>

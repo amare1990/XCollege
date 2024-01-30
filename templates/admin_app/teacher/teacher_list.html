@@ -15,17 +15,22 @@
         <div class="row">
           <div class="col-md-3 d-none d-md-block bg-secondary px-2 mr-2">
             {% if request.user.userprofile.role == 'admin' %}
-              {% include 'admin_app/admin_navbar.html' %}
-            {% else %}
-              {% include 'accounts/head_navbar.html' %}
-            {% endif %}
+            {% include 'admin_app/admin_navbar.html' %}
+          {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
+            {% include 'accounts/head_navbar.html' %}
+          {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
+            {% include 'accounts/teacher_navbar.html' %}
+          {% elif request.user.userprofile.role == 'student' %}
+            {% include 'accounts/student_navbar.html' %}
+          {% endif %}
           </div>
           <div class="col-md-10 py-5" style="background-color: rgb(40, 109, 109); max-width: 70%;">
             <div class="btn-group" role="group" aria-label="Teachers' lis">
-              <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
-              <a class="btn btn-primary" href="{% url 'add-teacher' %}">Add more</a>
+              {% if request.user.userprofile == teacher %}
+                <a class="btn btn-primary" href="{% url 'add-teacher' %}">Add teacher</a>
+              {% endif %}
             </div>
-            <h3 class="text-center py-3">List of teachers </h3>
+            <h3 class="text-center">List of teachers </h3>
             <div class="my-5">
                 <p>{{ number_of_teachers }} total teachers </p>
                 <table class="table table-dark table-responsive">
@@ -57,9 +62,13 @@
                         <td> {{ teacher.position }} </td>
                         <td>
                           <div class="btn-group" role="group" aria-label="List of teachers actions">
-                            <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>
+                            {% if request.user.userprofile == teacher %}
+                              <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>
+                            {% endif %}
                             <a class="btn btn-primary" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a>
-                            <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a>
+                            {% if request.user.userprofile == teacher %}
+                              <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a>
+                            {% endif %}
                           </div>
                         </td>
                       </tr>

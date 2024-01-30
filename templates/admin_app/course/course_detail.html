@@ -14,7 +14,7 @@
       {% endif %}
 
       <div class="row">
-        <div class="col-md-2 d-none d-md-block bg-secondary">
+        <div class="col-md-3 d-none d-md-block bg-secondary">
           {% if request.user.userprofile.role == 'admin' %}
             {% include 'admin_app/admin_navbar.html' %}
           {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
@@ -25,14 +25,10 @@
             {% include 'accounts/student_navbar.html' %}
           {% endif %}
         </div>
-        <div class="col-md-10 py-5 ml-3" style="max-width: 75%; background-color: rgb(40, 109, 109);">
-
+        <div class="col-md-10 ml-3" style="max-width: 70%; background-color: rgb(40, 109, 109);">
           <div class="btn-group" role="group" aria-label="Basic example">
-            <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage </a>
             {% if user.userprofile.role == 'admin' %}
               <a class="btn btn-primary" href="{% url 'course-list' %}">List of all courses </a>
-            {% else %}
-              <a class="text-white btn btn-primary" href="{% url 'my-all-department-courses' %}">List of all my department courses </a>
             {% endif %}
           </div>
           <h2 class="text-center mt-5">Details of <strong>{{ course.name }}</strong> course</h2>
@@ -41,16 +37,20 @@
               <p>Year: {{ course.academic_year }} and </p>
               <p>Semester: {{ course.semester }} </p>
               <p>Department:  {{ department.name }} </p>
-              <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#course-edit-Modal">
-                  Edit course
-                </button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#course-delete-Modal">
-                  Delete
-                </button>
-                <a class="btn btn-primary" href="{% url 'add-mark' course_code=course.course_code %}">Add marks</a>
-                <a class="btn btn-primary" href="{% url 'mark-list' course_code=course.course_code %}">Mark sheet</a>
-                <a class="btn btn-primary" href="{% url 'view-result' course_code=course.course_code %}">View my result</a>
+              <div class="btn-group" role="group" aria-label="Result view">
+                {% if request.user.userprofile in teachers_taught %}
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#course-edit-Modal">
+                    Edit course
+                  </button>
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#course-delete-Modal">
+                    Delete
+                  </button>
+                  <a class="btn btn-primary" href="{% url 'add-mark' course_code=course.course_code %}">Add marks</a>
+                  <a class="btn btn-primary" href="{% url 'mark-list' course_code=course.course_code %}">Mark sheet</a>
+                {% endif %}
+                {% if request.user.userprofile in students_registered %}
+                  <a class="btn btn-primary" href="{% url 'view-result' course_code=course.course_code %}">View my result</a>
+                {% endif %}
               </div>
               <hr class="my-5">
               <h5>Teachers in charge for this course</h5>
@@ -80,10 +80,14 @@
                     <td>{{ teacher.user.username }}</td>
                     <td>{{ teacher.department }}</td>
                     <td>
-                      <div class="btn-group" role="group" aria-label="Basic example">
-                        <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>
+                      <div class="btn-group" role="group" aria-label="Teacher profile action">
+                        {% if request.user.userprofile == teacher %}
+                          <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>
+                        {% endif %}
                         <a class="btn btn-primary" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a>
-                        <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a>
+                        {% if request.user.userprofile == teacher %}
+                          <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a>
+                        {% endif %}
                       </div>
                     </td>
                   </tr>
@@ -113,14 +117,18 @@
                   {% for student in course.students.all %}
                   <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td><a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'student-detail' student_id=student.pk %}">{{ student.pk }}</a></td>
+                    <td><a class="text-white bg-primary px-2 py-1 rounded"
+                      {% if request.user.userprofile == student %} href="{% url 'student-detail' student_id=student.pk %}"
+                      {% endif %}>{{ student.pk }}</a></td>
                     <td>{{ student.user.username }}</td>
                     <td>{{ student.department }}</td>
                     <td>
-                      <div class="btn-group" role="group" aria-label="Basic example">
-                        <a class="text-white btn btn-primary" href="{% url 'student-edit' student_id=student.pk %}">Edit</a>
-                        <a class="text-white btn btn-primary" href="{% url 'student-detail' student_id=student.pk %}">View</a>
-                        <a class="text-white btn btn-primary" href="{% url 'student-delete' student_id=student.pk %}">Delete</a>
+                      <div class="btn-group" role="group" aria-label="Student profile action">
+                        {% if request.user.userprofile == student %}
+                          <a class="text-white btn btn-primary" href="{% url 'edit-profile' %}">Edit</a>
+                          <a class="text-white btn btn-primary" href="{% url 'student-detail' student_id=student.pk %}">View</a>
+                          <a class="text-white btn btn-primary" href="{% url 'student-delete' student_id=student.pk %}">Delete</a>
+                        {% endif %}
                       </div>
                     </td>
                   </tr>

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}  User Edit Form  {% endblock %}
 {% block content%}
-  <div class="container my-5 py-3 bg-secondary" style="max-width: 40rem;">
+  <div class="my-5 pt-3 pb-5">
     {% if messages %}
       {% for message in messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,7 +12,21 @@
         </div>
       {% endfor %}
     {% endif %}
-    <p>You are logged in as <span class="text-success"><strong>{{ user.username|capfirst }}</strong></span></p>
+
+    <div class="row">
+      <div class="col-md-3 d-none d-md-block bg-secondary">
+        {% if request.user.userprofile.role == 'admin' %}
+          {% include 'admin_app/admin_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
+          {% include 'accounts/head_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
+          {% include 'accounts/teacher_navbar.html' %}
+        {% elif request.user.userprofile.role == 'student' %}
+          {% include 'accounts/student_navbar.html' %}
+        {% endif %}
+      </div>
+      <div class="col-md-10 py-5 ml-5" style="max-width: 50%; background-color: rgb(40, 109, 109);">
+        <p>You are logged in as <span class="text-success"><strong>{{ user.username }}</strong></span></p>
     <h3 class="text-center bg-primary">Edit your profile here!</h3>
     <div class="form-group">
       <form id="editProfileForm" method="POST" enctype="multipart/form-data" action="{% url 'edit-profile' %}">
@@ -33,8 +47,6 @@
           <label for="id_last_name">Last Name:</label>
           <input type="text" class="form-control" id="id_last_name" name="last_name" value="{{ form.last_name.value }}">
         </div>
-
-        <!-- Other form fields from Userprofile model -->
         <div class="form-group">
           <label for="id_role">Role:</label>
           <select class="form-control" id="id_role" name="role">
@@ -104,13 +116,12 @@
           <label>Current Profile Picture:</label>
           <img src="/media/{{ request.user.userprofile.profile_picture }}" alt="Current Profile Picture" class="img-fluid" style="max-height: 100px;">
         </div>
-
-
-
         <button type="submit" class="btn btn-primary">
           Update
         </button>
       </form>
+    </div>
+      </div>
     </div>
   </div>
 
