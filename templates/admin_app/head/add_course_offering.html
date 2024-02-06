@@ -14,7 +14,7 @@
   {% endif %}
 
   <div class="row">
-    <div class="col-md-3 d-none d-md-block bg-secondary">
+    <div class="col-md-2 d-none d-md-block bg-secondary px-2">
       {% if request.user.userprofile.role == 'admin' %}
             {% include 'admin_app/admin_navbar.html' %}
           {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
@@ -25,9 +25,8 @@
             {% include 'accounts/student_navbar.html' %}
           {% endif %}
     </div>
-    <div class="col-md-10 py-5 ml-5" style="max-width: 40rem; background-color: rgb(40, 109, 109);">
+    <div class="col-md-10 py-5" style="max-width: 40rem; background-color: rgb(40, 109, 109); margin: 0 auto;">
       <div class="btn-group" role="group" aria-label="Basic example">
-        <a class="btn btn-primary" href="{% url 'admin-dashboard' %} ">My homepage </a>
         <a class="btn btn-primary" href="{% url 'course-offering-view' %}">View courses offered</a>
       </div>
       <p class="pt-3 text-center"> H! {{ user.username }} | Head of {{ user.userprofile.department }} </p>

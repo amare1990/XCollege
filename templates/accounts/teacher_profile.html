@@ -47,8 +47,8 @@
             Brief bio: <br> {{ profile.bio }}
           </p>
           <div class="btn-group" role="group" aria-label="Edit and delete buttons">
-            <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=profile.pk %}">Edit a teacher </a>
-            <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=profile.pk %}">Delete teacher </a>
+            <a class="btn btn-primary" href="{% url 'edit-profile' profile_id=profile.pk %}">Edit teacher profile</a>
+            <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=profile.pk %}">Delete teacher profile</a>
           </div>
         </div>
        </div>

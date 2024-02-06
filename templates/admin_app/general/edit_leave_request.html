@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}  Edit leave request  {% endblock %}
 {% block content%}
-<div class="container my-5 py-3 bg-secondary" style="max-width: 500px;">
+<div class="my-5 mr-5 pt-3 pb-5">
   {% if messages %}
     {% for message in messages %}
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,17 +12,32 @@
       </div>
     {% endfor %}
   {% endif %}
-  <div class="btn-group rounded" role="group" aria-label="Basic example">
-    <a href="{% url 'admin-dashboard' %}" class="btn btn-primary"> My homepage </a>
-    <a href="{% url 'leave-request-details' leave_request_id=leave_request.pk %}" class="btn btn-primary"> Leave request details </a>
-  </div>
-  <h3 class="text-center pt-3"> Edit a leave request </h3>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <div class="text-center rounded">
-      <button class="btn btn-primary" type="submit">Update</button>
+
+  <div class="row">
+    <div class="col-md-2 d-none d-md-block bg-secondary px-2">
+      {% if request.user.userprofile.role == 'admin' %}
+        {% include 'admin_app/admin_navbar.html' %}
+      {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
+        {% include 'accounts/head_navbar.html' %}
+      {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
+        {% include 'accounts/teacher_navbar.html' %}
+      {% elif request.user.userprofile.role == 'student' %}
+        {% include 'accounts/student_navbar.html' %}
+      {% endif %}
     </div>
-</form>
+    <div class="col-md-10 py-5" style="background-color: rgb(40, 109, 109); max-width: 70%; margin: 0 auto;">
+      <div class="btn-group rounded" role="group" aria-label="Leave request details">
+        <a href="{% url 'leave-request-details' leave_request_id=leave_request.pk %}" class="btn btn-primary"> Leave request details </a>
+      </div>
+      <h3 class="text-center pt-3"> Edit a leave request </h3>
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="text-center rounded">
+          <button class="btn btn-primary" type="submit">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -60,18 +60,19 @@ class UserRegistrationView(generic.CreateView):
   success_url= reverse_lazy('user-login')
 
 # User Profile editing
-@login_required
-def edit_profile(request):
+# @login_required
+def edit_profile(request, profile_id):
+    profile = get_object_or_404(UserProfile, pk=profile_id)
+    print('prifile id:  ', profile.id)
     departments = Department.objects.all()
     if request.method == 'POST':
-        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
+        form = EditProfileForm(request.POST, request.FILES, instance=profile.user)
         if form.is_valid():
             user = form.save(commit=False)
             user.save()
             user_profile, created = UserProfile.objects.get_or_create(user=user)
             user_profile.profile_picture = request.FILES.get('profile_picture')
 
-            # Save additional fields based on the role
             role = request.POST.get('role')
             if role == 'teacher':
                 user_profile.position = request.POST.get('position')
@@ -88,5 +89,6 @@ def edit_profile(request):
             user_profile.save()
             return redirect('admin-dashboard')
     else:
-        form = EditProfileForm(instance=request.user)
-    return render(request, 'accounts/registration/edit_profile_dynamic.html', {'form': form, 'departments': departments})
+        form = EditProfileForm(instance=profile.user)
+    return render(request, 'accounts/registration/edit_profile_dynamic.html',
+                  {'form': form, 'departments': departments, 'profile': profile})

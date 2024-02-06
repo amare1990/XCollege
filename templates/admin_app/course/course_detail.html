@@ -14,7 +14,7 @@
       {% endif %}
 
       <div class="row">
-        <div class="col-md-3 d-none d-md-block bg-secondary">
+        <div class="col-md-2 d-none d-md-block bg-secondary px-2">
           {% if request.user.userprofile.role == 'admin' %}
             {% include 'admin_app/admin_navbar.html' %}
           {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
@@ -25,8 +25,8 @@
             {% include 'accounts/student_navbar.html' %}
           {% endif %}
         </div>
-        <div class="col-md-10 ml-3" style="max-width: 70%; background-color: rgb(40, 109, 109);">
-          <div class="btn-group" role="group" aria-label="Basic example">
+        <div class="col-md-10" style="max-width: 70%; background-color: rgb(40, 109, 109); margin: 0 auto;">
+          <div class="btn-group pt-3" role="group" aria-label="List of courses">
             {% if user.userprofile.role == 'admin' %}
               <a class="btn btn-primary" href="{% url 'course-list' %}">List of all courses </a>
             {% endif %}
@@ -82,7 +82,7 @@
                     <td>
                       <div class="btn-group" role="group" aria-label="Teacher profile action">
                         {% if request.user.userprofile == teacher %}
-                          <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>
+                          <a class="btn btn-primary" href="{% url 'edit-profile' profile_id=teacher.pk %}">Edit</a>
                         {% endif %}
                         <a class="btn btn-primary" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a>
                         {% if request.user.userprofile == teacher %}
@@ -125,13 +125,42 @@
                     <td>
                       <div class="btn-group" role="group" aria-label="Student profile action">
                         {% if request.user.userprofile == student %}
-                          <a class="text-white btn btn-primary" href="{% url 'edit-profile' %}">Edit</a>
+                          <a class="text-white btn btn-primary" href="{% url 'edit-profile' profile_id=student.id %}">Edit</a>
                           <a class="text-white btn btn-primary" href="{% url 'student-detail' student_id=student.pk %}">View</a>
-                          <a class="text-white btn btn-primary" href="{% url 'student-delete' student_id=student.pk %}">Delete</a>
+                          <!-- <a class="text-white btn btn-primary" href="{% url 'student-delete' student_id=student.pk %}">Delete</a> -->
+                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#student-delete-Modal-{{student.pk}}">
+                            Delete
+                          </button>
                         {% endif %}
                       </div>
                     </td>
                   </tr>
+                  <div class="modal fade" id="student-delete-Modal-{{student.pk}}" tabindex="-1" role="dialog" aria-labelledby="student-delete-ModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header text-secondary">
+                          <h5 class="modal-title" id="student-delete-ModalLabel">Student Deletion</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="container my-3 text-secondary">
+                            <h5 >Confirm Deletion</h5>
+                            <p>Are you sure you want to delete  <strong>{{ student.user.username }}</strong> student?</p>
+
+                            <form method="post" action="{% url 'student-delete' student_id=student.id %}">
+                              {% csrf_token %}
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger">Confirm Deletion</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   {% endfor %}
 
                 </tbody>

@@ -1,131 +1,132 @@
 {% extends 'base.html' %}
 {% block title %}  Home Page  {% endblock %}
 {% block content %}
-  <br/><br/>
-  <div class="row my-5 mr-2 py-5">
-    <div class="col-md-2 d-none d-md-block pl-2">
-      {% include "admin_app/admin_navbar.html" %}
-    </div>
+  <div class="my-5 mr-5 pt-3 pb-5">
+    <div class="row">
+      <div class="col-md-2 d-none d-md-block pl-2">
+        {% include "admin_app/admin_navbar.html" %}
+      </div>
 
-    <!-- content -->
-    <div class="col-md-10 ml-sm-auto px-4 py-5" style="background-color: rgb(40, 109, 109)">
-      <p>Hi     <span class="text-success bg-white my-3 rounded p-2" style="font-size: 25px;"> {{ user.username }} </span> </p>
-      <div class="row m-0 px-5">
-        <h3 class="mb-3">Dashboard</h3>
-        <div class="col-12 p-0">
-          <div class="topstat d-flex justify-content-between">
-            <div class="statbox">
-              <span class="text-white">
-                <i class="fas fa-user-graduate fa-3x"></i>
-              </span>
-              <div class="text">
-                <p>Students</p>
-                <h3>
-                  <a class="text-white bg-primary px-3 py-1 rounded" href="{% url 'student-list' %}">{{ total_students }}</a>
-                </h3>
+      <!-- content -->
+      <div class="col-md-10 ml-sm-auto px-4 py-5" style="background-color: rgb(40, 109, 109); margin: 0 auto;">
+        <p>Hi     <span class="text-success bg-white my-3 rounded p-2" style="font-size: 25px;"> {{ user.username }} </span> </p>
+        <div class="row m-0 px-5">
+          <h3 class="mb-3">Dashboard</h3>
+          <div class="col-12 p-0">
+            <div class="topstat d-flex justify-content-between">
+              <div class="statbox">
+                <span class="text-white">
+                  <i class="fas fa-user-graduate fa-3x"></i>
+                </span>
+                <div class="text">
+                  <p>Students</p>
+                  <h3>
+                    <a class="text-white bg-primary px-3 py-1 rounded" href="{% url 'student-list' %}">{{ total_students }}</a>
+                  </h3>
+                </div>
               </div>
-            </div>
-            <div class="statbox">
-              <span class="text-white">
-                <i class="fas fa-chalkboard-teacher fa-3x"></i>
-              </span>
-              <div class="text">
-                <p>Teachers</p>
-                <h3>
-                  <a class="text-white bg-primary px-3 py-1 rounded" href="{% url 'teacher-list' %}">{{ total_teachers }}</a>
-                </h3>
+              <div class="statbox">
+                <span class="text-white">
+                  <i class="fas fa-chalkboard-teacher fa-3x"></i>
+                </span>
+                <div class="text">
+                  <p>Teachers</p>
+                  <h3>
+                    <a class="text-white bg-primary px-3 py-1 rounded" href="{% url 'teacher-list' %}">{{ total_teachers }}</a>
+                  </h3>
+                </div>
               </div>
-            </div>
-            <div class="statbox">
-              <span class="text-white">
-                <i class="fas fa-users fa-3x"></i>
-              </span>
-              <div class="text">
-                <p>Clubs</p>
-                <h3>20</h3>
+              <div class="statbox">
+                <span class="text-white">
+                  <i class="fas fa-users fa-3x"></i>
+                </span>
+                <div class="text">
+                  <p>Clubs</p>
+                  <h3>20</h3>
+                </div>
               </div>
-            </div>
-            <div class="statbox">
-              <span class="text-white">
-                <i class="fas fa-book fa-3x"></i>
-              </span>
-              <div class="text">
-                <p>Books</p>
-                <h3>2000</h3>
+              <div class="statbox">
+                <span class="text-white">
+                  <i class="fas fa-book fa-3x"></i>
+                </span>
+                <div class="text">
+                  <p>Books</p>
+                  <h3>2000</h3>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- second row -->
-      <div id="second-row" class="row m-0 px-5">
-        <div class="col-12 mt-5 p-0 d-flex justify-content-between">
-          <div class="card bg-secondary">
-            <div class="card-header">
-              <h5>Upcoming events</h5>
+        <!-- second row -->
+        <div id="second-row" class="row m-0 px-5">
+          <div class="col-12 mt-5 p-0 d-flex justify-content-between">
+            <div class="card bg-secondary">
+              <div class="card-header">
+                <h5>Upcoming events</h5>
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between bg-secondary">
+                  <span class="name">Seminar on Machine Learning</span>
+                  <span class="date">december 12</span>
+                  <span class="organizer">dpi decoder</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between bg-secondary">
+                  <span class="name">Spelling Bee</span>
+                  <span class="date">november 26</span>
+                  <span class="organizer">english club</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between bg-secondary">
+                  <span class="name">hello! you.</span>
+                  <span class="date">december 2</span>
+                  <span class="organizer">cultural club</span>
+                </li>
+              </ul>
             </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item d-flex justify-content-between bg-secondary">
-                <span class="name">Seminar on Machine Learning</span>
-                <span class="date">december 12</span>
-                <span class="organizer">dpi decoder</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between bg-secondary">
-                <span class="name">Spelling Bee</span>
-                <span class="date">november 26</span>
-                <span class="organizer">english club</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between bg-secondary">
-                <span class="name">hello! you.</span>
-                <span class="date">december 2</span>
-                <span class="organizer">cultural club</span>
-              </li>
-            </ul>
-          </div>
-          <div class="card bg-secondary">
-            <div class="card-header">
-              <h5>Notice Board</h5>
+            <div class="card bg-secondary">
+              <div class="card-header">
+                <h5>Notice Board</h5>
+              </div>
+              <ul class="list-group">
+                <li class="list-group-item bg-secondary">
+                  <h5 class="date">23 nov 2019</h5>
+                  <h5>Admit card collecting notice.</h5>
+                </li>
+              </ul>
             </div>
-            <ul class="list-group">
-              <li class="list-group-item bg-secondary">
-                <h5 class="date">23 nov 2019</h5>
-                <h5>Admit card collecting notice.</h5>
-              </li>
-            </ul>
           </div>
         </div>
-      </div>
 
-      <!-- end of second row -->
-      <!-- payment row -->
-      <div class="row m-0 px-5">
-        <h3 class="mt-5 mb-3">Stuff Payment</h3>
-        <div class="col-12 p-0 d-flex justify-content-between">
-          <div class="unpaid card">
-            <ul class="list-group list-group-flush">
-              <li class="title list-group-item bg-secondary">
-                <h5>unpaid</h5>
-              </li>
-              <li class="list-group-item bg-secondary">
-                <input type="checkbox" name="paid"> Md. Shariful Islam
-              </li>
-              <li class="list-group-item bg-secondary">
-                <input type="checkbox" name="paid"> Md. Shariful Islam
-              </li>
-              <li class="list-group-item bg-secondary">
-                <input type="checkbox" name="paid"> Md. Shariful Islam
-              </li>
-            </ul>
-          </div>
-          <div class="paid card bg-secondary">
-            <ul class="list-group list-group-flush">
-              <li class="title list-group-item bg-secondary">
-                <h5>paid</h5>
-              </li>
-              <li class="list-group-item bg-secondary">Suma rani das</li>
-              <li class="list-group-item bg-secondary">Johir chy</li>
-            </ul>
+        <!-- end of second row -->
+        <!-- payment row -->
+        <div class="row m-0 px-5">
+          <h3 class="mt-5 mb-3">Stuff Payment</h3>
+          <div class="col-12 p-0 d-flex justify-content-between">
+            <div class="unpaid card">
+              <ul class="list-group list-group-flush">
+                <li class="title list-group-item bg-secondary">
+                  <h5>unpaid</h5>
+                </li>
+                <li class="list-group-item bg-secondary">
+                  <input type="checkbox" name="paid"> Md. Shariful Islam
+                </li>
+                <li class="list-group-item bg-secondary">
+                  <input type="checkbox" name="paid"> Md. Shariful Islam
+                </li>
+                <li class="list-group-item bg-secondary">
+                  <input type="checkbox" name="paid"> Md. Shariful Islam
+                </li>
+              </ul>
+            </div>
+            <div class="paid card bg-secondary">
+              <ul class="list-group list-group-flush">
+                <li class="title list-group-item bg-secondary">
+                  <h5>paid</h5>
+                </li>
+                <li class="list-group-item bg-secondary">Suma rani das</li>
+                <li class="list-group-item bg-secondary">Johir chy</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

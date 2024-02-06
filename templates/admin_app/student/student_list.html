@@ -3,7 +3,7 @@
 {% block content %}
   {% if messages %}
     {% for message in messages %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <div mt-5 class="alert alert-success alert-dismissible fade show" role="alert">
       {{ message }}
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
@@ -14,19 +14,21 @@
 
   <div class="my-5 mr-5 pt-3 pb-5">
     <div class="row">
-      <div class="col-md-3 d-none d-md-block bg-secondary px-2 mr-2">
+      <div class="col-md-2 d-none d-md-block bg-secondary px-2 mr-2">
         {% if request.user.userprofile.role == 'admin' %}
           {% include 'admin_app/admin_navbar.html' %}
         {% else %}
           {% include 'accounts/head_navbar.html' %}
         {% endif %}
       </div>
-      <div class="col-md-10 py-5" style="background-color: rgb(40, 109, 109); max-width: 70%;">
-        <div class="btn-group" role="group" aria-label="department students list">
-          <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
+      <div class="col-md-10 py-5" style="background-color: rgb(40, 109, 109); max-width: 70%; margin: 0 auto;">
+        <!-- <div class="btn-group" role="group" aria-label="department students list">
+          <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage..</a>
           <a class="btn btn-primary" href="{% url 'add-student' %}"> Add more</a>
-        </div>
-        <h3 class="text-center mt-4">List of students in our department </h3>
+        </div> -->
+        <h3 class="text-center mt-4">
+          List of students in our {% if request.user.userprofile.role == 'admin' %} College {% else %} department {% endif %}
+        </h3>
         <div class="mb-5">
             <p>{{ number_of_students }} total students </p>
             <table class="table table-dark table-responsive">
@@ -58,16 +60,112 @@
                   <td> {{ student.department }} </td>
                   <td>
                     <div class="btn-group">
-                      <a class="btn btn-primary" href="{% url 'student-edit' student_id=student.pk %}">Edit</a>
+                      {% if request.user.userprofile == student or request.user.userprofile.role == 'admin' %}
+                        <a class="btn btn-primary" href="{% url 'edit-profile' profile_id=student.id %}">Edit</a>
+                      {% endif %}
                       <a class="btn btn-primary" href="{% url 'student-detail' student_id=student.pk %}">View</a>
-                      <a class="btn btn-primary" href="{% url 'student-delete' student_id=student.pk %}">Delete</a>
+                      {% if request.user.userprofile == student or request.user.userprofile.role == 'admin' %}
+                        <!-- <a class="btn btn-primary" href="{% url 'student-delete' student_id=student.pk %}">Delete</a> -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#student-delete-Modal-{{student.pk}}">
+                          Delete
+                        </button>
+                        <button class="btn btn-primary deactivate-btn" id="deactivateBtn" data-student-id="{{ student.pk }}" data-deactivated="{% if student.user.is_active %}false{% else %}true{% endif %}">
+                          {% if student.user.is_active %}
+                            Deactivate
+                          {% else %}
+                            Reactivate
+                          {% endif %}
+                        </button>
+                      {% endif %}
                     </div>
                   </td>
                 </tr>
+                <div class="modal fade" id="student-delete-Modal-{{student.pk}}" tabindex="-1" role="dialog" aria-labelledby="student-delete-ModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header text-secondary">
+                        <h5 class="modal-title" id="student-delete-ModalLabel">Student Deletion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="container my-3 text-secondary">
+                          <h5 >Confirm Deletion</h5>
+                          <p>Are you sure you want to delete  <strong>{{ student.user.username }}</strong> student?</p>
+
+                          <form method="post" action="{% url 'student-delete' student_id=student.id %}">
+                            {% csrf_token %}
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-danger">Confirm Deletion</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 {% endfor %}
               </tbody>
             </table>
         </div>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const deactivateButtons = document.querySelectorAll('.deactivate-btn');
+            deactivateButtons.forEach(button => {
+              console.log('Deactivate btn:  ', button)
+              button.addEventListener('click', function() {
+                const studentId = parseInt(button.getAttribute('data-student-id', 10));
+                console.log('Studentid= ', studentId)
+                const isDeactivated = button.getAttribute('data-deactivated') === 'true';
+                console.log('isDaectivated= ', isDeactivated)
+                console.log('cookies: '+getCookie('csrftoken'))
+
+                // const url = `http://localhost:8000/student/${studentId}/deactivate/`;
+                const url = `${window.location.origin}/teacher/${teacherId}/deactivate/`;
+
+                fetch(url, {
+                  method: 'POST',
+                  headers: {'Content-Type': 'application/json'},
+                  body: JSON.stringify({studentId}),
+                })
+                .then(response => {
+                  console.log('Response status:', response.status);
+                  return response.json();
+                })
+                .then(data => {
+                  if (data.is_deactivated) {
+                    button.textContent = 'Reactivate';
+                    button.setAttribute('data-deactivated', 'true');
+                  } else {
+                    button.textContent = 'Deactivate';
+                    button.setAttribute('data-deactivated', 'false');
+                  }
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                });
+              });
+            });
+
+            function getCookie(name) {
+              let cookieValue = null;
+              if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                  const cookie = cookies[i].trim();
+                  if (cookie.substring(0, name.length + 1) === name + '=') {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                  }
+                }
+              }
+              return cookieValue;
+            }
+          });
+        </script>
       </div>
     </div>
   </div>

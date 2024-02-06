@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import UserProfile, Department, Course, Assessment, Mark, LeaveRequest
-from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarksForm, AssessmentForm, LeaveRequestForm, EditTeacherForm
+from accounts.forms import EditProfileForm
+from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarksForm, AssessmentForm, LeaveRequestForm, LeaveRequestApprovalForm, EditTeacherForm
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models import Count
 from django.http import HttpResponse
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.decorators import login_required
 
 
 def letter_grade(total_weights, total_marks):
@@ -218,7 +221,7 @@ def course_delete(request, course_code):
     if request.method == 'POST':
         course.delete()
         return redirect('course-list')
-    # return render(request, 'admin_app/course/course_delete.html', {'course': course})
+    return render(request, 'admin_app/course/course_delete.html', {'course': course})
 
 # Department list
 def department_list(request):
@@ -241,10 +244,11 @@ def department_edit(request, department_id):
             return redirect('department-detail', department_id=department_id)
     else:
         form_department = AddDepartmentForm(instance=department)
-    return render(request, 'admin_app/department/department_edit.html', {'form_department': form_department })
+    return render(request, 'admin_app/department/department_edit.html', {'form_department': form_department, 'department': department })
 
 def department_detail(request, department_id):
     department = Department.objects.get(pk=department_id)
+    # userprofile = UserProfile.objects.filter(department=department)
     context = {
       'department':department
    }
@@ -312,15 +316,15 @@ def department_teacher_list(request, department_id, role):
 
 #     return render(request, 'admin_app/head/my_all_department_students.html', {'department_students': department_students})
 
-def teacher_edit(request, teacher_id):
-    teacher = get_object_or_404(UserProfile, pk=teacher_id)
+def teacher_edit(request, profile_id):
+    teacher = get_object_or_404(UserProfile, pk=profile_id)
     if request.method == 'POST':
         form_teacher = EditTeacherForm(request.POST, request.FILES, instance=teacher)
         if form_teacher.is_valid():
             # form_teacher.save(commit=False)
             # teacher.user= request.user
             form_teacher.save()
-            return redirect('teacher-detail', teacher_id=teacher_id)
+            return redirect('teacher-detail', teacher_id=profile_id)
     else:
         form_teacher = AddTeacherForm(instance=teacher)
     return render(request, 'accounts/registration/edit_profile_dynamic.html', {'form_teacher': form_teacher, 'teacher':teacher })
@@ -333,9 +337,29 @@ def teacher_detail(request, teacher_id):
    }
     return render(request, 'admin_app/teacher/teacher_detail.html', context)
 
+from django.http import HttpResponseNotAllowed
+
+def teacher_deactivate(request, teacher_id):
+    teacher = get_object_or_404(User, pk=teacher_id)
+    print('Active or inactive=  ', teacher.user.is_active)
+    if request.method == 'POST':
+        if teacher.user.is_active:
+            teacher.user.is_active = False
+            teacher.user.save()
+            # You might also want to perform additional actions here, such as revoking access or privileges
+
+            messages.success(request, 'Teacher profile deactivated successfully.')
+        else:
+            messages.error(request, 'Teacher profile is already deactivated.')
+
+        return redirect('teacher-list')  # Redirect to the teacher list page after deactivation
+    else:
+        return HttpResponseNotAllowed(['POST'])
+
+@login_required
 def teacher_delete(request, teacher_id):
     profile = request.user.userprofile
-    department_id = profile.department.id
+    department_id = profile.department
     print('department in teacher_delete view= ', department_id)
     role = profile.role
     print('Profile= ', profile)
@@ -343,12 +367,12 @@ def teacher_delete(request, teacher_id):
     if request.method == 'POST':
         teacher.delete()
         # teacher.user.delete()
-        messages.info(request, "Deleted successfully!")
+        messages.success(request, "Deleted successfully!")
         if role == 'admin':
             return redirect('teacher-list')
         else:
             return redirect('department-teacher-list', department_id, role)
-    return render(request, 'admin_app/teacher/teacher_delete.html', {'teacher': teacher, 'department': department_id})
+    # return render(request, 'admin_app/teacher/teacher_delete.html', {'teacher': teacher, 'department': department_id})
 
 def teacher_courses(request):
     user_profile = UserProfile.objects.get(user=request.user)
@@ -543,16 +567,17 @@ def department_student_list(request, department_id, role):
 
    return render(request, 'admin_app/student/student_list.html', context)
 
-def student_edit(request, student_id):
-    student = get_object_or_404(UserProfile, pk=student_id)
+def student_edit(request, profile_id):
+    profile = get_object_or_404(UserProfile, pk=profile_id)
+    print(f'profile id:  {profile.id} and given profile id: {profile_id}')
     if request.method == 'POST':
-        form_student = AddStudentForm(request.POST, request.FILES, instance=student)
+        form_student = EditProfileForm(request.POST, request.FILES, instance=profile.use)
         if form_student.is_valid():
             form_student.save()
-            return redirect('student-detail', student_id=student_id)
+            return redirect('student-detail', student_id=profile_id)
     else:
-        form_student = AddStudentForm(instance=student)
-    return render(request, 'accounts/registration/edit_profile_dynamic.html', {'form_student': form_student, 'student':student })
+        form_student = EditProfileForm(instance=profile.user)
+    return render(request, 'accounts/registration/edit_profile_dynamic.html', {'form_student': form_student, 'profile':profile })
 
 def student_detail(request, student_id):
     student = UserProfile.objects.get(pk=student_id)
@@ -564,16 +589,18 @@ def student_detail(request, student_id):
 
 def student_delete(request, student_id):
     profile = request.user.userprofile
-    department_id = profile.department.id
+    department_id = profile.department
     role = profile.role
     student = get_object_or_404(UserProfile, pk=student_id)
     if request.method == 'POST':
         student.delete()
         # student.user.delete()
-        messages.info(request, "Deleted successfully!")
+        messages.success(request, "Deleted successfully!")
         if role == 'admin':
+            messages.success(request, "Deleted successfully!")
             return redirect('student-list')  # Redirect to the student list view
         else:
+            messages.success(request, "Deleted successfully!")
             return redirect('department-student-list', department_id, role)  # Redirect to the department student list view
     return render(request, 'admin_app/student/student_delete.html', {'student': student })
 
@@ -703,30 +730,44 @@ def leave_request(request):
         form = LeaveRequestForm(request.POST)
         if form.is_valid():
             leave_request = form.save(commit=False)
-            leave_request.userprofile = request.user.userprofile
+            leave_request.requested_by= request.user.userprofile
             leave_request.save()
+            print('Leave requester=' , leave_request.requested_by)
             return redirect('leave-request-details', leave_request.id)
     else:
         form = LeaveRequestForm()
-
     return render(request, 'admin_app/general/leave_request_form.html', {'form': form})
 
 def manage_leave_request(request):
-    # requested_to = None
-    # if request.user.userprofile and request.user.userprofile.department:
-    #     requested_to = request.user.userprofile.department.department_head
-    # else:
-
     requested_by = request.user.userprofile
-    print('department=', request.user.userprofile.department)
     requested_to = request.user.userprofile.department.department_head
+    print('requested_to= ', requested_to )
+    user = User.objects.get(username=requested_to)
     my_leave_requests = LeaveRequest.objects.filter(requested_by= requested_by)
-    return render(request, 'admin_app/general/manage_leave_request.html',
-                  {'my_leave_requests': my_leave_requests, 'requested_by': requested_by, 'requested_to': requested_to})
+    requested_leaves = LeaveRequest.objects.filter(requested_to=user.userprofile)
 
-def leave_request_approval(request):
-    pending_leave_requests = LeaveRequest.objects.filter(approved=False)
-    return render(request, 'admin_app/general/leave_request_approval.html', {'pending_leave_requests': pending_leave_requests})
+    requested_to = request.user.userprofile.department.department_head
+    user = User.objects.get(username=requested_to)
+    pending_leave_requests = LeaveRequest.objects.filter(is_approved=False, requested_to=user.userprofile)
+    return render(request, 'admin_app/general/manage_leave_request.html',
+                  {'my_leave_requests': my_leave_requests, 'requested_by': requested_by,
+                   'requested_leaves': requested_leaves, 'requested_to': user, 'pending_leave_requests': pending_leave_requests})
+
+def leave_request_approval(request, leave_request_id):
+    leave_request = LeaveRequest.objects.get(pk=leave_request_id)
+    print('leave request=' , leave_request.is_approved)
+    if request.method == 'POST':
+        approval_form = LeaveRequestApprovalForm(request.POST, instance=leave_request)
+        if approval_form.is_valid():
+            approval_form.is_approved = True
+            approval_form.save()
+            # Additional logic after form submission (e.g., sending notifications, updating status, etc.)
+            return redirect('leave-request-details', leave_request_id)  # Redirect to a success page
+    # else:
+    #     approval_form = LeaveRequestApprovalForm(instance=leave_request)
+
+    # return render(request, 'admin_app/general/leave_request_approval.html', {'approval_form': approval_form, 'leave_request': leave_request})
+
 
 def leave_request_details(request, leave_request_id):
     leave_request = get_object_or_404(LeaveRequest, pk=leave_request_id)

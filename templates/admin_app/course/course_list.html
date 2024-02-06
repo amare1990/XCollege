@@ -12,7 +12,7 @@
         </div>
       {% endfor %}
     {% endif %}
-    <div class="row container-fluid">
+    <div class="row">
       <div class="col-md-2 d-none d-md-block bg-secondary px-2">
         {% if request.user.userprofile.role == 'admin' %}
             {% include 'admin_app/admin_navbar.html' %}
@@ -24,10 +24,12 @@
             {% include 'accounts/student_navbar.html' %}
           {% endif %}
       </div>
-      <div class="col-md-10 py-5 ml-2" style="max-width: 60rem; background-color: rgb(40, 109, 109);">
+      <div class="col-md-10 py-5" style="max-width: 60rem; background-color: rgb(40, 109, 109); margin: 0 auto;">
         <div class="btn-group" role="group" aria-label="All course litss">
-          <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage </a>
-          <a class="btn btn-primary" href="{% url 'add-course' %}"> Add more course</a>
+          <!-- <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage </a> -->
+          {% if request.user.userprofile.role == 'admin' %}
+            <a class="btn btn-primary" href="{% url 'add-course' %}"> Add more course</a>
+          {% endif %}
         </div>
         <h3 class="text-center mt-5">List of courses</h3>
         <div class="my-5">
@@ -55,10 +57,38 @@
                     <div class="btn-group" role="group" aria-label="Action group buttons">
                       <a class="btn btn-primary" href="{% url 'course-edit' course_code=course.course_code %}">Edit</a>
                       <a class="btn btn-primary" href="{% url 'course-detail' course_code=course.course_code %}">View</a>
-                      <a class="btn btn-primary" href="{% url 'course-delete' course_code=course.course_code %}">Delete</a>
+                      <!-- <a class="btn btn-primary" href="{% url 'course-delete' course_code=course.course_code %}">Delete</a> -->
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#course-delete-Modal-{{ course.course_code }}">
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>
+                <div class="modal fade" id="course-delete-Modal-{{ course.course_code }}" tabindex="-1" role="dialog" aria-labelledby="course-delete-ModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header text-secondary">
+                        <h5 class="modal-title" id="course-delete-ModalLabel">Course Deletion</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="container my-3 text-secondary">
+                          <h5 >Confirm Deletion</h5>
+                          <p>Are you sure you want to delete  <strong>{{ course.name }}</strong> course?</p>
+                          <form method="post" action="{% url 'course-delete' course_code=course.course_code %}">
+                            {% csrf_token %}
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-danger">Confirm Deletion</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 {% endfor %}
               </tbody>
             </table>

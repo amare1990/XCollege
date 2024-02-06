@@ -70,7 +70,7 @@
           </button>
           <div class="dropdown-menu dropdown-menu-right bg-primary" aria-labelledby="dropdownMenuButton">
             <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
-            <a class="nav-link text-white" href="{% url 'edit-profile' %}">Edit profile</a>
+            <a class="nav-link text-white" href="{% url 'edit-profile' profile_id=request.user.userprofile.id %}">Edit profile</a>
             <a class="nav-link text-white" href="{% url 'change-password' %}">Change password</a>
             <a class="nav-link text-white" href="{% url 'reset_password' %}">Reset your password?</a>
             {% if user.userprofile.role or user.is_superuser or user.is_staff%}

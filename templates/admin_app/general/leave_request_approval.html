@@ -1,30 +1,5 @@
-{% extends 'base.html' %}
-{% block title %}  Manage Leave request {% endblock %}
-{% block content%}
-  <div class="container my-5 py-5 bg-secondary">
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      {% endfor %}
-    {% endif %}
-    <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'admin-dashboard' %}">Homepage</a>
-    <h3 class="text-center py-3">Pending Leave Requests</h3>
-    <ul>
-      {% for leave_request in pending_leave_requests %}
-        <li>
-          Start Date: {{ leave_request.start_date }} | End Date: {{ leave_request.end_date }} | Reason: {{ leave_request.reason }}
-          <form method="post" action="{% url 'approve_leave_request' leave_request.id %}">
-            {% csrf_token %}
-            <button type="submit" name="action" value="approve">Approve</button>
-            <button type="submit" name="action" value="reject">Reject</button>
-          </form>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-{% endblock %}
+<form method="post" action="{% url 'leave-request-approval' leave_request.id %}">
+  {% csrf_token %}
+  {{ approval_form.as_p }}
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

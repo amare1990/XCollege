@@ -1,82 +1,244 @@
 {% extends 'base.html' %}
-{% block title %}List of teachers {% endblock %}
+{% load static %}
+{% block title %}List of teachers{% endblock %}
 {% block content %}
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-        {% endfor %}
-      {% endif %}
-      <div class="my-5 mr-5 pt-3 pb-5">
-        <div class="row">
-          <div class="col-md-3 d-none d-md-block bg-secondary px-2 mr-2">
-            {% if request.user.userprofile.role == 'admin' %}
-            {% include 'admin_app/admin_navbar.html' %}
-          {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
-            {% include 'accounts/head_navbar.html' %}
-          {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
-            {% include 'accounts/teacher_navbar.html' %}
-          {% elif request.user.userprofile.role == 'student' %}
-            {% include 'accounts/student_navbar.html' %}
+  {% if messages %}
+    {% for message in messages %}
+      <div mt-5 class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endfor %}
+  {% endif %}
+  <div class="my-5 mr-5 pt-3 pb-5">
+    <div class="row">
+      <div class="col-md-2 d-none d-md-block bg-secondary px-2">
+        {% if request.user.userprofile.role == 'admin' %}
+        {% include 'admin_app/admin_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
+          {% include 'accounts/head_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
+          {% include 'accounts/teacher_navbar.html' %}
+        {% elif request.user.userprofile.role == 'student' %}
+          {% include 'accounts/student_navbar.html' %}
+        {% endif %}
+      </div>
+      <div class="col-md-10 py-5" style="background-color: rgb(40, 109, 109); max-width: 80%; margin: 0 auto;">
+        <div class="btn-group" role="group" aria-label="Teachers' list">
+          {% if request.user.userprofile == teacher %}
+            <a class="btn btn-primary" href="{% url 'add-teacher' %}">Add teacher</a>
           {% endif %}
-          </div>
-          <div class="col-md-10 py-5" style="background-color: rgb(40, 109, 109); max-width: 70%;">
-            <div class="btn-group" role="group" aria-label="Teachers' lis">
-              {% if request.user.userprofile == teacher %}
-                <a class="btn btn-primary" href="{% url 'add-teacher' %}">Add teacher</a>
-              {% endif %}
-            </div>
-            <h3 class="text-center">List of teachers </h3>
-            <div class="my-5">
-                <p>{{ number_of_teachers }} total teachers </p>
-                <table class="table table-dark table-responsive">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Id</th>
-                      <th scope="col"> Username </th>
-                      <th scope="col">Role</th>
-                      <th scope="col">Bio</th>
-                      <th scope="col">Tiltle</th>
-                      <th scope="col">Department</th>
-                      <th scope="col">Position</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for teacher in teachers %}
-                      <tr>
-                        <th scope="row">{{ forloop.counter }}</th>
-                        <td>
-                          <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">{{ teacher.pk }}</a>
-                        </td>
-                        <td>{{ teacher.user.username }}</td>
-                        <td>{{ teacher.role }}</td>
-                        <td>{{ teacher.bio|truncatechars:50 }}</td>
-                        <td> {{ teacher.title }} </td>
-                        <td> {{ teacher.department }} </td>
-                        <td> {{ teacher.position }} </td>
-                        <td>
-                          <div class="btn-group" role="group" aria-label="List of teachers actions">
-                            {% if request.user.userprofile == teacher %}
-                              <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=teacher.pk %}">Edit</a>
+        </div>
+        <h3 class="text-center">
+          List of teachers in our {% if request.user.userprofile.role == 'admin' %} Institute {% else %} department {% endif %}
+        </h3>
+        <div class="my-5">
+            <p>{{ number_of_teachers }} total teachers </p>
+            <table class="table table-dark table-responsive">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Id</th>
+                  <th scope="col"> Username </th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Bio</th>
+                  <th scope="col">Tiltle</th>
+                  <th scope="col">Department</th>
+                  <th scope="col">Position</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for teacher in teachers %}
+                  <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>
+                      <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">{{ teacher.pk }}</a>
+                    </td>
+                    <td>{{ teacher.user.username }}</td>
+                    <td>{{ teacher.role }}</td>
+                    <td>{{ teacher.bio|truncatechars:50 }}</td>
+                    <td> {{ teacher.title }} </td>
+                    <td> {{ teacher.department }} </td>
+                    <td> {{ teacher.position }} </td>
+                    <td>
+                      <div class="btn-group" role="group" aria-label="List of teachers actions">
+                        {% if request.user.userprofile == teacher or request.user.userprofile.role == 'admin' %}
+                          <a class="btn btn-primary" href="{% url 'edit-profile' profile_id=teacher.pk %}">Edit</a>
+                        {% endif %}
+                        <!-- <a class="btn btn-primary" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a> -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#teacher-view-Modal-{{ teacher.pk }}">
+                          View
+                        </button>
+                        {% if request.user.userprofile == teacher or request.user.userprofile.role == 'admin' %}
+                          <!-- <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a> -->
+                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#teacher-delete-Modal-{{ teacher.pk }}">
+                            Delete
+                          </button>
+
+                          <button class="btn btn-primary deactivate-btn" id="deactivateBtn" data-teacher-id="{{ teacher.pk }}" data-deactivated="{% if teacher.user.is_active %}false{% else %}true{% endif %}">
+                            {% if teacher.user.is_active %}
+                              Deactivate
+                            {% else %}
+                              Reactivate
                             {% endif %}
-                            <a class="btn btn-primary" href="{% url 'teacher-detail' teacher_id=teacher.pk %}">View</a>
-                            {% if request.user.userprofile == teacher %}
-                              <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete</a>
-                            {% endif %}
+                          </button>
+                        {% endif %}
+                      </div>
+                    </td>
+                  </tr>
+
+                  <div class="modal fade" id="teacher-view-Modal-{{ teacher.pk }}" tabindex="-1" role="dialog" aria-labelledby="teacher-view-ModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="teacher-view-ModalLabel">Teacher details</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <h3 class="my-3 bg-secondary">Teacher details</h3>
+                          <div class="card bg-secondary" style="max-width: 40rem;">
+                            <div class="row g-0">
+                              <div class="col-md-4">
+                                {% if profile.profile_picture %}
+                                  <img src="{{ profile.profile_picture.url }}" class="card-img-top" alt="Profile picture">
+                                {% else %}
+                                  <img src="{% static 'profile_pictures/default_profile.jpg' %}" class="card-img-top" alt="Default profile picture">
+                                {% endif %}
+                              </div>
+                            <div class="col-md-8">
+                              <div class="card-body">
+                                <h5 class="card-title">{{ teacher.title }}: {{ teacher.user.username|capfirst }} </h5>
+                                <p class="card-text">Role: {{ teacher.role }} <br>
+                                Title: {{ teacher.title }} <br>
+                                Position: {{ teacher.position }} <br>
+                                Faculty member in the department of {{ teacher.department }} <br>
+                                Brief bio of {{ teacher.title }}: <br> {{ teacher.bio }} <br>
+                                {% if request.user.userprofile == teacher %}
+                                  <div class="btn-group" role="group" aria-label="Basic example">
+                                    <a class="btn btn-primary" href="{% url 'edit-profile' profile_id=teacher.pk %}">
+                                      {% if request.user.userprofile == teacher %}
+                                          Edit my profile
+                                      {% else %}
+                                        Edit teacher profile
+                                      {% endif %}
+                                    </a>
+                                    <!-- <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=teacher.pk %}">Delete teacher </a> -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#teacher-delete-Modal">
+                                      {% if request.user.userprofile == teacher %}
+                                          Delete my profile
+                                      {% else %}
+                                        Delete teacher profile
+                                      {% endif %}
+                                    </button>
+                                  </div>
+                                {% endif %}
+                              </div>
+                            </div>
+                            </div>
                           </div>
-                        </td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-            </div>
-          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal fade" id="teacher-delete-Modal-{{ teacher.pk }}" tabindex="-1" role="dialog" aria-labelledby="teacher-delete-ModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header text-secondary">
+                          <h5 class="modal-title" id="teacher-delete-ModalLabel">Teacher Deletion</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="container my-3 text-secondary">
+                            <h5 >Confirm Deletion</h5>
+                            <p>Are you sure you want to delete  <strong>{{ teacher.user.username }}</strong> teacher?</p>
+                            <form method="post" action="{% url 'teacher-delete' teacher_id=teacher.id %}">
+                              {% csrf_token %}
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger">Confirm Deletion</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </tbody>
+            </table>
         </div>
       </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const deactivateButtons = document.querySelectorAll('.deactivate-btn');
+        deactivateButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            // parseInt(deactivateButton.getAttribute('data-teacher-id'), 10);
+            const teacherId = parseInt(button.getAttribute('data-teacher-id'));
+            console.log('Teacherid= ', teacherId)
+            const isDeactivated = button.getAttribute('data-deactivated') === 'true';
+            console.log('isDaectivated= ', isDeactivated)
+            console.log('cookies: '+getCookie('csrftoken'))
+
+            // const url = `http://localhost:8000/teacher/${teacherId}/deactivate/`;
+            const url = `${window.location.origin}/teacher/${teacherId}/deactivate/`;
+            console.log('url: ' , url)
+
+            fetch(url, {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken')},
+              body: JSON.stringify({teacherId: teacherId})
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(data => {
+              if (data.is_deactivated) {
+                button.textContent = 'Reactivate';
+                button.setAttribute('data-deactivated', 'true');
+              } else {
+                button.textContent = 'Deactivate';
+                button.setAttribute('data-deactivated', 'false');
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+          });
+        });
+
+        function getCookie(name) {
+          let cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              if (cookie.substring(0, name.length + 1) === name + '=') {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+              }
+            }
+          }
+          return cookieValue;
+        }
+      });
+    </script>
+  </div>
 {% endblock %}

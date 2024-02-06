@@ -46,6 +46,14 @@ venv-college/lib/python3.8/site-packages/PIL/__pycache__/BufrStubImagePlugin.cpy
 /static/**/*.min.css
 static/profile_pictures/*
 
+venv-college/lib/python3.8/site-packages/pip/*.pyc
+venv-college/lib/python3.8/site-packages/pip/_vendor/tenacity/__pycache__/*.pyc
+venv-college/bin/pip3.11
+venv-college/lib/python3.8/site-packages/pip-23.3.1.dist-info/
+venv-college/lib/python3.8/site-packages/pip/_internal/resolution/resolvelib/factory.py
+venv-college/lib/python3.8/site-packages/pip/_internal/vcs/mercurial.py
+
+
 
 
 

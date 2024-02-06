@@ -13,13 +13,21 @@
       {% endfor %}
     {% endif %}
     <div class="row">
-      <div class="col-md-2 d-none d-md-block bg-secondary">
+      <div class="col-md-2 d-none d-md-block bg-secondary px-2 mr-2">
+        {% if request.user.userprofile.role == 'admin' %}
         {% include 'admin_app/admin_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
+          {% include 'accounts/head_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
+          {% include 'accounts/teacher_navbar.html' %}
+        {% elif request.user.userprofile.role == 'student' %}
+          {% include 'accounts/student_navbar.html' %}
+        {% endif %}
       </div>
-      <div class="col-md-10 py-5 ml-5" style="max-width: 60rem; background-color: rgb(40, 109, 109);">
+      <div class="col-md-10 py-5" style="background-color: rgb(40, 109, 109); max-width: 75%; margin: 0 auto;">
         <div class="btn-group" role="group" aria-label="departments' list">
-          <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
-          <a class="btn btn-primary" href="{% url 'add-department' %}">Add more</a>
+          <!-- <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a> -->
+          <a class="btn btn-primary" href="{% url 'add-department' %}">Add department</a>
         </div>
         <h3 class="text-center pt-5"> List of departments</h3>
         <p>Total of {{ number_of_departments }} departments</p>
@@ -43,11 +51,72 @@
               <td>
                 <div class="btn-group" role="group" aria-label="List of departments">
                   <a class="btn btn-primary" href="{% url 'department-edit' department_id=dept.pk %}">Edit</a>
-                  <a class="btn btn-primary" href="{% url 'department-detail' department_id=dept.pk %}">View</a>
-                  <a class="btn btn-primary" href="{% url 'department-delete' department_id=dept.pk %}">Delete</a>
+                  <!-- <a class="btn btn-primary" href="{% url 'department-detail' department_id=dept.pk %}">View</a> -->
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#department-view-Modal-{{ dept.pk }}">
+                    View
+                  </button>
+                  <!-- <a class="btn btn-primary" href="{% url 'department-delete' department_id=dept.pk %}">Delete</a> -->
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#department-delete-Modal-{{ dept.pk }}">
+                    Delete
+                  </button>
                 </div>
               </td>
             </tr>
+            <div class="modal fade" id="department-view-Modal-{{ dept.pk }}" tabindex="-1" role="dialog" aria-labelledby="department-view-ModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-secondary" id="department-view-ModalLabel">Department details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="card bg-secondary" style="max-width: 40rem;">
+                      <div class="container py-4">
+                          <h4 class="text-center">{{ dept.name }} </h4>
+                          <p>Department Head username: {{ dept.department_head }}</p>
+                          <p> {{ dept.name }} department has three streams and five programs executing with regular, extension and summer programs.</p>
+                          <!-- <div class="btn-group" role="group" aria-label="Department details">
+                            <a class="btn btn-primary" href="{% url 'department-edit' department_id=dept.pk %}">Edit department</a>
+                            <a class="btn btn-primary" href="{% url 'department-delete' department_id=dept.pk %}">Delete department</a>
+                          </div> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="department-delete-Modal-{{ dept.pk }}" tabindex="-1" role="dialog" aria-labelledby="department-delete-ModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header text-secondary">
+                    <h5 class="modal-title text-secondary" id="department-delete-ModalLabel">Department Deletion</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="container my-3 text-secondary">
+                      <h5 >Confirm Deletion...</h5>
+                      <p>Are you sure you want to delete  <strong>{{ dept.name }}</strong> department?</p>
+                      <form method="post" action="{% url 'department-delete' department_id=dept.id %}">
+                        {% csrf_token %}
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-danger">Confirm Deletion</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             {% endfor %}
           </tbody>
         </table>

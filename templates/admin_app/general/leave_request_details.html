@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Leave request details {% endblock %}
 {% block content%}
-  <div class="container my-5 py-5 bg-secondary">
+  <div class="my-5 mr-5 pt-3 pb-5">
     {% if messages %}
       {% for message in messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,15 +12,29 @@
         </div>
       {% endfor %}
     {% endif %}
-    <div class="btn-group" role="group" aria-label="Leave request form">
-      <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">Homepage</a>
-      <a class="btn btn-primary" href="{% url 'leave-request' %}">Request leave</a>
-    </div>
-    <h3 class="text-center py-3">Leave request details requested by {{leave_request.userprofile}}</h3>
 
-    <div class="bg-dark p-3">
-      Requested by {{ leave_request.userprofile }} | Reason: {{ leave_request.reason }}| Start Date: {{ leave_request.start_date }} | End Date: {{ leave_request.end_date }} | Status: {% if leave_request.approved %} Approved {% else %} Pending {% endif %}
-    </div>
+    <div class="row">
+      <div class="col-md-2 d-none d-md-block bg-secondary px-2">
+        {% if request.user.userprofile.role == 'admin' %}
+          {% include 'admin_app/admin_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
+          {% include 'accounts/head_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
+          {% include 'accounts/teacher_navbar.html' %}
+        {% elif request.user.userprofile.role == 'student' %}
+          {% include 'accounts/student_navbar.html' %}
+        {% endif %}
+      </div>
+      <div class="col-md-10 py-5" style="background-color: rgb(40, 109, 109); max-width: 70%; margin: 0 auto;">
+        <div class="btn-group" role="group" aria-label="Leave request form">
+          <a class="btn btn-primary" href="{% url 'edit-leave-request' leave_request_id=leave_request.id %}">Edit leave request</a>
+        </div>
+        <h3 class="text-center py-3">Leave request details requested by {{leave_request.requested_by}}</h3>
 
+        <div class="bg-dark p-3">
+          Requested by {{ leave_request.requested_by }}| Requested body {{ leave_request.requested_to}} | Reason: {{ leave_request.reason }}| Start Date: {{ leave_request.start_date }} | End Date: {{ leave_request.end_date }} | Status: {% if leave_request.approved %} Approved {% else %} Pending {% endif %}
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock %}

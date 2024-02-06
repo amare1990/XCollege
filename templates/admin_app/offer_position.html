@@ -13,15 +13,15 @@
       {% endfor %}
     {% endif %}
     <div class="row">
-      <div class="col-md-2 d-none d-md-block bg-secondary">
+      <div class="col-md-2 d-none d-md-block bg-secondary px-2">
         {% include 'admin_app/admin_navbar.html' %}
       </div>
-      <div class="col-md-10 py-5 ml-5" style="max-width: 40rem; background-color: rgb(40, 109, 109);">
+      <div class="col-md-10 py-3" style="max-width: 40rem; background-color: rgb(40, 109, 109); margin: 0 auto;">
         <div class="btn-group" role="group" aria-label="Offer position">
-          <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a>
+          <!-- <a class="btn btn-primary" href="{% url 'admin-dashboard' %}">My homepage</a> -->
           <a class="btn btn-primary" href="{% url 'view-position' %}">View positions</a>
         </div>
-        <h3 class="text-center pt-5">Offer position</h3>
+        <h3 class="text-center pt-3">Offer position</h3>
         <form method="POST">
           {% csrf_token %}
           {{ form.as_p }}

@@ -14,7 +14,7 @@
     {% endif %}
 
     <div class="row">
-      <div class="col-md-3 d-none d-md-block bg-secondary">
+      <div class="col-md-2 d-none d-md-block bg-secondary px-2">
         {% if request.user.userprofile.role == 'admin' %}
           {% include 'admin_app/admin_navbar.html' %}
         {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
@@ -25,11 +25,11 @@
           {% include 'accounts/student_navbar.html' %}
         {% endif %}
       </div>
-      <div class="col-md-10 py-5 ml-5" style="max-width: 50%; background-color: rgb(40, 109, 109);">
+      <div class="col-md-10 py-5" style="max-width: 50%; background-color: rgb(40, 109, 109); margin: 0 auto;">
         <p>You are logged in as <span class="text-success"><strong>{{ user.username }}</strong></span></p>
     <h3 class="text-center bg-primary">Edit your profile here!</h3>
     <div class="form-group">
-      <form id="editProfileForm" method="POST" enctype="multipart/form-data" action="{% url 'edit-profile' %}">
+      <form id="editProfileForm" method="POST" enctype="multipart/form-data" action="{% url 'edit-profile' profile_id=profile.id %}">
         {% csrf_token %}
         <div class="form-group">
           <label for="id_username">Username:</label>

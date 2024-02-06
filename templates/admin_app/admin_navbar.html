@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg flex-column my-5 bg-secondary">
+<nav class="navbar navbar-expand-lg flex-column bg-secondary">
   <button class="navbar-toggler bg-primary" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon text-white"><i class="fas fa-bars"></i></span>
   </button>
@@ -14,14 +14,11 @@
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
           <div class="card-body">
             <ul class="nav flex-column">
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a class="nav-link text-white" href="{% url 'add-teacher' %}">Add teacher</a>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a class="nav-link text-white" href="{% url 'teacher-list' %}">View teachers</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-white" href="{% url 'staff-list' %}">Staff lists</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link text-white" href="#">Manage staff</a>
@@ -37,9 +34,9 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingtwo" data-parent="#accordion">
           <div class="card-body">
             <ul class="nav flex-column">
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a class="nav-link text-white" href="{% url 'add-student' %}">Add student</a>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a class="nav-link text-white" href="{% url 'student-list' %}">View students</a>
               </li>

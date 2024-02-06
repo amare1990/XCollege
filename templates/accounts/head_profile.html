@@ -4,13 +4,13 @@
   {% block content %}
   <br/><br/>
   <div class="row my-5">
-    <div class="col-md-3 d-none d-md-block bg-secondary">
+    <div class="col-md-2 d-none d-md-block bg-secondary px-2">
       {% include 'accounts/head_navbar.html' %}
     </div>
 
     <!-- body-->
-    <div class="statbox pl-5">
-      <div class="bg-secondary d-flex align-items-center mb-3 pl-3" style="width: 40rem;">
+    <div class="col-md-10 statbox">
+      <div class="bg-secondary d-flex align-items-center mb-3 pl-3" style="max-width: 40rem; margin: 0 auto;">
         <span class="text-primary pr-2">
           <i class="fas fa-user-graduate fa-3x"></i>
         </span>
@@ -33,7 +33,7 @@
           {% endif %}
         </P>
       </div>
-      <div class="card bg-secondary" style="width: 40rem;">
+      <div class="card bg-secondary" style="max-width: 40rem; margin: 0 auto;">
         <div class="row g-0">
           <div class="col-md-4">
             {% if profile.profile_picture %}
@@ -58,11 +58,11 @@
               Faculty member in the department of {{ profile.department }} <br>
               Position: {{ profile.position|capfirst }} <br>
               Brief bio: <br> {{ profile.bio }}</p>
-              <div class="btn-group" role="group" aria-label="Basic example">
-                <a class="btn btn-primary" href="{% url 'teacher-edit' teacher_id=profile.pk %}">Edit my profile</a>
+              <div class="btn-group" role="group" aria-label="Profile action">
+                <a class="btn btn-primary" href="{% url 'edit-profile' profile.id %}">Edit my profile</a>
                 <!-- <a class="btn btn-primary" href="{% url 'teacher-delete' teacher_id=profile.pk %}">Delete profile</a> -->
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#profile-delete-Modal">
-                  Delete profile
+                  Delete my profile
                 </button>
               </div>
           </div>

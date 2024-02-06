@@ -26,7 +26,8 @@ urlpatterns = [
     path('teacher_list/', views.teacher_list, name='teacher-list'),
     path('teacher_list/<int:department_id>/<role>/', views.department_teacher_list, name='department-teacher-list'),
     path('teacher/<int:teacher_id>/detail/', views.teacher_detail, name='teacher-detail'),
-    path('teacher/<int:teacher_id>/edit/', views.teacher_edit, name='teacher-edit'),
+    path('teacher/<int:profile_id>/edit/', views.teacher_edit, name='teacher-edit'),
+    path('teacher/<int:teacher_id>/deactivate/', views.teacher_deactivate, name='teacher-deactivate'),
     path('teacher/<int:teacher_id>/delete/', views.teacher_delete, name='teacher-delete'),
     path('teacher/teacher_courses/', views.teacher_courses, name='teacher-courses'),
 
@@ -41,7 +42,7 @@ urlpatterns = [
     path('student_list/', views.student_list, name='student-list'),
     path('student_list/<int:department_id>/<role>/', views.department_student_list, name='department-student-list'),
     path('student/<int:student_id>/detail/', views.student_detail, name='student-detail'),
-    path('student/<int:student_id>/edit/', views.student_edit, name='edit-profile'),
+    path('student/<int:profile_id>/edit/', views.student_edit, name='student-edit'),
     path('student/<int:student_id>/delete/', views.student_delete, name='student-delete'),
     path('student/register/', views.course_registration, name='course-register'),
     path('student/student_courses/', views.student_courses, name='student-courses'),
@@ -55,6 +56,7 @@ urlpatterns = [
 
     path('leave_request/', views.leave_request, name='leave-request'),
     path('manage_leave_request/', views.manage_leave_request, name='manage-leave-request'),
+    path('approvereject_leave_request/<int:leave_request_id>/', views.leave_request_approval, name='leave-request-approval'),
     path('leave_request_details/<int:leave_request_id>/', views.leave_request_details, name='leave-request-details'),
     path('delete_leave_request/<int:leave_request_id>/', views.delete_leave_request, name='delete-leave-request'),
     path('edit_leave_request/<int:leave_request_id>/', views.edit_leave_request, name='edit-leave-request'),
