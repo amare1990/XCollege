@@ -740,6 +740,8 @@ def leave_request(request):
 
 def manage_leave_request(request):
     requested_by = request.user.userprofile
+    print('Requested to department= ', request.user.userprofile.department)
+    print(f'department name: {request.user.userprofile.department} whereas the head username is {request.user.userprofile.department.department_head}')
     requested_to = request.user.userprofile.department.department_head
     print('requested_to= ', requested_to )
     user = User.objects.get(username=requested_to)
@@ -748,25 +750,27 @@ def manage_leave_request(request):
 
     requested_to = request.user.userprofile.department.department_head
     user = User.objects.get(username=requested_to)
-    pending_leave_requests = LeaveRequest.objects.filter(is_approved=False, requested_to=user.userprofile)
+    # pending_leave_requests = LeaveRequest.objects.filter(is_approved=False, requested_to=user.userprofile)
+    pending_leave_requests = LeaveRequest.objects.filter(status='pending', requested_to=user.userprofile)
     return render(request, 'admin_app/general/manage_leave_request.html',
                   {'my_leave_requests': my_leave_requests, 'requested_by': requested_by,
                    'requested_leaves': requested_leaves, 'requested_to': user, 'pending_leave_requests': pending_leave_requests})
 
 def leave_request_approval(request, leave_request_id):
     leave_request = LeaveRequest.objects.get(pk=leave_request_id)
-    print('leave request=' , leave_request.is_approved)
+    print('leave request status=' , leave_request.status)
     if request.method == 'POST':
         approval_form = LeaveRequestApprovalForm(request.POST, instance=leave_request)
         if approval_form.is_valid():
-            approval_form.is_approved = True
+            # approval_form.is_approved = True
+            leave_request.is_approved = True
             approval_form.save()
             # Additional logic after form submission (e.g., sending notifications, updating status, etc.)
             return redirect('leave-request-details', leave_request_id)  # Redirect to a success page
-    # else:
-    #     approval_form = LeaveRequestApprovalForm(instance=leave_request)
+    else:
+        approval_form = LeaveRequestApprovalForm(instance=leave_request)
 
-    # return render(request, 'admin_app/general/leave_request_approval.html', {'approval_form': approval_form, 'leave_request': leave_request})
+    return render(request, 'admin_app/general/leave_request_approval.html', {'approval_form': approval_form, 'leave_request': leave_request})
 
 
 def leave_request_details(request, leave_request_id):

@@ -68,7 +68,9 @@ class School(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=50)
-    department_head = models.CharField(max_length=50, blank=True, null=True)
+    department_head = models.OneToOneField('UserProfile', on_delete=models.SET_NULL, related_name='department_head', blank=True, null=True)
+    # department_head = models.CharField(max_length=50, blank=True, null=True)
+    # department_head = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     def __str__(self):
         return self.name if self.name else "Unnamed Department"
 
@@ -174,12 +176,18 @@ class Mark(models.Model):
     comment = models.CharField(max_length=100, blank=True, null=True, default='Ok!')
 
 class LeaveRequest(models.Model):
+    status = (('pending', 'Pending'),
+              ('is_approved', 'Approved'),
+              ('is_rejected', 'Rejected'),
+              )
     requested_by = models.ForeignKey(UserProfile, related_name='leave_requests_requested_by', on_delete=models.CASCADE)
     requested_to = models.ForeignKey(UserProfile, related_name='leave_requests_requested_to', on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
     reason = models.TextField()
-    is_approved = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, choices=status, default='pending')
+    # is_approved = models.BooleanField(default=False)
+    # is_rejected = models.BooleanField(default=False)
     leave_request_comments = models.TextField(blank=True)
     notification_viewed = models.BooleanField(default=False)
 

@@ -39,7 +39,7 @@
                 <th scope="col">Requested by</th>
                 <th scope="col">Requested body</th>
                 <th scope="col">Reason</th>
-                <th scope="col"> Start Date </th>
+                <th scope="col">Start Date </th>
                 <th scope="col">End Date</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
@@ -62,17 +62,22 @@
                   <td>{{ leave_request.reason }}</td>
                   <td>{{ leave_request.start_date }}</td>
                   <td>{{ leave_request.end_date }}</td>
+                  <!-- <td>Status: {{ leave_request.is_approved }}</td> -->
                   <td>
-                    {% if leave_request.is_approved %}
-                      <span style="color: darkgoldenrod;">Approved</span>
+                    {% if leave_request.status == 'is_approved' %}
+                      <span style="color: rgb(68, 240, 15);">Approved</span>
+                    {% elif leave_request.status == 'is_rejected' %}
+                      <span style="color: rgb(240, 15, 34);">Rejected</span>
                     {% else %}
                       <span style="color: darkgoldenrod;">Pending </span>
                     {% endif %}
                   </td>
                   <td>
                     <div class="btn-group" role="group" aria-label="Edit assessment">
-                      <a class="btn btn-primary" href="{% url 'edit-leave-request' leave_request_id=leave_request.id %}">Edit</a>
-                      <a class="btn btn-primary" href="{% url 'delete-leave-request' leave_request_id=leave_request.id %}">Delete</a>
+                      {% if leave_request.is_approved is False %}
+                        <a class="btn btn-primary" href="{% url 'edit-leave-request' leave_request_id=leave_request.id %}">Edit</a>
+                        <a class="btn btn-primary" href="{% url 'delete-leave-request' leave_request_id=leave_request.id %}">Delete</a>
+                      {% endif %}
                     </div>
                   </td>
                 </tr>
@@ -98,6 +103,7 @@
                   <th scope="col">End Date</th>
                   <th scope="col">Approve/Reject</th>
                   <th scope="col">Comments</th>
+                  <th scope="col">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -122,15 +128,20 @@
                     <td>
                       <form method="post" action="{% url 'leave-request-approval' leave_request_id=lrequest.id %}">
                         {% csrf_token %}
-                        <div>
+                        <!-- <div>
+                          <label for="id_is_approved">Is Approved:</label>
                           {{ approval_form.is_approved }}
                         </div>
                         <div>
-                          {{ approval_form.leave_request_comments }}
+                          <label for="id_leave_request_comments">Comments:</label>
+                          {{ approval_form.leave_request_comments }} -->
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Approve</button>
                       </form>
                     </td>
+
+                    <td>{{ lrequest.leave_request_comments }}</td>
+                    <td>{{ lrequest.status }}</td>
                   </tr>
                 {% endfor %}
               </tbody>

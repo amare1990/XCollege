@@ -215,7 +215,7 @@ class LeaveRequestForm(forms.ModelForm):
     class Meta:
         model = LeaveRequest
         fields ='__all__'
-        exclude = ('requested_by', 'is_approved', 'leave_request_comments', 'notification_viewed',)
+        exclude = ('requested_by', 'status', 'leave_request_comments', 'notification_viewed',)
 
         widgets = {
         'start_date': forms.DateInput(attrs={'type': 'date'}),
@@ -225,4 +225,4 @@ class LeaveRequestForm(forms.ModelForm):
 class LeaveRequestApprovalForm(forms.ModelForm):
     class Meta:
         model = LeaveRequest
-        fields = ['is_approved', 'leave_request_comments']
+        fields = ['status', 'leave_request_comments']
