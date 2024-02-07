@@ -1,5 +1,13 @@
-<form method="post" action="{% url 'leave-request-approval' leave_request.id %}">
+<!-- <form method="post" action="{% url 'leave-request-approval' leave_request.id %}">
   {% csrf_token %}
   {{ approval_form.as_p }}
   <button type="submit" class="btn btn-primary">Submit</button>
+</form> -->
+
+<form method="post" action="{% url 'leave-request-approval' leave_request.id %}">
+  {% csrf_token %}
+  {{ approval_form.as_p }}
+  <button type="submit" name="approve" class="btn btn-primary">Approve</button>
+  <button type="submit" name="reject" class="btn btn-danger">Reject</button>
 </form>
+

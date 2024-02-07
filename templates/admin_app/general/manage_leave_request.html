@@ -42,6 +42,7 @@
                 <th scope="col">Start Date </th>
                 <th scope="col">End Date</th>
                 <th scope="col">Status</th>
+                <th scope="col">Comment</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -72,9 +73,10 @@
                       <span style="color: darkgoldenrod;">Pending </span>
                     {% endif %}
                   </td>
+                  <td>{{ leave_request.leave_request_comments }}</td>
                   <td>
                     <div class="btn-group" role="group" aria-label="Edit assessment">
-                      {% if leave_request.is_approved is False %}
+                      {% if leave_request.status == 'pending' %}
                         <a class="btn btn-primary" href="{% url 'edit-leave-request' leave_request_id=leave_request.id %}">Edit</a>
                         <a class="btn btn-primary" href="{% url 'delete-leave-request' leave_request_id=leave_request.id %}">Delete</a>
                       {% endif %}
@@ -102,8 +104,8 @@
                   <th scope="col">Start Date </th>
                   <th scope="col">End Date</th>
                   <th scope="col">Approve/Reject</th>
-                  <th scope="col">Comments</th>
                   <th scope="col">Status</th>
+                  <th scope="col">Comments</th>
                 </tr>
               </thead>
               <tbody>
@@ -136,18 +138,86 @@
                           <label for="id_leave_request_comments">Comments:</label>
                           {{ approval_form.leave_request_comments }} -->
                         </div>
-                        <button type="submit" class="btn btn-primary">Approve</button>
+                        <button type="submit" class="btn btn-primary">Approve/Reject</button>
                       </form>
                     </td>
 
+                    <td>
+                      {% if lrequest.status == 'is_approved' %}
+                        <span style="color: rgb(68, 240, 15);">Approved</span>
+                      {% elif lrequest.status == 'is_rejected' %}
+                        <span style="color: rgb(240, 15, 34);">Rejected</span>
+                      {% else %}
+                        <span style="color: darkgoldenrod;">Pending</span>
+                      {% endif %}
+                    </td>
                     <td>{{ lrequest.leave_request_comments }}</td>
-                    <td>{{ lrequest.status }}</td>
                   </tr>
                 {% endfor %}
               </tbody>
             </table>
           {% endif %}
         {% endif %}
+        {% if request.user == requested_to %}
+          <button type="button" class="btn btn-secondary" id="toggleButton">Archived</button>
+        {% endif %}
+        <div class="archived" style="display: none;">
+          {% if requested_to == request.user %}
+          <h5 class="mt-4">Archived leave requests</h5>
+          {% if archived_leave_requests.count == 0 %}
+            <p>No archived leave requests to be shown</p>
+          {% else %}
+            <table class="table table-responsive">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Requested by</th>
+                  {% if request.user.userprofile.role == 'admin' %}
+                    <th scope="col">Requested body</th>
+                  {% endif %}
+                  <th scope="col">Reason</th>
+                  <th scope="col">Start Date </th>
+                  <th scope="col">End Date</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Comments</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for archived in archived_leave_requests %}
+                  <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ archived.requested_by }}</td>
+                    {% if archived.user.userprofile.role == 'admin' %}
+                      <td>{{ archived.requested_to }}</td>
+                    {% endif %}
+                    <td>
+                      {% if archived.reason|length > 10 %}
+                        <span id="short_{{archived.id }}">{{ archived.reason|slice:":10" }}</span>
+                        <span id="full_{{ archived.id }}" style="display: none;">{{ archived.reason }}</span>
+                      {% else %}
+                        {{ archived.reason }}
+                      {% endif %}
+                    </td>
+                    <td>{{ archived.start_date }}</td>
+                    <td>{{ archived.end_date }}</td>
+                    <td>
+                      {% if archived.status == 'is_approved' %}
+                        <span style="color: rgb(68, 240, 15);">Approved</span>
+                      {% elif archived.status == 'is_rejected' %}
+                        <span style="color: rgb(240, 15, 34);">Rejected</span>
+                      {% else %}
+                        <span style="color: darkgoldenrod;">Pending</span>
+                      {% endif %}
+                    </td>
+                    <td>{{ archived.leave_request_comments }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% endif %}
+        {% endif %}
+
+        </div>
       </div>
     </div>
 
@@ -167,6 +237,15 @@
           button.textContent = "More";
         }
       }
+
+      document.getElementById('toggleButton').addEventListener('click', function() {
+        var archivedDiv = document.querySelector('.archived');
+        if (archivedDiv.style.display === 'none') {
+          archivedDiv.style.display = 'block';
+        } else {
+          archivedDiv.style.display = 'none';
+        }
+      });
     </script>
   </div>
 {% endblock %}

@@ -225,4 +225,4 @@ class LeaveRequestForm(forms.ModelForm):
 class LeaveRequestApprovalForm(forms.ModelForm):
     class Meta:
         model = LeaveRequest
-        fields = ['status', 'leave_request_comments']
+        fields = ['leave_request_comments']
