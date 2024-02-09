@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import UserProfile, Department, Course, Assessment, Mark, LeaveRequest
 from accounts.forms import EditProfileForm
-from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarksForm, AssessmentForm, LeaveRequestForm, LeaveRequestApprovalForm, EditTeacherForm
+from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarksForm, AddAssessmentForm, EditAssessmentForm, LeaveRequestForm, LeaveRequestApprovalForm, EditTeacherForm
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models import Count
@@ -385,55 +385,85 @@ def teacher_courses(request):
 
     return render(request, 'admin_app/teacher/teacher_courses.html', context)
 
+# def add_assessment(request):
+#     teacher = request.user.userprofile
+#     if request.method == 'POST':
+#         form = AssessmentForm(request.POST, teacher=teacher)
+#         if form.is_valid():
+#             print('add ass form is valid')
+#             assessment = form.save(commit=False)
+#             course_for_teacher = Course.objects.filter(teachers=teacher).first()
+#             # print('course_for_teacher =', course_for_teacher )
+#             if course_for_teacher:
+#                 assessment.course = course_for_teacher
+#                 # assessment.save()
+#                 form.save()
+#                 print('Course inside= ', assessment.course)
+#                 return redirect('assessments')
+#                 # return redirect('assessments')
+#         else:
+#             messages.error(request, 'Invalid form')
+#             return redirect('add-assessment')
+#     else:
+#         form = AssessmentForm(teacher=teacher)
+#         return render(request, 'admin_app/teacher/add_assessment.html', {'form': form})
+
 def add_assessment(request):
     teacher = request.user.userprofile
+    user_profile = UserProfile.objects.get(user=request.user)
     if request.method == 'POST':
-        form = AssessmentForm(request.POST, teacher=teacher)
+        form = AddAssessmentForm(user_profile=user_profile, data=request.POST)
         if form.is_valid():
-            print('add ass form is valid')
             assessment = form.save(commit=False)
-            course_for_teacher = Course.objects.filter(teachers=teacher).first()
-            # print('course_for_teacher =', course_for_teacher )
+            course_id = request.POST.get('course')  # Get the selected course ID from the form
+            course_for_teacher = Course.objects.filter(teachers=teacher, id=course_id).first()  # Filter the course by teacher and ID
             if course_for_teacher:
                 assessment.course = course_for_teacher
-                # assessment.save()
-                form.save()
-                print('Course inside= ', assessment.course)
+                assessment.teacher = teacher  # Set the teacher for the assessment
+                assessment.save()
                 return redirect('assessments')
-                # return redirect('assessments')
+            else:
+                messages.error(request, 'No course assigned to the teacher')
         else:
             messages.error(request, 'Invalid form')
-            return redirect('add-assessment')
     else:
-        form = AssessmentForm(teacher=teacher)
-        return render(request, 'admin_app/teacher/add_assessment.html', {'form': form})
+        form = AddAssessmentForm(user_profile=user_profile)
+    return render(request, 'admin_app/teacher/add_assessment.html', {'form': form})
+
+
 
 def assessments(request):
     teacher = request.user.userprofile
-    course_taught_by_teacher = Course.objects.filter(teachers=teacher).first()
-    if course_taught_by_teacher:
-        assessments = Assessment.objects.filter(course=course_taught_by_teacher)
-        print('Number of assessments=', assessments.count())
-        return render(request, 'admin_app/teacher/assessments.html', {'assessments': assessments})
+    courses_taught_by_teacher = Course.objects.filter(teachers=teacher)
+    print('courses_taught_by_teacher: ' , courses_taught_by_teacher)
+    assessments_by_course = {}
+    for course in courses_taught_by_teacher:
+        assessments = Assessment.objects.filter(course=course)
+        assessments_by_course[course] = assessments
+
+    for course, assessments in assessments_by_course.items():
+        print(f'course {course.id}: {course.name}')
+    if assessments_by_course:
+        return render(request, 'admin_app/teacher/assessments.html', {'assessments_by_course': assessments_by_course})
     else:
-        return HttpResponse('No course')
+        return HttpResponse('No courses you have been offered or added assessments either')
+
 
 def edit_assessment(request, assessment_id):
     assessment = get_object_or_404(Assessment, pk=assessment_id)
-
     if request.method == 'POST':
-        form = AssessmentForm(request.POST, instance=assessment, user=request.user)
+        form = EditAssessmentForm(request.POST, instance=assessment)
         if form.is_valid():
-            edited_assessment = form.save(commit=False)
-            if not Assessment.objects.filter(teacher=edited_assessment.teacher, assessment_name=edited_assessment.assessment_name).exclude(pk=edited_assessment.pk).exists():
-                edited_assessment.save()
-                return redirect('assessments')
-            else:
-                messages.error(request, 'Assessment with the same name already exists for this teacher')
+            # edited_assessment = form.save(commit=False)
+            # if not Assessment.objects.filter(teacher=edited_assessment.teacher, assessment_name=edited_assessment.assessment_name).exclude(pk=edited_assessment.pk).exists():
+            form.save()
+            return redirect('assessments')
+        # else:
+        #     messages.error(request, 'Assessment with the same name already exists for this teacher')
         else:
             messages.error(request, 'Invalid form')
     else:
-        form = AssessmentForm(instance=assessment, user=request.user)
+        form = EditAssessmentForm(instance=assessment)
 
     return render(request, 'admin_app/teacher/edit_assessment.html', {'form': form})
 
@@ -452,6 +482,8 @@ def add_mark(request, course_code):
     students = selected_course.students.all()
     # teacher = request.user.userprofile
     assessments = Assessment.objects.filter(course=selected_course) if selected_course else []
+    for assessment in assessments:
+        print(f'assessment {assessment.id}: {assessment.assessment_name}')
     print('assessments in add_mark=' , assessments)
 
     existing_marks = {}

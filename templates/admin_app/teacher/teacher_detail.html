@@ -15,7 +15,7 @@
       {% endif %}
 
       <div class="row">
-        <div class="col-md-2 d-none d-md-block bg-secondary">
+        <div class="col-md-2 d-none d-md-block bg-secondary px-2">
           {% if request.user.userprofile.role == 'admin' %}
             {% include 'admin_app/admin_navbar.html' %}
           {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}  Edit Assessment  {% endblock %}
 {% block content%}
-  <div class="container my-5 py-5 bg-secondary" style="max-width: 40rem;">
+  <div class="my-5 pt-3 pb-5">
     {% if messages %}
       {% for message in messages %}
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,14 +12,30 @@
         </div>
       {% endfor %}
     {% endif %}
-    <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'assessments' %}">View assessments</a>
-    <h3 class="text-center py-3"> Edit assessment</h3>
-    <form method="POST">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <div class="text-center">
-        <button class="btn btn-primary">Edit assessment</button>
+
+    <div class="row">
+      <div class="col-md-2 d-none d-md-block bg-secondary px-2">
+        {% if request.user.userprofile.role == 'admin' %}
+          {% include 'admin_app/admin_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
+          {% include 'accounts/head_navbar.html' %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
+          {% include 'accounts/teacher_navbar.html' %}
+        {% elif request.user.userprofile.role == 'student' %}
+          {% include 'accounts/student_navbar.html' %}
+        {% endif %}
       </div>
-    </form>
+      <div class="col-md-10 py-5" style="max-width: 68%; background-color: rgb(40, 109, 109); margin: 0 auto;">
+        <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'assessments' %}">View assessments</a>
+        <h3 class="text-center py-3"> Edit assessment</h3>
+        <form method="POST">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <div class="text-center">
+            <button class="btn btn-primary">Edit assessment</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 {% endblock %}

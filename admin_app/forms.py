@@ -110,13 +110,28 @@ class OfferPositionForm(forms.Form):
 class CourseSelectionForm(forms.Form):
     course = forms.ModelChoiceField(queryset=Course.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
 
-class AssessmentForm(forms.ModelForm):
+class AddAssessmentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        teacher = kwargs.pop('teacher', None)
-        teacher_dept = teacher.department
-        super(AssessmentForm, self).__init__(*args, **kwargs)
-        if teacher_dept:
-            self.fields['course'].queryset = Course.objects.filter(department=teacher_dept)
+        user_profile = kwargs.pop('user_profile', None)
+        super(AddAssessmentForm, self).__init__(*args, **kwargs)
+        if user_profile:
+            courses_taught = user_profile.courses_taught.all()
+            self.fields['course'].queryset = courses_taught
+
+    class Meta:
+        model = Assessment
+        fields = ['course', 'assessment_name', 'weight']
+
+class EditAssessmentForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        # teacher = kwargs.pop('teacher', None)
+        # teacher_dept = teacher.department
+        super(EditAssessmentForm, self).__init__(*args, **kwargs)
+        instance = kwargs.get('instance')
+        if instance:
+            teacher_dept = instance.teacher.department
+            if teacher_dept:
+                self.fields['course'].queryset = Course.objects.filter(department=teacher_dept)
 
     class Meta:
         model = Assessment
