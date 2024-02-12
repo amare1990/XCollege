@@ -94,13 +94,12 @@
                     <div class="modal-dialog" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h5 class="modal-title" id="teacher-view-ModalLabel">Teacher details</h5>
+                          <h5 class="modal-title bg-secondary" id="teacher-view-ModalLabel">Teacher details</h5>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
                         <div class="modal-body">
-                          <h3 class="my-3 bg-secondary">Teacher details</h3>
                           <div class="card bg-secondary" style="max-width: 40rem;">
                             <div class="row g-0">
                               <div class="col-md-4">
@@ -112,7 +111,7 @@
                               </div>
                             <div class="col-md-8">
                               <div class="card-body">
-                                <h5 class="card-title">{{ teacher.title }}: {{ teacher.user.username|capfirst }} </h5>
+                                <h5 class="card-title">{{ teacher.title }}: {{ teacher.user.username }} </h5>
                                 <p class="card-text">Role: {{ teacher.role }} <br>
                                 Title: {{ teacher.title }} <br>
                                 Position: {{ teacher.position }} <br>

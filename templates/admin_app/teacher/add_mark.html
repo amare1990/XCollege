@@ -14,7 +14,7 @@
     {% endif %}
 
     <div class="row">
-      <div class="col-md-3 d-none d-md-block bg-secondary">
+      <div class="col-md-2 d-none d-md-block bg-secondary px-2">
         {% if request.user.userprofile.role == 'admin' %}
               {% include 'admin_app/admin_navbar.html' %}
             {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
@@ -25,7 +25,7 @@
               {% include 'accounts/student_navbar.html' %}
             {% endif %}
       </div>
-      <div class="col-md-10 py-5 ml-2" style="max-width: 70%; background-color: rgb(40, 109, 109);">
+      <div class="col-md-10 py-5" style="max-width: 80%; background-color: rgb(40, 109, 109); margin: 0 auto;">
         <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'assessments' %}">Assessments</a>
     <h3 class="text-center py-3">Fill Marks for <strong>{{ course.name }}</strong> course</h3>
     <form method="post">
@@ -40,7 +40,7 @@
               {% for assessment in assessments %}
                 <th>{{ assessment.assessment_name }}</th>
               {% endfor %}
-              <th>Remark</th>
+              <!-- <th>Remark</th> -->
             </tr>
           </thead>
 

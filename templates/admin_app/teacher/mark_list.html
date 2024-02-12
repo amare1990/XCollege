@@ -19,7 +19,7 @@
           {% include 'admin_app/admin_navbar.html' %}
         {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
           {% include 'accounts/head_navbar.html' %}
-        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == '' %}
           {% include 'accounts/teacher_navbar.html' %}
         {% elif request.user.userprofile.role == 'student' %}
           {% include 'accounts/student_navbar.html' %}
@@ -37,7 +37,10 @@
             <th> # </th>
             <th>Student Name</th>
               {% for assessment in assessments %}
-                <th>{{ assessment.assessment_name }}</th>
+
+                {% if assessment.assessment_name != 'Comment' %}
+                  <th>{{ assessment.assessment_name }}</th>
+                {% endif %}
               {% endfor %}
             <th> Total marks </th>
             <th>Grade</th>
@@ -52,17 +55,29 @@
               <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'student-detail' student_id=data.student.pk %}">{{ data.student.user.username }}</a>
             </td>
             {% for assessment in assessments %}
+
+            {% if assessment.assessment_name != 'Comment' %}
               <td>
                 {% for mark in data.marks %}
-                  {% if mark.assessment == assessment %}
-                    {{ mark.mark }}
-                  {% endif %}
+
+                    {% if mark.assessment == assessment %}
+                      {{ mark.mark }}
+                    {% endif %}
+
                 {% endfor %}
               </td>
+              {% endif %}
             {% endfor %}
             <td>{{ data.total_marks }} </td>
             <td>
               <span class="text-warning px-2 py-1 rounded">{{ data.grade }}</span>
+            </td>
+            <td>
+              {% for mark in data.marks %}
+                  {% if mark.assessment.assessment_name == 'Comment' %}
+                    {{ mark.comment }}
+                  {% endif %}
+                {% endfor %}
             </td>
           </tr>
         {% endfor %}

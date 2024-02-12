@@ -368,11 +368,14 @@ def teacher_delete(request, teacher_id):
         teacher.delete()
         # teacher.user.delete()
         messages.success(request, "Deleted successfully!")
-        if role == 'admin':
-            return redirect('teacher-list')
+        if UserProfile.objects.filter(role='teacher').count() > 1:
+            if role == 'admin':
+                return redirect('teacher-list')
+            else:
+                return redirect('department-teacher-list', department_id, role)
         else:
-            return redirect('department-teacher-list', department_id, role)
-    # return render(request, 'admin_app/teacher/teacher_delete.html', {'teacher': teacher, 'department': department_id})
+            return redirect('home')
+    return render(request, 'admin_app/teacher/teacher_delete.html', {'teacher': teacher, 'department': department_id})
 
 def teacher_courses(request):
     user_profile = UserProfile.objects.get(user=request.user)
@@ -408,18 +411,25 @@ def teacher_courses(request):
 #         form = AssessmentForm(teacher=teacher)
 #         return render(request, 'admin_app/teacher/add_assessment.html', {'form': form})
 
+# from decimal import Decimal
 def add_assessment(request):
     teacher = request.user.userprofile
     user_profile = UserProfile.objects.get(user=request.user)
+    # total_weight = Decimal('0.00')
     if request.method == 'POST':
         form = AddAssessmentForm(user_profile=user_profile, data=request.POST)
         if form.is_valid():
             assessment = form.save(commit=False)
-            course_id = request.POST.get('course')  # Get the selected course ID from the form
-            course_for_teacher = Course.objects.filter(teachers=teacher, id=course_id).first()  # Filter the course by teacher and ID
+            course_id = request.POST.get('course')
+            course_for_teacher = Course.objects.filter(teachers=teacher, id=course_id).first()
             if course_for_teacher:
                 assessment.course = course_for_teacher
-                assessment.teacher = teacher  # Set the teacher for the assessment
+                assessment.teacher = teacher
+                # total_weight = total_weight + assessment.weight
+                # print('Total_weight= ' , total_weight)
+                # if total_weight > 100.00:
+                #     messages.warning(request, 'Your assessments total weight is greater than 100!')
+                #     return redirect('assessments')
                 assessment.save()
                 return redirect('assessments')
             else:
@@ -482,9 +492,6 @@ def add_mark(request, course_code):
     students = selected_course.students.all()
     # teacher = request.user.userprofile
     assessments = Assessment.objects.filter(course=selected_course) if selected_course else []
-    for assessment in assessments:
-        print(f'assessment {assessment.id}: {assessment.assessment_name}')
-    print('assessments in add_mark=' , assessments)
 
     existing_marks = {}
 
@@ -539,11 +546,11 @@ def mark_list(request, course_code):
     assessments = {}
     teacher = request.user.userprofile
     # course_taught_by_teacher = Course.objects.filter(teachers=teacher).first()
-    print('course_taught_by_teacher' , selected_course)
+    # print('course_taught_by_teacher' , selected_course)
     if selected_course:
         assessments = Assessment.objects.filter(course=selected_course)
 
-    print('assessments in mark list= ', assessments)
+    # print('assessments in mark list= ', assessments)
 
     marks_data = []
     grade = ''
@@ -627,13 +634,13 @@ def student_delete(request, student_id):
     if request.method == 'POST':
         student.delete()
         # student.user.delete()
-        messages.success(request, "Deleted successfully!")
+        # messages.success(request, "Deleted successfully!")
         if role == 'admin':
             messages.success(request, "Deleted successfully!")
-            return redirect('student-list')  # Redirect to the student list view
+            return redirect('student-list')
         else:
-            messages.success(request, "Deleted successfully!")
-            return redirect('department-student-list', department_id, role)  # Redirect to the department student list view
+            messages.success(request, f"Deleted successfully! Good Bye {profile.user.username}!")
+            return redirect('home')
     return render(request, 'admin_app/student/student_delete.html', {'student': student })
 
 
@@ -683,12 +690,12 @@ def view_result(request, course_code):
     if course_taken_by_student:
         assessments = Assessment.objects.filter(course=course_taken_by_student)
 
-    print('assessments in mark list= ', assessments)
+    # print('assessments in mark list= ', assessments)
 
 
 
     userObj = request.user
-    print('username= ,', userObj.username)
+    # print('username= ,', userObj.username)
     marks = Mark.objects.filter(student=userObj.userprofile)
     # print('Mark assessment queryset= ', mark.assessment)
     # assessments = mark.assessment
@@ -703,7 +710,7 @@ def view_result(request, course_code):
     for mark in marks:
         total_mark+= mark.mark
         my_mark.append(mark)
-    print('my mark= ', my_mark)
+    print('my mark comment= ', my_mark[6].comment)
 
     grade = letter_grade(total_weights,total_mark)
     return render(request, 'admin_app/student/view_result.html', { 'assessments': assessments,
@@ -776,12 +783,15 @@ def manage_leave_request(request):
     print(f'department name: {request.user.userprofile.department} whereas the head username is {request.user.userprofile.department.department_head}')
     requested_to = request.user.userprofile.department.department_head
     print('requested_to= ', requested_to )
+    if requested_to is None or requested_by.position == 'head':
+        # return HttpResponse("The department head's profile regarding his/her department is not updated yet")
+        requested_to = UserProfile.objects.get(user__username='admin')
     user = User.objects.get(username=requested_to)
     my_leave_requests = LeaveRequest.objects.filter(requested_by= requested_by)
     requested_leaves = LeaveRequest.objects.filter(requested_to=user.userprofile)
 
-    requested_to = request.user.userprofile.department.department_head
-    user = User.objects.get(username=requested_to)
+    # requested_to = request.user.userprofile.department.department_head
+    # user = User.objects.get(username=requested_to)
     pending_leave_requests = LeaveRequest.objects.filter(status='pending', requested_to=user.userprofile)
     archived_leave_requests = LeaveRequest.objects.filter(status__in=['is_approved', 'is_rejected'], requested_to=user.userprofile)
     return render(request, 'admin_app/general/manage_leave_request.html',
