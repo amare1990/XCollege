@@ -19,7 +19,7 @@
           {% include 'admin_app/admin_navbar.html' %}
         {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
           {% include 'accounts/head_navbar.html' %}
-        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
+        {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == '' %}
           {% include 'accounts/teacher_navbar.html' %}
         {% elif request.user.userprofile.role == 'student' %}
           {% include 'accounts/student_navbar.html' %}
@@ -51,8 +51,10 @@
           <label for="id_role">Role:</label>
           <select class="form-control" id="id_role" name="role">
             <option value="">---------</option>
+            <option value="admin" {% if form.role.value == 'admin' %} selected {% endif %}>Admin</option>
             <option value="teacher" {% if form.role.value == 'teacher' %} selected {% endif %}>Teacher</option>
             <option value="student" {% if form.role.value == 'student' %} selected {% endif %}>Student</option>
+            <option value="staff" {% if form.role.value == 'staff' %} selected {% endif %}>Staff</option>
           </select>
         </div>
         <div class="form-group" id="titlePositionFields" style="display: none;">
@@ -98,7 +100,7 @@
           <label for="id_bio">Bio:</label>
           <textarea class="form-control" id="id_bio" name="bio" rows="3" placeholder="Enter your bio briefly">{{ form.bio.value }}</textarea>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label for="id_department">Department:</label>
           {{form.department.value }}
           <select class="form-control" id="id_department" name="department">
@@ -107,7 +109,17 @@
               <option value="{{ department.id }}" {% if form.department.value == department.name %} selected {% endif %}>{{ department.name }}</option>
             {% endfor %}
           </select>
+        </div> -->
+        <div class="form-group">
+          <label for="id_department">Department:</label>
+          <select class="form-control" id="id_department" name="department">
+            <option value="">Select Department</option>
+            {% for department in departments %}
+              <option value="{{ department.id }}" {% if profile.department.id == department.id %} selected {% endif %}>{{ department.name }}</option>
+            {% endfor %}
+          </select>
         </div>
+
         <div class="form-group">
           <label for="id_profile_picture">Profile Picture:</label>
           <input type="file" class="form-control-file" id="id_profile_picture" name="profile_picture">
@@ -126,22 +138,33 @@
   </div>
 
   <script>
-      // JavaScript to show/hide fields based on selected role
-      document.addEventListener('DOMContentLoaded', function() {
-      var role = document.getElementById('id_role').value;
+    // JavaScript to show/hide fields based on selected role
+    document.addEventListener('DOMContentLoaded', function() {
+      var roleSelect = document.getElementById('id_role');
       var titlePositionFields = document.getElementById('titlePositionFields');
       var academicYearSemesterFields = document.getElementById('academicYearSemesterFields');
 
-      if (role === 'teacher') {
-        titlePositionFields.style.display = 'block';
-        academicYearSemesterFields.style.display = 'none';
-      } else if (role === 'student') {
-        titlePositionFields.style.display = 'none';
-        academicYearSemesterFields.style.display = 'block';
-      } else {
-        titlePositionFields.style.display = 'none';
-        academicYearSemesterFields.style.display = 'none';
+      function updateDisplayedFields() {
+        var role = roleSelect.value;
+
+        if (role === 'teacher') {
+          titlePositionFields.style.display = 'block';
+          academicYearSemesterFields.style.display = 'none';
+        } else if (role === 'student') {
+          titlePositionFields.style.display = 'none';
+          academicYearSemesterFields.style.display = 'block';
+        } else {
+          titlePositionFields.style.display = 'none';
+          academicYearSemesterFields.style.display = 'none';
+        }
       }
+
+      // Initial update based on the default selected role
+      updateDisplayedFields();
+
+      // Update displayed fields when the role selection changes
+      roleSelect.addEventListener('change', updateDisplayedFields);
     });
   </script>
+
 {% endblock %}

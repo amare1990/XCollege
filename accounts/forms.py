@@ -111,12 +111,16 @@ class EditProfileForm(forms.ModelForm):
         fields = ['username', 'email', 'first_name', 'last_name']
 
     def __init__(self, *args, **kwargs):
+        # user = kwargs.pop('user', None)
         super(EditProfileForm, self).__init__(*args, **kwargs)
+        # if user and (user.is_superuser or user.userprofile.role == 'admin'):
+        #     # Include the 'role' field for admin users
+        #     self.fields['role'] = forms.CharField(max_length=20, required=True)
         if self.instance:
-            # Populate the form with initial data from the UserProfile model
             user_profile = self.instance.userprofile
             if user_profile:
-                self.fields['role'].initial = user_profile.role
+                if 'role' in self.fields:  # Check if the 'role' field is present
+                    self.fields['role'].initial = user_profile.role
                 self.fields['title'].initial = user_profile.title
                 self.fields['department'].initial = user_profile.department
                 self.fields['academic_year'].initial = user_profile.academic_year

@@ -132,7 +132,7 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(default='Enter your bio briefly')
-    role = models.CharField(max_length=20, choices=roles, default='student')
+    role = models.CharField(max_length=20, choices=roles)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, blank=True, null=True)
     academic_year = models.CharField(max_length=20, choices=year, null=True, blank=True)
     semester = models.CharField(max_length=20, choices=semester, null=True, blank=True)
@@ -141,6 +141,8 @@ class UserProfile(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, null=True, blank=True)
     position = models.CharField(max_length=50, choices=position, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', default='profile_pictures/default_profile.jpg')
+
+    updated_by_admin = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username

@@ -65,15 +65,17 @@ def edit_profile(request, profile_id):
     profile = get_object_or_404(UserProfile, pk=profile_id)
     print('prifile id:  ', profile.id)
     departments = Department.objects.all()
+    # show_edit_profile = False
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES, instance=profile.user)
         if form.is_valid():
             user = form.save(commit=False)
             user.save()
             user_profile, created = UserProfile.objects.get_or_create(user=user)
-            user_profile.profile_picture = request.FILES.get('profile_picture')
+            # user_profile.profile_picture = request.FILES.get('profile_picture')
 
             role = request.POST.get('role')
+            user_profile.role = role
             if role == 'teacher':
                 user_profile.position = request.POST.get('position')
                 user_profile.title = request.POST.get('title')
@@ -90,5 +92,9 @@ def edit_profile(request, profile_id):
             return redirect('admin-dashboard')
     else:
         form = EditProfileForm(instance=profile.user)
+        # if request.user.userprofile.role == 'admin':
+        #     # Check if the userprofile being viewed has not been updated by the admin yet
+        #     if not profile.updated_by_admin:
+        #         show_edit_profile = True
     return render(request, 'accounts/registration/edit_profile_dynamic.html',
                   {'form': form, 'departments': departments, 'profile': profile})
