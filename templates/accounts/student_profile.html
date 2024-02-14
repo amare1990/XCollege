@@ -22,7 +22,7 @@
       <div class="card bg-secondary" style="max-width: 40rem; margin: 0 auto;">
         <div class="row g-0">
           <div class="col-md-4">
-            {% if profile.profile_picture %}
+            {% if profile.profile_picture != '' %}
               <img src="{{ profile.profile_picture.url }}" class="card-img-top" alt="Profile picture">
             {% else %}
               <img src="{% static 'profile_pictures/default_profile.jpg' %}" class="card-img-top" alt="Default profile picture">

@@ -120,7 +120,7 @@ def add_department(request):
             form_department.save()
             return redirect('department-list')
         else:
-            messages.error(request, "You didn't fill the form proporly!")
+            messages.error(request, "You didn't fill the form properly!")
             return redirect('add-department')
     else:
         form_department = AddDepartmentForm()

@@ -10,7 +10,6 @@ from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
-# Password change view
 class PasswordsChangeView(PasswordChangeView):
   form_class = PasswordChangeForm
   success_url = reverse_lazy('password-change-done')
@@ -18,7 +17,6 @@ class PasswordsChangeView(PasswordChangeView):
 def password_change_done(request):
   return render(request, 'accounts/registration/password_change_done.html', {})
 
-# User login
 def user_login(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -53,14 +51,12 @@ def user_login(request):
     return render(request, 'accounts/registration/login.html', {})
 
 
-# User Registration
 class UserRegistrationView(generic.CreateView):
   form_class = SignUpForm
   template_name ='accounts/registration/register.html'
   success_url= reverse_lazy('user-login')
 
-# User Profile editing
-# @login_required
+
 def edit_profile(request, profile_id):
     profile = get_object_or_404(UserProfile, pk=profile_id)
     print('prifile id:  ', profile.id)
@@ -84,8 +80,9 @@ def edit_profile(request, profile_id):
                 user_profile.semester = request.POST.get('semester')
 
             department_id = request.POST.get('department')
-            department = Department.objects.get(pk=department_id)
-            user_profile.department = department
+            if department_id is None:
+                department = Department.objects.get(pk=department_id)
+                user_profile.department = department
             user_profile.bio = request.POST.get('bio')
             user_profile.profile_picture = request.FILES.get('profile_picture')
             user_profile.save()

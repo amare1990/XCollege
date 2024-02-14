@@ -15,7 +15,7 @@
     <div class="row">
       <div class="col-md-2 d-none d-md-block bg-secondary px-2 mr-2">
         {% if request.user.userprofile.role == 'admin' %}
-        {% include 'admin_app/admin_navbar.html' %}
+          {% include 'admin_app/admin_navbar.html' %}
         {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position == 'head' %}
           {% include 'accounts/head_navbar.html' %}
         {% elif request.user.userprofile.role == 'teacher' and request.user.userprofile.position is None %}
@@ -37,6 +37,7 @@
               <th scope="col">#</th>
               <th scope="col">Department Id</th>
               <th scope="col">Name</th>
+              <th scope="col">Department Head</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -48,6 +49,7 @@
                 <a class="text-white bg-primary px-2 py-1 rounded" href="{% url 'department-detail' department_id=dept.pk %}">{{ dept.pk }}</a>
               </td>
               <td>{{ dept.name }}</td>
+              <td>{{ dept.department_head }}</td>
               <td>
                 <div class="btn-group" role="group" aria-label="List of departments">
                   <a class="btn btn-primary" href="{% url 'department-edit' department_id=dept.pk %}">Edit</a>

@@ -100,20 +100,10 @@
           <label for="id_bio">Bio:</label>
           <textarea class="form-control" id="id_bio" name="bio" rows="3" placeholder="Enter your bio briefly">{{ form.bio.value }}</textarea>
         </div>
-        <!-- <div class="form-group">
-          <label for="id_department">Department:</label>
-          {{form.department.value }}
-          <select class="form-control" id="id_department" name="department">
-            <option value="">Select Department</option>
-            {% for department in departments %}
-              <option value="{{ department.id }}" {% if form.department.value == department.name %} selected {% endif %}>{{ department.name }}</option>
-            {% endfor %}
-          </select>
-        </div> -->
         <div class="form-group">
           <label for="id_department">Department:</label>
           <select class="form-control" id="id_department" name="department">
-            <option value="">Select Department</option>
+            <option value="0">Select Department</option>
             {% for department in departments %}
               <option value="{{ department.id }}" {% if profile.department.id == department.id %} selected {% endif %}>{{ department.name }}</option>
             {% endfor %}

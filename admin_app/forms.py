@@ -4,7 +4,7 @@ from django.forms import formset_factory
 from .models import UserProfile, Department, Course, Assessment, LeaveRequest
 
 class AddDepartmentForm(forms.ModelForm):
-     department_head = forms.ModelChoiceField(queryset=UserProfile.objects.filter(role='teacher'), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
+    #  department_head = forms.ModelChoiceField(queryset=UserProfile.objects.filter(role='teacher'), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
 
      class Meta:
         model = Department
@@ -12,24 +12,6 @@ class AddDepartmentForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
         }
-
-# class RegistrationForm(forms.ModelForm):
-#     class Meta:
-#         model = UserProfile
-#         fields = ['user', 'title', 'position', 'bio', 'role', 'department', 'academic_year', 'semester']
-
-#         widgets = {
-#             'user': forms.Select(attrs={'class': 'form-control'}),
-#             'bio': forms.Textarea(attrs={'class': 'form-control'}),
-#             'role': forms.Select(attrs={'class': 'form-control'}),
-#             'department': forms.Select(attrs={'class': 'form-control'}),
-#             'academic_year': forms.Select(attrs={'class': 'form-control'}),
-#             'semester': forms.Select(attrs={'class': 'form-control'}),
-#             'position': forms.Select(attrs={'class': 'form-control'}),
-#             'title': forms.Select(attrs={'class': 'form-control'}),
-#             'semester': forms.Select(attrs={'class': 'form-control'})
-#         }
-
 
 class AddStudentForm(forms.ModelForm):
     class Meta:
@@ -58,20 +40,6 @@ class AddTeacherForm(forms.ModelForm):
             'title': forms.Select(attrs={'class': 'form-control'}),
             'position': forms.Select(attrs={'class': 'form-control'}),
         }
-
-# class EditTeacherForm(forms.ModelForm):
-#     class Meta:
-#         model = UserProfile
-#         fields = ['role', 'department', 'title', 'position', 'bio', 'profile_picture']
-
-#         widgets = {
-#             # 'user': forms.Select(attrs={'class': 'form-control'}),
-#             'bio': forms.Textarea(attrs={'class': 'form-control'}),
-#             'role': forms.Select(attrs={'class': 'form-control'}),
-#             'department': forms.Select(attrs={'class': 'form-control'}),
-#             'title': forms.Select(attrs={'class': 'form-control'}),
-#             'position': forms.Select(attrs={'class': 'form-control'}),
-#         }
 
 class AddCourseForm(forms.ModelForm):
     class Meta:
@@ -136,13 +104,6 @@ class EditAssessmentForm(forms.ModelForm):
     class Meta:
         model = Assessment
         fields = ['course', 'assessment_name', 'weight']
-
-
-# class AddMarksForm(forms.Form):
-#     student = forms.ModelChoiceField(queryset=UserProfile.objects.filter(role='student'))
-#     assessment = forms.ModelChoiceField(queryset=Assessment.objects.all())
-#     marks = forms.DecimalField(max_digits=5, decimal_places=2, initial=0)
-#     comment = forms.CharField(max_length=100)
 
 
 class AddMarksForm(forms.Form):
