@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import UserProfile, Department, Course, Assessment, Mark, LeaveRequest
 from accounts.forms import EditProfileForm
-from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, AddMarksForm, AddAssessmentForm, EditAssessmentForm, LeaveRequestForm, LeaveRequestApprovalForm, EditTeacherForm
+from .forms import AddStudentForm, AddTeacherForm, AddDepartmentForm, EditDepartmentForm, \
+    AddCourseForm, CourseRegistrationForm, AddCourseOfferingForm, OfferPositionForm, \
+    AddMarksForm, AddAssessmentForm, EditAssessmentForm, LeaveRequestForm, \
+    LeaveRequestApprovalForm, EditTeacherForm
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models import Count
@@ -120,7 +123,9 @@ def add_department(request):
             form_department.save()
             return redirect('department-list')
         else:
-            messages.error(request, "You didn't fill the form properly!")
+            messages.error(request, """You didn't fill the form properly!
+                           Maybe there is no more UserProfile of which its role is a teacher created.
+                           You have to create more Userprofile of which its role is a teacher to add a department!""")
             return redirect('add-department')
     else:
         form_department = AddDepartmentForm()
@@ -238,12 +243,12 @@ def department_list(request):
 def department_edit(request, department_id):
     department = get_object_or_404(Department, pk=department_id)
     if request.method == 'POST':
-        form_department = AddDepartmentForm(request.POST, instance=department)
+        form_department = EditDepartmentForm(request.POST, instance=department)
         if form_department.is_valid():
             form_department.save()
             return redirect('department-detail', department_id=department_id)
     else:
-        form_department = AddDepartmentForm(instance=department)
+        form_department = EditDepartmentForm(instance=department)
     return render(request, 'admin_app/department/department_edit.html', {'form_department': form_department, 'department': department })
 
 def department_detail(request, department_id):

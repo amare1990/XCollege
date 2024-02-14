@@ -68,14 +68,8 @@ class School(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=50)
-    # department_head = models.OneToOneField('UserProfile', on_delete=models.SET_NULL, related_name='department_head', blank=True, null=True)
-    department_head = models.CharField(max_length=50, blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            admin= UserProfile.objects.get(user__is_superuser=True)
-            self.department_head = admin
-        super(Department, self).save(*args, **kwargs)
+    department_head = models.OneToOneField('UserProfile', on_delete=models.SET_NULL, related_name='department_head', blank=True, null=True)
+    # department_head = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return self.name if self.name else "Unnamed Department"

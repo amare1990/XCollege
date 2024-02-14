@@ -4,13 +4,30 @@ from django.forms import formset_factory
 from .models import UserProfile, Department, Course, Assessment, LeaveRequest
 
 class AddDepartmentForm(forms.ModelForm):
-    #  department_head = forms.ModelChoiceField(queryset=UserProfile.objects.filter(role='teacher'), empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
+    def __init__(self, *args, **kwargs):
+        super(AddDepartmentForm, self).__init__(*args, **kwargs)
+        if UserProfile.objects.filter(role='teacher').exists():
+            existing_department_heads = Department.objects.exclude(department_head__isnull=True)
+            available_user_profiles = UserProfile.objects.filter(role='teacher').exclude(id__in=existing_department_heads.values('department_head__id'))
+            self.fields['department_head'] = forms.ModelChoiceField(queryset=available_user_profiles, empty_label=None, widget=forms.Select(attrs={'class': 'form-control'}))
+        else:
+            self.fields['department_head'] = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
-     class Meta:
+
+    class Meta:
         model = Department
         fields = ['name', 'department_head']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+class EditDepartmentForm(forms.ModelForm):
+    class Meta:
+        model = Department
+        fields = ['name', 'department_head']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'department_head': forms.Select(attrs={'class': 'form-control'})
         }
 
 class AddStudentForm(forms.ModelForm):

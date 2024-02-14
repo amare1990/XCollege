@@ -80,7 +80,7 @@ def edit_profile(request, profile_id):
                 user_profile.semester = request.POST.get('semester')
 
             department_id = request.POST.get('department')
-            if department_id is None:
+            if department_id is not None:
                 department = Department.objects.get(pk=department_id)
                 user_profile.department = department
             user_profile.bio = request.POST.get('bio')
