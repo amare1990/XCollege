@@ -4,7 +4,7 @@
 
   <br/>
 
-  <h3><b>College Management System</b></h3>
+  <h2><b>College Management System</b></h2>
 
 </div>
 
@@ -101,7 +101,7 @@ To get a local copy up and running, follow these steps.
 Install python
 ```sh
   sudo apt-get update
-  sudo apt install python3.8
+  sudo apt-get install python3.8
 ```
 
 ### Setup
@@ -116,17 +116,23 @@ Clone this repository to your desired folder (e.g., my-folder):
 ### Install
 
 Install this project with:
+Then activate the virtual environment (if you use Linux environment), run the following commands
 
 ```sh
-To activate the virtual environment (if you use Linux environment), run
-source venv-college/bin/activate
+  source venv-college/bin/activate
+  python -m ensurepip --default-pip
+  python -m ensurepip --upgrade
 ```
 
-Then run following commands to create migrations and databases
+Then install all dependencies
+```sh
+  pip install -r requirements.txt
+```
+
+Then run the following commands to create migrations and databases
 ```sh
 python manage makemigrations
 python manage migrate
-
 ```
 
 ### Usage

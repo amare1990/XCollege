@@ -715,7 +715,7 @@ def view_result(request, course_code):
     for mark in marks:
         total_mark+= mark.mark
         my_mark.append(mark)
-    print('my mark comment= ', my_mark[6].comment)
+    # print('my mark comment= ', my_mark[6].comment)
 
     grade = letter_grade(total_weights,total_mark)
     return render(request, 'admin_app/student/view_result.html', { 'assessments': assessments,
